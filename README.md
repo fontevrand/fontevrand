@@ -1,6 +1,8 @@
 ## Hi there 👋
 ## note
 <label for="C01">01.地址變更</label> <label for="C02">02.收費管道變更</label>
+按了下一步按鈕 會出現的 red color message:
+<strong id="errormeg">選取之保單不可辦理紅利/回饋金選擇權變更。<br>選取之保單不可辦理墊繳狀況變更。<br>選取之保單不可辦理主約保障異動。<br>選取之保單不可辦理繳清保險。<br>選取之保單不可辦理保費異動。<br>選取之保單不可辦理結清紅利/回饋金。<br>選取之保單，包含不可辦理紅利／回饋金匯款帳戶變更。<br></strong>
 ## updated my java code
 
 <!--
