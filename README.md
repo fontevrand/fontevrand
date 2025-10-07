@@ -1,7 +1,6 @@
 ## Hi there 👋
 ## note
-01.地址變更
-<label for="C01">01.地址變更</label>
+<label for="C01">01.地址變更</label> <label for="C02">02.收費管道變更</label>
 ## updated my java code
 
 <!--
