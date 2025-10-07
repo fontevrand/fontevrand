@@ -36,6 +36,9 @@ public class CSROneCallPass extends AbstractBasePage {
 	// Step1 - 契約終止
 	private String terminiateContractRadioButtonLocator = "//td[@class='pc_info']//label[@for='ewOption2']";
 
+	// Step1 - 保單變更
+	private String policyChangeRadioButtonLocator = "//td[@class='pc_info']//label[@for='ewOption3' or contains(normalize-space(),'保單變更')]";
+
 	// Step2（保單借款）
 	private String policyChangeTableTitleLocator = "(//div[@id='divInputChg']//table[@width='100%' and @class='table table-bordered search-table']/tbody/tr)[1]/th[not(contains(@class,'pc_hide'))]";
 	private String enterLoanContentTableTitleLocator = "//div[@id='divInputChg']//table[@width='100%' and @class='table table-bordered search-table' and @id='loanData2']/tbody/tr/th[not(contains(@class,'pc_hide'))]";
@@ -295,6 +298,22 @@ public class CSROneCallPass extends AbstractBasePage {
 
 			// 若驗證或回跳有任何一個失敗，都視為整體失敗
 			if (!termOk || !backOk) return false;
+
+			// ===== 保單變更流程 =====
+			// 回到 Step1 後，確保保單仍有勾選
+			if (!ensureChecked(By.id("checkbox" + POLICY_NO), By.xpath(policyChangeCheckboxLocator), 6000)) return false;
+
+			// 這裡填你要勾的項目文字；先以「01.地址變更」示範，之後要加更多就往陣列裡加
+			List<String> changeItems = Arrays.asList(
+				"01.地址變更"
+				// ,"02.電話變更", "03.Email變更" ...
+			);
+
+			// 選「保單變更」radio，勾 changeItems，然後下一步
+			if (!runPolicyChangeStep1SelectItems(changeItems)) return false;
+
+			// 若暫時還沒做保單變更 Step2/3 的驗證，先回到 Step1 避免卡住
+			if (!returnToStep1Robust("policy-change-step1")) return false;
 
 			return true;
 		} finally {
@@ -1350,5 +1369,121 @@ public class CSROneCallPass extends AbstractBasePage {
 			try { new Actions(driver).sendKeys(Keys.ESCAPE).perform(); } catch (Exception ignore) {}
 			try { Thread.sleep(120); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
 		} catch (Exception ignore) {}
+	}
+
+	/* =========================
+	   下面是新增的「保單變更 Step1 勾選」相關方法
+	   ========================= */
+
+	/** 執行「保單變更」Step1：選 radio + 勾指定變更項目（依 label 文字），最後點 Next  */
+	private boolean runPolicyChangeStep1SelectItems(List<String> labelsToCheck) {
+		// 1) 選「保單變更」radio
+		WebElement changeRadio = findElementIsDisplayed(By.xpath(policyChangeRadioButtonLocator), true, 4000);
+		if (changeRadio == null) return false;
+		try { ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView({block:'center'});", changeRadio); } catch (Exception ignore) {}
+		try { click(changeRadio, true); } catch (Exception e) { ((JavascriptExecutor)driver).executeScript("arguments[0].click();", changeRadio); }
+
+		waitForStable();
+
+		// 2) 勾變更項目（用 label 文字做寬鬆匹配）
+		if (labelsToCheck != null) {
+			for (String labelText : labelsToCheck) {
+				if (!checkChangeItemByLabelText(labelText)) {
+					logger.debug("[PolicyChange] 勾選變更項目失敗: " + labelText);
+					return false;
+				}
+			}
+		}
+
+		// 3) 下一步
+		WebElement next = findElementIsDisplayed(By.xpath(stepOneNextButtonLocator), true, 5000);
+		if (next == null) return false;
+		try { ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView({block:'center'});", next); } catch (Exception ignore) {}
+		try { click(next, true); } catch (Exception e) { ((JavascriptExecutor)driver).executeScript("arguments[0].click();", next); }
+
+		waitForStable();
+		return true;
+	}
+
+	/** 以「顯示文字」勾選變更項目 checkbox，支援 01.地址變更 這種前綴。 */
+	private boolean checkChangeItemByLabelText(String fullText) {
+		String want = normalizeText(fullText);
+		String core = stripLeadingIndex(want); // 將 "01.地址變更" 變成 "地址變更" 以便 contains 比對
+
+		// 優先：精準 label 文字
+		By[] tries = new By[] {
+			By.xpath("//label[normalize-space()='"+escapeQuotes(want)+"']"),
+			By.xpath("//label[contains(normalize-space(),'"+escapeQuotes(want)+"')]"),
+			// 退而求其次：只比對核心文字（去掉 01. 前綴）
+			By.xpath("//label[contains(normalize-space(),'"+escapeQuotes(core)+"')]"),
+			// 有些不是 <label> 包文字，找 row/容器內文字再找 checkbox
+			By.xpath("//*[self::tr or self::li or self::div][.//*[contains(normalize-space(),'"+escapeQuotes(core)+"') or contains(normalize-space(),'"+escapeQuotes(want)+"')]]//input[@type='checkbox']"),
+			// 文本在 td/span 的情況
+			By.xpath("//input[@type='checkbox'][ancestor::*[self::tr or self::li or self::div][.//*[contains(normalize-space(),'"+escapeQuotes(core)+"') or contains(normalize-space(),'"+escapeQuotes(want)+"')]]]")
+		};
+
+		for (By by : tries) {
+			try {
+				WebElement node = findElementIsDisplayed(by, true, 1200);
+				if (node == null) continue;
+
+				// 如果抓到的是 <label>
+				if ("label".equalsIgnoreCase(node.getTagName())) {
+					WebElement input = null;
+					try {
+						String fid = node.getAttribute("for");
+						if (fid != null && !fid.isBlank()) input = findElement(By.id(fid), false, 500);
+					} catch (Exception ignore) {}
+
+					try { ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView({block:'center'});", node); } catch (Exception ignore) {}
+					try { click(node, true); } catch (Exception e) { ((JavascriptExecutor)driver).executeScript("arguments[0].click();", node); }
+
+					// 驗證是否勾到
+					if (isCheckboxSelected(input, node)) return true;
+
+					// 再直接點 input
+					if (input != null) {
+						try { click(input, true); } catch (Exception e) { ((JavascriptExecutor)driver).executeScript("arguments[0].click();", input); }
+						if (isCheckboxSelected(input, node)) return true;
+					}
+				} else { // 抓到的是 input
+					WebElement input = node;
+					try { ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView({block:'center'});", input); } catch (Exception ignore) {}
+					if (!input.isSelected()) {
+						try { click(input, true); } catch (Exception e) { ((JavascriptExecutor)driver).executeScript("arguments[0].click();", input); }
+					}
+					// 盡量再點一次附近的 label（若有），提高穩定度
+					try {
+						WebElement lbl = input.findElement(By.xpath("following::label[1]"));
+						if (!input.isSelected()) {
+							try { click(lbl, true); } catch (Exception e) { ((JavascriptExecutor)driver).executeScript("arguments[0].click();", lbl); }
+						}
+					} catch (Exception ignore) {}
+					if (input.isSelected()) return true;
+				}
+			} catch (Exception ignore) {}
+		}
+		return false;
+	}
+
+	/** 去掉 "01." / "02-" 這類前綴，只留核心文字做 contains 比對 */
+	private String stripLeadingIndex(String s) {
+		if (s == null) return "";
+		return s.replaceFirst("^\\s*\\d+\\s*[\\.|．、-]\\s*", "").trim();
+	}
+
+	/** XPath 字串 escape（單引號內容拼接） */
+	private String escapeQuotes(String s) {
+		if (s == null) return "";
+		if (!s.contains("'")) return s;
+		// 將 ' 轉為 concat('a', "'", 'b') 模式
+		String[] parts = s.split("'");
+		StringBuilder sb = new StringBuilder("concat(");
+		for (int i = 0; i < parts.length; i++) {
+			if (i > 0) sb.append(", \"'\", ");
+			sb.append("'").append(parts[i]).append("'");
+		}
+		sb.append(")");
+		return sb.toString();
 	}
 }
