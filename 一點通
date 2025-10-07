@@ -36,8 +36,11 @@ public class CSROneCallPass extends AbstractBasePage {
 	// Step1 - 契約終止
 	private String terminiateContractRadioButtonLocator = "//td[@class='pc_info']//label[@for='ewOption2']";
 
-	// Step1 - 保單變更
-	private String policyChangeRadioButtonLocator = "//td[@class='pc_info']//label[@for='ewOption3' or contains(normalize-space(),'保單變更')]";
+	// Step1 - 保單變更（新增）
+	private String policyChangeRadioLooseXpath = "//td[@class='pc_info']//label[@for='ewOption3' or contains(normalize-space(),'保單變更')]";
+	private By policyChangeRadioBy = By.xpath(policyChangeRadioLooseXpath);
+	private By changeItemsTableBy = By.id("tran_list"); // 變更項目那張表
+	private List<String> selectedChangeItems = new ArrayList<>(); // 過濾紅字後仍保留的項目（顯示文字）
 
 	// Step2（保單借款）
 	private String policyChangeTableTitleLocator = "(//div[@id='divInputChg']//table[@width='100%' and @class='table table-bordered search-table']/tbody/tr)[1]/th[not(contains(@class,'pc_hide'))]";
@@ -295,25 +298,10 @@ public class CSROneCallPass extends AbstractBasePage {
 
 			// ★ 不論驗證是否成功，都嘗試回 Step1（關鍵修正）
 			boolean backOk = returnToStep1Robust("terminate-review");
-
-			// 若驗證或回跳有任何一個失敗，都視為整體失敗
 			if (!termOk || !backOk) return false;
 
-			// ===== 保單變更流程 =====
-			// 回到 Step1 後，確保保單仍有勾選
-			if (!ensureChecked(By.id("checkbox" + POLICY_NO), By.xpath(policyChangeCheckboxLocator), 6000)) return false;
-
-			// 這裡填你要勾的項目文字；先以「01.地址變更」示範，之後要加更多就往陣列裡加
-			List<String> changeItems = Arrays.asList(
-				"01.地址變更"
-				// ,"02.電話變更", "03.Email變更" ...
-			);
-
-			// 選「保單變更」radio，勾 changeItems，然後下一步
-			if (!runPolicyChangeStep1SelectItems(changeItems)) return false;
-
-			// 若暫時還沒做保單變更 Step2/3 的驗證，先回到 Step1 避免卡住
-			if (!returnToStep1Robust("policy-change-step1")) return false;
+			// ===== 保單變更：全選 -> 過濾紅字 -> 進 Step2 逐項驗證 =====
+			if (!runPolicyChange_AllSelect_FilterAndVerify()) return false;
 
 			return true;
 		} finally {
@@ -854,6 +842,246 @@ public class CSROneCallPass extends AbstractBasePage {
 		return getSelectedText(selectBy);
 	}
 
+	// =========================
+	// NEW：保單變更主流程（整合版）
+	// =========================
+	/** 保單變更：勾保單 → 選保單變更 → 全選項目 → 下一步
+	    若仍停在 Step1 且出現紅字，逐列反勾該列 → 再按下一步
+	    進入 Step2 後，針對已保留項目逐一驗證（目前實作『地址變更』）→ 回 Step1 */
+	private boolean runPolicyChange_AllSelect_FilterAndVerify() {
+		// 勾保單
+		if (!ensureChecked(By.id("checkbox" + POLICY_NO), By.xpath(policyChangeCheckboxLocator), 6000)) return false;
+
+		// 選「保單變更」radio（寬鬆）
+		WebElement pcRadio = findElementIsDisplayed(policyChangeRadioBy, true, 4000);
+		if (pcRadio == null) {
+			// 備援：用文字搜
+			pcRadio = findElementIsDisplayed(By.xpath("//label[contains(normalize-space(),'保單變更')]"), true, 3000);
+		}
+		if (pcRadio == null) return false;
+		click(pcRadio, true);
+		waitForStable();
+
+		// 全選變更項目
+		List<RowItem> rows = collectChangeItemRowsOnStep1();
+		if (rows.isEmpty()) {
+			logger.debug("[PolicyChange] 找不到變更項目列（tran_list）");
+			return false;
+		}
+		for (RowItem r : rows) checkRowCheckbox(r);
+		waitForStable();
+
+		// 先記下目前全選的項目清單
+		selectedChangeItems = collectCurrentlySelectedChangeItemTexts();
+
+		// 下一步（第一次）→ 可能因為有不開放項目而仍留在 Step1
+		WebElement next = findElementIsDisplayed(By.xpath(stepOneNextButtonLocator), true, 4000);
+		if (next == null) return false;
+		click(next, true);
+		waitForStable();
+
+		// 最多兩輪：如果還在 Step1，依「紅字」反勾不允許的列，再按下一步
+		for (int round = 1; round <= 2; round++) {
+			if (!stillOnStep1()) break; // 已離開 Step1
+			List<String> removed = deselectRowsWithRedMessage(); // 反勾並回傳移除的顯示文字
+			if (removed.isEmpty()) break;     // 沒抓到紅字就不再嘗試
+			// 從已選清單剔除
+			for (String rm : removed) {
+				final String nrm = normalizeText(rm);
+				selectedChangeItems.removeIf(s -> normalizeText(s).equals(nrm));
+			}
+			waitForStable();
+
+			next = findElementIsDisplayed(By.xpath(stepOneNextButtonLocator), true, 3000);
+			if (next == null) return false;
+			click(next, true);
+			waitForStable();
+		}
+
+		// 檢查是否已進 Step2（保單變更畫面通常在 divInputChg 底下）
+		boolean inStep2 = findElement(By.id("divInputChg"), false, 3000) != null || !stillOnStep1();
+		if (!inStep2) {
+			logger.debug("[PolicyChange] 無法進入 Step2（可能全部項目都不開放？）");
+			return false;
+		}
+
+		logger.debug("[PolicyChange] 經過紅字過濾後保留的項目：" + selectedChangeItems);
+
+		// === 逐項驗證 Step2（目前只實作『地址變更』基本驗證；其餘項目先略過並記 log） ===
+		boolean allOk = true;
+		for (String item : selectedChangeItems) {
+			String t = normalizeText(item);
+			if (t.contains("地址")) {
+				allOk &= verifyPolicyChangeStep2Address();
+			} else {
+				logger.debug("[PolicyChange] 暫未實作 Step2 驗證的項目： " + item);
+			}
+		}
+
+		// 驗完回 Step1（避免卡在 Step2）
+		allOk &= returnToStep1Robust("policy-change-step2");
+
+		return allOk;
+	}
+
+	/** 是否仍在 Step1（用 Step1 的兩個關鍵元素判斷） */
+	private boolean stillOnStep1() {
+		try {
+			return findElement(selectChangeItemOptLocator, false, 800) != null
+				&& findElement(pageDisplayCorrectlyLocator,  false, 800) != null;
+		} catch (Exception e) { return false; }
+	}
+
+	/** 取得 Step1 變更項目每一列：checkbox + 顯示文字（盡量靠 label/td 文字） */
+	private List<RowItem> collectChangeItemRowsOnStep1() {
+		List<RowItem> out = new ArrayList<>();
+		try {
+			WebElement table = findElement(changeItemsTableBy, false, 3000);
+			if (table == null) return out;
+			List<WebElement> trs = table.findElements(By.xpath(".//tbody/tr"));
+			for (WebElement tr : trs) {
+				try {
+					WebElement cb = null;
+					try { cb = tr.findElement(By.xpath(".//input[@type='checkbox']")); } catch (Exception ignore) {}
+					if (cb == null) continue;
+
+					String id = cb.getAttribute("id");
+					String text = "";
+					// 優先 label
+					try {
+						if (id != null && !id.isBlank()) {
+							WebElement lab = tr.findElement(By.xpath(".//label[@for='" + id + "']"));
+							text = safeText(lab);
+						}
+					} catch (Exception ignore) {}
+					// 退而求其次：該列可見文字
+					if (text.isBlank()) text = safeText(tr);
+
+					RowItem ri = new RowItem();
+					ri.tr = tr;
+					ri.checkbox = cb;
+					ri.labelText = text;
+					out.add(ri);
+				} catch (Exception ignore) {}
+			}
+		} catch (Exception ignore) {}
+		return out;
+	}
+
+	/** 把目前 Step1 已勾選的項目名稱（顯示文字）收集起來 */
+	private List<String> collectCurrentlySelectedChangeItemTexts() {
+		List<String> out = new ArrayList<>();
+		List<RowItem> rows = collectChangeItemRowsOnStep1();
+		for (RowItem r : rows) {
+			try {
+				if (r.checkbox != null && r.checkbox.isSelected()) {
+					out.add(r.labelText);
+				}
+			} catch (Exception ignore) {}
+		}
+		return out;
+	}
+
+	/** 依列勾選（若尚未選） */
+	private void checkRowCheckbox(RowItem r) {
+		try {
+			if (r.checkbox == null) return;
+			if (!r.checkbox.isSelected()) {
+				try { ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView({block:'center'});", r.checkbox); } catch (Exception ignore) {}
+				try { r.checkbox.click(); } catch (Exception e) {
+                    try {
+                        if (r.tr != null) {
+                            WebElement lab = null;
+                            try { lab = r.tr.findElement(By.xpath(".//label[@for='" + r.checkbox.getAttribute("id") + "']")); } catch (Exception ignore) {}
+                            if (lab != null) ((JavascriptExecutor)driver).executeScript("arguments[0].click();", lab);
+                        }
+                    } catch (Exception ignore) {}
+                }
+			}
+		} catch (Exception ignore) {}
+	}
+
+	/** 依列反勾（若已選） */
+	private void uncheckRowCheckbox(RowItem r) {
+		try {
+			if (r.checkbox == null) return;
+			if (r.checkbox.isSelected()) {
+				try { ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView({block:'center'});", r.checkbox); } catch (Exception ignore) {}
+				try { r.checkbox.click(); } catch (Exception e) {
+                    try {
+                        if (r.tr != null) {
+                            WebElement lab = null;
+                            try { lab = r.tr.findElement(By.xpath(".//label[@for='" + r.checkbox.getAttribute("id") + "']")); } catch (Exception ignore) {}
+                            if (lab != null) ((JavascriptExecutor)driver).executeScript("arguments[0].click();", lab);
+                        }
+                    } catch (Exception ignore) {}
+                }
+			}
+		} catch (Exception ignore) {}
+	}
+
+	/** 找出含『紅字』提示的不允許列，反勾之；回傳被反勾的顯示文字清單 */
+	private List<String> deselectRowsWithRedMessage() {
+		List<String> removedLabels = new ArrayList<>();
+		List<RowItem> rows = collectChangeItemRowsOnStep1();
+		for (RowItem r : rows) {
+			try {
+				if (r.tr == null) continue;
+				// 判斷這一列是否有紅字或錯誤訊息（多種 class/style 嘗試）
+				boolean hasError = false;
+				By[] redLoc = new By[] {
+					By.xpath(".//*[contains(@class,'text-danger') or contains(@class,'has-error') or contains(@class,'error') or contains(@class,'alert-danger')]"),
+					By.xpath(".//*[contains(translate(@style,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'color:red')]"),
+					By.xpath(".//font[contains(translate(@color,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'red')]")
+				};
+				for (By by : redLoc) {
+					List<WebElement> reds = r.tr.findElements(by);
+					if (reds != null && !reds.isEmpty()) {
+						for (WebElement el : reds) {
+							if (!safeText(el).isBlank() && el.isDisplayed()) { hasError = true; break; }
+						}
+					}
+					if (hasError) break;
+				}
+				if (hasError) {
+					uncheckRowCheckbox(r);
+					removedLabels.add(r.labelText);
+					logger.debug("[PolicyChange] 反勾（不開放）： " + r.labelText);
+				}
+			} catch (Exception ignore) {}
+		}
+
+		// 補救：若列上沒紅字，但頁面上方彙整訊息有寫到某項目名稱，也嘗試反勾
+		if (removedLabels.isEmpty()) {
+			try {
+				String page = getWholePageText();
+				if (page != null && !page.isBlank()) {
+					for (RowItem r : rows) {
+						String name = normalizeText(r.labelText);
+						if (name.isBlank()) continue;
+						if (page.contains(name) && (
+							page.contains("不可辦理") || page.contains("未開放") ||
+							page.contains("無法受理") || page.contains("不支援") || page.contains("不得辦理")
+						)) {
+							uncheckRowCheckbox(r);
+							removedLabels.add(r.labelText);
+							logger.debug("[PolicyChange] 反勾（彙整訊息匹配）： " + r.labelText);
+						}
+					}
+				}
+			} catch (Exception ignore) {}
+		}
+
+		return removedLabels;
+	}
+
+	/** 小結構：Step1 的一列變更項目 */
+	private static class RowItem {
+		WebElement tr;
+		WebElement checkbox;
+		String labelText;
+	}
+
 	// ====== 小工具 ======
 	private void captureStep1Context() {
 		try { step1Url = driver.getCurrentUrl(); } catch (Exception ignore) {}
@@ -1371,119 +1599,47 @@ public class CSROneCallPass extends AbstractBasePage {
 		} catch (Exception ignore) {}
 	}
 
-	/* =========================
-	   下面是新增的「保單變更 Step1 勾選」相關方法
-	   ========================= */
-
-	/** 執行「保單變更」Step1：選 radio + 勾指定變更項目（依 label 文字），最後點 Next  */
-	private boolean runPolicyChangeStep1SelectItems(List<String> labelsToCheck) {
-		// 1) 選「保單變更」radio
-		WebElement changeRadio = findElementIsDisplayed(By.xpath(policyChangeRadioButtonLocator), true, 4000);
-		if (changeRadio == null) return false;
-		try { ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView({block:'center'});", changeRadio); } catch (Exception ignore) {}
-		try { click(changeRadio, true); } catch (Exception e) { ((JavascriptExecutor)driver).executeScript("arguments[0].click();", changeRadio); }
-
+	// =========================
+	// 保單變更 Step2：地址變更驗證（基本）
+	// =========================
+	/** 保單變更 Step2（地址變更）基本驗證：確認進入、看到關鍵文案，且有可輸入的地址欄位 */
+	private boolean verifyPolicyChangeStep2Address() {
 		waitForStable();
 
-		// 2) 勾變更項目（用 label 文字做寬鬆匹配）
-		if (labelsToCheck != null) {
-			for (String labelText : labelsToCheck) {
-				if (!checkChangeItemByLabelText(labelText)) {
-					logger.debug("[PolicyChange] 勾選變更項目失敗: " + labelText);
-					return false;
-				}
-			}
+		String page = getWholePageText();
+		boolean sawTitle = containsText(page, "地址變更", "Step2-變更項目顯示")
+						|| containsText(page, "保單變更", "Step2-標題");
+		if (!sawTitle) {
+			logger.debug("[PolicyChange-Step2] 頁面上沒有明顯的『地址變更／保單變更』字樣，改以欄位存在性驗證");
 		}
 
-		// 3) 下一步
-		WebElement next = findElementIsDisplayed(By.xpath(stepOneNextButtonLocator), true, 5000);
-		if (next == null) return false;
-		try { ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView({block:'center'});", next); } catch (Exception ignore) {}
-		try { click(next, true); } catch (Exception e) { ((JavascriptExecutor)driver).executeScript("arguments[0].click();", next); }
-
-		waitForStable();
-		return true;
-	}
-
-	/** 以「顯示文字」勾選變更項目 checkbox，支援 01.地址變更 這種前綴。 */
-	private boolean checkChangeItemByLabelText(String fullText) {
-		String want = normalizeText(fullText);
-		String core = stripLeadingIndex(want); // 將 "01.地址變更" 變成 "地址變更" 以便 contains 比對
-
-		// 優先：精準 label 文字
-		By[] tries = new By[] {
-			By.xpath("//label[normalize-space()='"+escapeQuotes(want)+"']"),
-			By.xpath("//label[contains(normalize-space(),'"+escapeQuotes(want)+"')]"),
-			// 退而求其次：只比對核心文字（去掉 01. 前綴）
-			By.xpath("//label[contains(normalize-space(),'"+escapeQuotes(core)+"')]"),
-			// 有些不是 <label> 包文字，找 row/容器內文字再找 checkbox
-			By.xpath("//*[self::tr or self::li or self::div][.//*[contains(normalize-space(),'"+escapeQuotes(core)+"') or contains(normalize-space(),'"+escapeQuotes(want)+"')]]//input[@type='checkbox']"),
-			// 文本在 td/span 的情況
-			By.xpath("//input[@type='checkbox'][ancestor::*[self::tr or self::li or self::div][.//*[contains(normalize-space(),'"+escapeQuotes(core)+"') or contains(normalize-space(),'"+escapeQuotes(want)+"')]]]")
+		By[] addrCandidates = new By[] {
+			By.xpath("//input[(contains(translate(@id,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'addr') or " +
+					 "contains(translate(@name,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'addr') or " +
+					 "contains(translate(@id,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'address') or " +
+					 "contains(translate(@name,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'address')) and " +
+					 "(not(@type) or @type='text' or @type='search')]"),
+			By.xpath("//textarea[contains(translate(@id,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'addr') or " +
+					 "contains(translate(@name,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'addr') or " +
+					 "contains(translate(@id,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'address') or " +
+					 "contains(translate(@name,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'address')]"),
+			By.xpath("//input[contains(@placeholder,'地址') or contains(@placeholder,'住址') or contains(@placeholder,'通訊地址')]"),
+			By.xpath("//textarea[contains(@placeholder,'地址') or contains(@placeholder,'住址') or contains(@placeholder,'通訊地址')]"),
+			By.xpath("(//*[contains(normalize-space(),'地址') or contains(normalize-space(),'住址')])[1]/following::input[1]"),
+			By.id("collectAddress")
 		};
 
-		for (By by : tries) {
-			try {
-				WebElement node = findElementIsDisplayed(by, true, 1200);
-				if (node == null) continue;
-
-				// 如果抓到的是 <label>
-				if ("label".equalsIgnoreCase(node.getTagName())) {
-					WebElement input = null;
-					try {
-						String fid = node.getAttribute("for");
-						if (fid != null && !fid.isBlank()) input = findElement(By.id(fid), false, 500);
-					} catch (Exception ignore) {}
-
-					try { ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView({block:'center'});", node); } catch (Exception ignore) {}
-					try { click(node, true); } catch (Exception e) { ((JavascriptExecutor)driver).executeScript("arguments[0].click();", node); }
-
-					// 驗證是否勾到
-					if (isCheckboxSelected(input, node)) return true;
-
-					// 再直接點 input
-					if (input != null) {
-						try { click(input, true); } catch (Exception e) { ((JavascriptExecutor)driver).executeScript("arguments[0].click();", input); }
-						if (isCheckboxSelected(input, node)) return true;
-					}
-				} else { // 抓到的是 input
-					WebElement input = node;
-					try { ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView({block:'center'});", input); } catch (Exception ignore) {}
-					if (!input.isSelected()) {
-						try { click(input, true); } catch (Exception e) { ((JavascriptExecutor)driver).executeScript("arguments[0].click();", input); }
-					}
-					// 盡量再點一次附近的 label（若有），提高穩定度
-					try {
-						WebElement lbl = input.findElement(By.xpath("following::label[1]"));
-						if (!input.isSelected()) {
-							try { click(lbl, true); } catch (Exception e) { ((JavascriptExecutor)driver).executeScript("arguments[0].click();", lbl); }
-						}
-					} catch (Exception ignore) {}
-					if (input.isSelected()) return true;
-				}
-			} catch (Exception ignore) {}
+		WebElement addrField = null;
+		for (By by : addrCandidates) {
+			addrField = findElementIsDisplayed(by, true, 1500);
+			if (addrField != null) break;
 		}
-		return false;
-	}
-
-	/** 去掉 "01." / "02-" 這類前綴，只留核心文字做 contains 比對 */
-	private String stripLeadingIndex(String s) {
-		if (s == null) return "";
-		return s.replaceFirst("^\\s*\\d+\\s*[\\.|．、-]\\s*", "").trim();
-	}
-
-	/** XPath 字串 escape（單引號內容拼接） */
-	private String escapeQuotes(String s) {
-		if (s == null) return "";
-		if (!s.contains("'")) return s;
-		// 將 ' 轉為 concat('a', "'", 'b') 模式
-		String[] parts = s.split("'");
-		StringBuilder sb = new StringBuilder("concat(");
-		for (int i = 0; i < parts.length; i++) {
-			if (i > 0) sb.append(", \"'\", ");
-			sb.append("'").append(parts[i]).append("'");
+		if (addrField == null) {
+			logger.debug("[PolicyChange-Step2] 找不到地址輸入欄位");
+			return false;
 		}
-		sb.append(")");
-		return sb.toString();
+
+		// （可加：必填星號、縣市/區下拉、格式、預覽按鈕 等）
+		return true;
 	}
 }
