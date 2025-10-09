@@ -118,16 +118,16 @@ public class CSROneCallPass extends AbstractBasePage {
     // NEW: 保單變更代碼到 Step2 Tab 索引的映射 (根據 HTML)
     private static final Map<String, Integer> POLICY_CODE_TO_TAB_INDEX = new HashMap<>();
     static {
-        POLICY_CODE_TO_TAB_INDEX.put("C01", 1); // 地址變更
-        POLICY_CODE_TO_TAB_INDEX.put("C02", 2); // 收費管道變更
-        POLICY_CODE_TO_TAB_INDEX.put("C03", 3); // 簽章方式變更
-        POLICY_CODE_TO_TAB_INDEX.put("A04", 4); // 繳別變更
-        POLICY_CODE_TO_TAB_INDEX.put("A10", 5); // 基本資料變更
-        POLICY_CODE_TO_TAB_INDEX.put("A11", 6); // 職業等級變更
-        POLICY_CODE_TO_TAB_INDEX.put("A16", 7); // 附約保障異動
-        POLICY_CODE_TO_TAB_INDEX.put("A23", 8); // 復效
-        POLICY_CODE_TO_TAB_INDEX.put("C35", 9); // 保單補發
-        // 其他沒有獨立 tab 的代碼無需加入
+        POLICY_CODE_TO_TAB_INDEX.put("C01", 1); // 地址變更 (tab_1)
+        POLICY_CODE_TO_TAB_INDEX.put("C02", 2); // 收費管道變更 (tab_2)
+        POLICY_CODE_TO_TAB_INDEX.put("C03", 3); // 簽章方式變更 (tab_3)
+        POLICY_CODE_TO_TAB_INDEX.put("A04", 4); // 繳別變更 (tab_4)
+        POLICY_CODE_TO_TAB_INDEX.put("A10", 5); // 基本資料變更 (tab_5)
+        POLICY_CODE_TO_TAB_INDEX.put("A11", 6); // 職業等級變更 (tab_6)
+        POLICY_CODE_TO_TAB_INDEX.put("A16", 7); // 附約保障異動 (tab_7)
+        POLICY_CODE_TO_TAB_INDEX.put("A23", 8); // 復效 (tab_8)
+        POLICY_CODE_TO_TAB_INDEX.put("C35", 9); // 保單補發 (tab_9)
+        // C05, C06, C37, C54 似乎共用 Tab 或沒有獨立 Tab，如果遇到則不切換 Tab。
     }
 
 	public CSROneCallPass() {
@@ -335,6 +335,10 @@ public class CSROneCallPass extends AbstractBasePage {
 
 			/* ====== NEW：保單變更 → 全選 → 解析紅字反勾 → 再進 Step2 → 針對項目驗證 ====== */
 			if (!runPolicyChange_AllSelect_FilterAndEnterStep2()) return false;
+            
+            // NEW: 處理 Step 2 中所有 Tab 共同的區塊 (補費/付款/收件人)
+            // 這裡將保單借款/契約終止中通用的付款/收件人邏輯抽取出來
+            if (!handleCommonStep2Sections()) return false; 
 
 			// 目前先接好 C01（地址變更）Step2 骨架；其餘項目之後可逐步擴充
 			if (!dispatchPolicyChangeStep2Validation()) return false;
@@ -434,7 +438,71 @@ public class CSROneCallPass extends AbstractBasePage {
 		allowedPolicyChangeCodes = getCheckedPolicyChangeCodes();
 		return true;
 	}
+    
+    // NEW: 處理 Step 2 中所有 Tab 共同的區塊 (補費/付款/收件人)
+	private boolean handleCommonStep2Sections() {
+		logger.info("Handling common Step 2 sections (Payment/Recipient Info)...");
+		
+		// ================== A. 選擇補費方式 (假設) ==================
+		try {
+			// 尋找包含「選擇補費方式」的區域並選擇第一個 Radio
+			By feeRadioLocator = By.xpath("//div[contains(text(),'選擇補費方式')]/following-sibling::div//input[@type='radio']");
+			WebElement firstFeeRadio = findElementIsDisplayed(feeRadioLocator, true, 3000);
+			if (firstFeeRadio != null) {
+				click(firstFeeRadio, true);
+				logger.debug("Selected the first available Payment Fee Radio.");
+			}
+		} catch (Exception ignore) {}
+		
+		// ================== B. 付款方式 (沿用保單借款的邏輯) ==================
+		
+		// 1. 選擇「使用已提供的帳戶」Radio
+		WebElement radio = findElementIsDisplayed(useProvidedRadio, true, 3000);
+		if (radio == null) {
+			logger.warn("Common section: Cannot find 'Use Provided Account' radio.");
+			// 不返回 false，因為可能某些變更不需要此選項
+		} else {
+			click(radio, true);
+		}
 
+		// 2. 選擇帳戶
+		if (findElement(providedAccountSelect, false, 500) != null) {
+			String val = selectFirstOptionFromSelectOrBootstrap(providedAccountSelect);
+			if (val == null) {
+				logger.error("Common section: Failed to select provided account.");
+			}
+			// 更新 selectedProvidedAcctText 供後續驗證使用
+			selectedProvidedAcctText = getSelectedText(providedAccountSelect);
+		}
+
+		// ================== C. 收件人資訊 (沿用保單借款的邏輯) ==================
+		WebElement chargeAddrRadio = findElementIsDisplayed(chargeAddressRadio, true, 3000);
+		if (chargeAddrRadio == null) {
+			logger.warn("Common section: Cannot find 'Charge Address' radio.");
+		} else {
+			click(chargeAddrRadio, true);
+			WebElement chargeAddrInput = findElementIsDisplayed(chargeAddressInput, false, 3000);
+			if (chargeAddrInput == null) {
+				 logger.warn("Common section: Cannot find charge address input.");
+			} else {
+				// 捕獲收件人資訊供後續驗證
+				chargeAddressFull = chargeAddrInput.getAttribute("value");
+				recipientNameText = getSelectedText(recipientNameSelect);
+				mailTypeText   = getSelectedText(mailTypeSelect);
+			}
+		}
+
+		// 文件/提醒 → 若有就全勾 (通用邏輯)
+		checkAllIfExists(By.cssSelector("#tb_doc tbody input[type='checkbox']"));
+		checkAllIfExists(By.cssSelector("#tb_note tbody input[type='checkbox']"));
+
+		// 收集勾選結果
+		stepTwoDocs = collectCheckedTextsFromTable("tb_doc", 3);
+		stepTwoNotes = collectCheckedTextsFromTable("tb_note", 3);
+
+		return true;
+	}
+    
 	private boolean activateTab(String code) {
 		Integer tabIndex = POLICY_CODE_TO_TAB_INDEX.get(code);
 		if (tabIndex == null) {
@@ -469,8 +537,9 @@ public class CSROneCallPass extends AbstractBasePage {
 		WebElement content = findElement(contentLocator, false, 2000);
 		return content != null && content.isDisplayed();
 	}
-    
+
 	private boolean dispatchPolicyChangeStep2Validation() {
+		// 允許的 Cxx，依序做 Step2 驗證（同一個 Step2 畫面可能同時含多個模組）
 		if (allowedPolicyChangeCodes == null || allowedPolicyChangeCodes.isEmpty()) {
 			logger.debug("[PolicyChange] 無允許項目可驗證，略過。");
 			return true;
@@ -485,19 +554,19 @@ public class CSROneCallPass extends AbstractBasePage {
 				allOk = false;
 				continue;
 			}
-            
+			
 			// 2. 執行特定 Tab 的驗證邏輯
 			boolean ok = true;
 			switch (code) {
 				case "C01":
 					ok = validate_C01_AddressChange_Step2();
 					break;
-				case "C02":
+                case "C02":
                     ok = validate_C02_BillingChannelChange_Step2(); 
                     break;
 				// TODO: 後續逐步擴充其他 Cxx...
 				default:
-					logger.debug("[PolicyChange] 暫無驗證實作或跳過: " + code);
+					logger.debug("[PolicyChange] 暫無驗證實作或跳過: " + code + "（略過但不判 fail）");
 					ok = true;
 			}
 			allOk &= ok;
@@ -541,12 +610,17 @@ public class CSROneCallPass extends AbstractBasePage {
 		logger.debug("[C01] 地址變更 Step2 填寫完成。");
 		return true;
 	}
-
+    
     // 示例：C02 收費管道變更
 	private boolean validate_C02_BillingChannelChange_Step2() {
 		By billingChannelSelect = By.id("billingChannel" + POLICY_NO);
         // 假設我們需要選擇 "自行繳費" (value="H" 或 text="自行繳費")
+        // 如果有多個選項，可以改為選擇第一個非預設值
+        
 		String selected = selectByTextFromSelectOrBootstrap(billingChannelSelect, "自行繳費");
+        // 如果選擇第一個選項，則可以這樣寫：
+        // String selected = selectFirstOptionFromSelectOrBootstrap(billingChannelSelect);
+        
 		if (selected == null) {
 			logger.error("[C02] Failed to validate billing channel.");
 			return false;
@@ -1811,10 +1885,10 @@ public class CSROneCallPass extends AbstractBasePage {
 			String u = url == null ? "" : url.toLowerCase();
 			if (!u.isEmpty()) {
 				urlLike = u.startsWith("about:blank")
-					  || u.startsWith("edge://") || u.startsWith("chrome://")
-					  || u.startsWith("blob:")  || u.contains(".pdf")
-					  || u.contains("/print")  || u.contains("preview")
-					  || u.contains("download");
+					 || u.startsWith("edge://") || u.startsWith("chrome://")
+					 || u.startsWith("blob:") || u.contains(".pdf")
+					 || u.contains("/print") || u.contains("preview")
+					 || u.contains("download");
 			}
 
 			boolean sizeLike = false;
