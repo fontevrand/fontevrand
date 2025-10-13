@@ -1,0 +1,25 @@
+// jQuery/DOM 穩定等待
+private void waitForStable() {
+    try {
+        new WebDriverWait(driver, Duration.ofSeconds(15)).until(d -> {
+            try {
+                JavascriptExecutor js = (JavascriptExecutor) d;
+                Object ready = js.executeScript("return document.readyState");
+                Object jq = js.executeScript("return window.jQuery ? jQuery.active : 0");
+                boolean docReady = "complete".equals(ready);
+                boolean ajaxIdle = !(jq instanceof Long) || ((Long) jq) == 0L;
+                return docReady && ajaxIdle;
+            } catch (Exception e) {
+                return true; // 任何例外就視為穩定，避免卡住
+            }
+        });
+    } catch (Exception ignore) {
+        // 忽略等待過程中的其他例外
+    } finally {
+        try {
+            Thread.sleep(200); // 小延遲，讓畫面渲染完成
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
+    }
+}
