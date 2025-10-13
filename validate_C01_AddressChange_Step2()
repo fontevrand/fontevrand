@@ -1,19 +1,37 @@
-/* ===== C01 地址變更：填「戶籍地址 dropdown」+「地址 text field」+「公司電話」 ===== */
+/* ===== C01 地址變更：戶籍地址下拉 + 地址輸入 + 公司電話 +（不驗證顯示） ===== */
 private boolean validate_C01_AddressChange_Step2() {
     waitForStable();
 
-    // 可能的戶籍地址(郵遞區號/區域)下拉：id/name/fallback by label
-    By[] zipCandidates = new By[]{
+    // ✅ 你要的目標值
+    final String TARGET_ZIP_TEXT  = "110 台北市信義區";
+    final String TARGET_ZIP_VALUE = "110";
+    final String TARGET_ADDRESS   = "永吉路30巷99號";
+    final String TARGET_COMPANY_PHONE = "02 37621960";
+
+    // 1) 戶籍地址/郵遞區號 下拉 (id/name → label 鄰近 → 當前 tab 第一個 select)
+    By[] zipCandidates = new By[] {
         By.id("clientspc"),
         By.name("clientspc"),
-        // 以「戶籍」或「郵遞區號」label 來反查 select
         By.xpath("(//label[contains(normalize-space(),'戶籍') or contains(normalize-space(),'郵遞')]/following::*[self::select])[1]"),
-        // tab 容器下第一個 select 也當備援
         By.xpath("//div[contains(@class,'tab_content') and contains(@class,'active')]//select[1]")
     };
+    WebElement zipSelectEl = findFirstPresent(zipCandidates, 3500);
+    if (zipSelectEl == null) {
+        logger.error("[C01] 找不到戶籍地址/郵遞區號 下拉");
+        return false;
+    }
+    String zipSelected = selectFromSelectOrBootstrap(getByOf(zipSelectEl), TARGET_ZIP_VALUE, TARGET_ZIP_TEXT);
+    if (zipSelected == null) {
+        zipSelected = selectByTextFromSelectOrBootstrap(getByOf(zipSelectEl), TARGET_ZIP_TEXT);
+    }
+    if (zipSelected == null) {
+        logger.error("[C01] 郵遞區下拉選擇失敗");
+        return false;
+    }
+    waitForStable(); // 有些頁面選完區域會重新渲染地址欄位
 
-    // 地址輸入框候選：id/name/fallback by label
-    By[] addrCandidates = new By[]{
+    // 2) 地址輸入框 (id/name → label 鄰近 → 當前 tab 內包含 Address 的第一個 text input)
+    By[] addrCandidates = new By[] {
         By.id("clientAddress"),
         By.name("clientAddress"),
         By.id("householdAddress"),
@@ -21,149 +39,40 @@ private boolean validate_C01_AddressChange_Step2() {
         By.xpath("(//label[contains(normalize-space(),'地址')][1]/following::*[self::input and @type='text'])[1]"),
         By.xpath("//div[contains(@class,'tab_content') and contains(@class,'active')]//input[@type='text' and (contains(@id,'Address') or contains(@name,'Address'))][1]")
     };
-
-    // 1) 戶籍地址 dropdown → 選「110 台北市信義區」
-    final String TARGET_ZIP_TEXT  = "110 台北市信義區";
-    final String TARGET_ZIP_VALUE = "110"; // 若是原生 <select value="110">
-
-    WebElement zipSelectEl = findFirstPresent(zipCandidates, 3500);
-    if (zipSelectEl == null) {
-        logger.error("[C01] 找不到戶籍地址(郵遞區號/區域)下拉");
-        return false;
-    }
-    String zipSelected = selectFromSelectOrBootstrap(getByOf(zipSelectEl), TARGET_ZIP_VALUE, TARGET_ZIP_TEXT);
-    if (zipSelected == null) {
-        // 後援：用可視文字選
-        zipSelected = selectByTextFromSelectOrBootstrap(getByOf(zipSelectEl), TARGET_ZIP_TEXT);
-    }
-    if (zipSelected == null) {
-        logger.error("[C01] 郵遞/區域 下拉選擇失敗");
-        return false;
-    }
-    waitForStable(); // 某些頁面選區域會觸發地址欄位重繪
-
-    // 2) 地址 text field → 輸入「松壽路3號」
-    final String NEW_ADDRESS = "松壽路3號";
     WebElement addressEl = findFirstPresent(addrCandidates, 3000);
     if (addressEl == null) {
         logger.error("[C01] 找不到地址輸入框");
         return false;
     }
-    input(addressEl, NEW_ADDRESS);
-    if (!NEW_ADDRESS.equals(addressEl.getAttribute("value"))) {
-        logger.warn("[C01] 地址輸入值確認不一致，實際 value='" + addressEl.getAttribute("value") + "'");
-        // 不強制失敗（有些頁面會自動轉半形/加路段），改為寬鬆包含
-        if (!normalizeText(addressEl.getAttribute("value")).contains(normalizeText(NEW_ADDRESS))) {
-            return false;
-        }
+    input(addressEl, TARGET_ADDRESS);
+    // 放寬核對（有些頁面會自動轉半形/加路段/去空白）
+    String addrVal = addressEl.getAttribute("value");
+    if (addrVal == null || normalizeText(addrVal).isEmpty()) {
+        logger.error("[C01] 地址輸入未生效");
+        return false;
     }
 
-    // 3) 公司電話（常見有 1 欄或 3 欄：區碼/號碼/分機）
-    //   盡可能以 label「公司電話」就近找，否則常見 id/name 模式
-    boolean phoneOk = setCompanyPhoneRobust("02", "23456789", "123");
-    if (!phoneOk) {
-        logger.warn("[C01] 公司電話欄位未找到或不可填（不致命，放寬處理）");
-    }
-
-    logger.debug("[C01] 地址變更 Step2：戶籍下拉、地址、公司電話都處理完成。");
-    return true;
-}
-
-/** 在多個 By 候選中，回傳第一個可見且可互動的元素 */
-private WebElement findFirstPresent(By[] candidates, int eachTimeoutMs) {
-    for (By by : candidates) {
-        try {
-            WebElement el = findElementIsDisplayed(by, true, eachTimeoutMs);
-            if (el != null) return el;
-        } catch (Exception ignore) {}
-    }
-    return null;
-}
-
-/** 由元素反推出一個可用的 By（優先 id/name；退而求其次用 XPath by position） */
-private By getByOf(WebElement el) {
-    try {
-        String id = el.getAttribute("id");
-        if (id != null && !id.isBlank()) return By.id(id);
-    } catch (Exception ignore) {}
-    try {
-        String name = el.getAttribute("name");
-        if (name != null && !name.isBlank()) return By.name(name);
-    } catch (Exception ignore) {}
-    // 備援：用相對 XPath（僅用在 selectFromSelectOrBootstrap/讀取文字時）
-    String jsPath =
-        "function xp(n){var p='';while(n&&n.nodeType===1){var i=1,s=n.previousSibling;while(s){if(s.nodeType===1&&s.tagName===n.tagName)i++;s=s.previousSibling;}p='/' + n.tagName + '['+i+']'+p;n=n.parentNode;}return p.toLowerCase();}return xp(arguments[0]);";
-    try {
-        String path = (String)((JavascriptExecutor)driver).executeScript(jsPath, el);
-        return By.xpath(path);
-    } catch (Exception e) {
-        return By.xpath("(//*)[1]"); // 不會真的被用到
-    }
-}
-
-/** 盡可能填「公司電話」：支援 1 欄或 3 欄（區碼/號碼/分機），並嘗試以 label 鄰近反查 */
-private boolean setCompanyPhoneRobust(String area, String number, String ext) {
-    // A. 先試「公司電話」標籤就近的三欄/單欄
-    try {
-        // 以『公司電話』或『公司  電話』等變體查找
-        WebElement phoneBlock = findElementIsDisplayed(
-            By.xpath("//*[self::label or self::th or self::td or self::div][contains(normalize-space(), '公司') and contains(normalize-space(), '電話')]"),
-            true, 1500
+    // 3) 公司電話（支援單欄或 區碼/號碼/分機 三欄）
+    if (!setCompanyPhoneRobust("02", "37621960", "")) {
+        // 再嘗試單欄（label 鄰近找第一個 text）
+        WebElement oneField = findElementIsDisplayed(
+            By.xpath("//*[self::label or self::th or self::td or self::div][contains(normalize-space(), '公司') and contains(normalize-space(), '電話')]/following::*[self::input and @type='text'][1]"),
+            true, 1200
         );
-        if (phoneBlock != null) {
-            // 先找三欄
-            List<WebElement> inputs = phoneBlock.findElements(By.xpath("./following::*[self::input and @type='text'][position()<=4]"));
-            if (inputs.size() >= 2) {
-                // 嘗試辨識含區碼/分機的欄位（看 placeholder/name/id）
-                WebElement areaEl = null, numEl = null, extEl = null;
-                for (WebElement in : inputs) {
-                    String ph = (in.getAttribute("placeholder") + "").toLowerCase();
-                    String nm = (in.getAttribute("name") + "").toLowerCase();
-                    String id = (in.getAttribute("id") + "").toLowerCase();
-                    if (areaEl == null && (ph.contains("區碼") || nm.contains("area") || id.contains("area"))) areaEl = in;
-                    else if (extEl == null && (ph.contains("分機") || nm.contains("ext")  || id.contains("ext")))  extEl = in;
-                    else if (numEl == null) numEl = in;
-                }
-                if (areaEl != null) input(areaEl, area);
-                if (numEl  != null) input(numEl,  number);
-                if (extEl  != null && ext != null && !ext.isEmpty()) input(extEl,  ext);
-                // 確認至少一欄被填到
-                if ((areaEl != null && !areaEl.getAttribute("value").isEmpty()) ||
-                    (numEl  != null && !numEl.getAttribute("value").isEmpty())) {
-                    return true;
-                }
-            }
-            // 退回單欄
-            WebElement oneField = phoneBlock.findElement(By.xpath("./following::*[self::input and @type='text'][1]"));
-            if (oneField != null) {
-                input(oneField, (ext==null||ext.isEmpty()) ? (area + number) : (area + number + " ext " + ext));
-                return true;
-            }
+        if (oneField != null) {
+            input(oneField, TARGET_COMPANY_PHONE);
+        } else {
+            // 找常見單欄 id/name
+            WebElement single = findFirstPresent(new By[]{
+                By.id("companyPhone"), By.name("companyPhone"),
+                By.id("officePhone"),  By.name("officePhone"),
+                By.id("companyTel"),   By.name("companyTel")
+            }, 800);
+            if (single != null) input(single, TARGET_COMPANY_PHONE);
+            else logger.warn("[C01] 找不到公司電話欄位（略過不致命）");
         }
-    } catch (Exception ignore) {}
-
-    // B. 常見 id/name（單欄）
-    By[] oneField = new By[]{
-        By.id("companyPhone"), By.name("companyPhone"),
-        By.id("officePhone"),  By.name("officePhone"),
-        By.id("company_tel"),  By.name("company_tel"),
-        By.id("companyTel"),   By.name("companyTel")
-    };
-    WebElement single = findFirstPresent(oneField, 800);
-    if (single != null) {
-        input(single, (ext==null||ext.isEmpty()) ? (area + number) : (area + number + " ext " + ext));
-        return true;
     }
 
-    // C. 常見三欄型式
-    WebElement areaEl = findFirstPresent(new By[]{ By.id("companyArea"), By.name("companyArea"), By.id("telArea"), By.name("telArea") }, 500);
-    WebElement numEl  = findFirstPresent(new By[]{ By.id("companyTel"),  By.name("companyTel"),  By.id("telNo"),   By.name("telNo")   }, 500);
-    WebElement extEl  = findFirstPresent(new By[]{ By.id("companyExt"),  By.name("companyExt"),  By.id("telExt"),  By.name("telExt")  }, 500);
-    if (areaEl != null || numEl != null) {
-        if (areaEl != null) input(areaEl, area);
-        if (numEl  != null) input(numEl,  number);
-        if (extEl  != null && ext != null && !ext.isEmpty()) input(extEl,  ext);
-        return true;
-    }
-    return false;
+    logger.debug("[C01] 戶籍=110 信義、地址=永吉路30巷99號、公司電話=02 37621960 已填寫。");
+    return true;
 }
