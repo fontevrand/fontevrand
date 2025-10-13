@@ -582,7 +582,7 @@ public class CSROneCallPass extends AbstractBasePage {
 		return allOk;
 	}
 
-	/* ===== C01 地址變更：戶籍地址下拉 + 地址輸入 + 公司電話 +（完成後按預覽） ===== */
+	/* ===== C01 地址變更：戶籍地址下拉 + 地址輸入 + 公司/住家/行動/Email（完成後按預覽） ===== */
 	private boolean validate_C01_AddressChange_Step2() {
 	    waitForStable();
 
@@ -606,14 +606,28 @@ public class CSROneCallPass extends AbstractBasePage {
 	        By.xpath("//div[contains(@class,'tab_content') and contains(@class,'active')]//input[@type='text' and (contains(@id,'Address') or contains(@name,'Address'))][1]")
 	    };
 
-	    // 你要的目標值
+	    // 其他欄位（盡量補齊）
+	    By[] homeAreaCands   = new By[]{ By.id("clientHomePhoneCde"), By.name("clientHomePhoneCde") };
+	    By[] homePhoneCands  = new By[]{ By.id("clientHomePhone"),    By.name("clientHomePhone") };
+	    By[] offAreaCands    = new By[]{ By.id("clientOfficePhoneCde"), By.name("clientOfficePhoneCde") };
+	    By[] offPhoneCands   = new By[]{ By.id("clientOfficePhone"),    By.name("clientOfficePhone") };
+	    By[] offExtCands     = new By[]{ By.id("clientOfficePhone2"),   By.name("clientOfficePhone2") };
+	    By[] mobileCands     = new By[]{ By.id("clientMobile"),         By.name("clientMobile") };
+	    By[] emailCands      = new By[]{ By.id("clientMail"),           By.name("clientMail") };
+
+	    // 你要的目標值（示範）
 	    final String TARGET_ZIP_TEXT  = "110 台北市信義區";
 	    final String TARGET_ZIP_VALUE = "110";
 	    final String TARGET_ADDRESS   = "永吉路30巷99號";
-	    final String PHONE_AREA       = "02";
-	    final String PHONE_NUMBER     = "37621960";
+	    final String HOME_AREA        = "02";
+	    final String HOME_PHONE       = "27541234";
+	    final String OFFICE_AREA      = "02";
+	    final String OFFICE_PHONE     = "87891234";
+	    final String OFFICE_EXT       = "123";
+	    final String MOBILE           = "0912123456";
+	    final String EMAIL            = "test@example.com";
 
-	    // 1) 戶籍地址 dropdown → 選「110 台北市信義區」
+	    // 1) 戶籍地址 dropdown → 先用點選方式；失敗再用 JS selectpicker
 	    WebElement zipSelectEl = findFirstPresent(zipCandidates, 3500);
 	    if (zipSelectEl == null) {
 	        logger.error("[C01] 找不到戶籍地址(郵遞區號/區域)下拉");
@@ -624,13 +638,31 @@ public class CSROneCallPass extends AbstractBasePage {
 	        // 後援：用可視文字選
 	        zipSelected = selectByTextFromSelectOrBootstrap(getByOf(zipSelectEl), TARGET_ZIP_TEXT);
 	    }
-	    if (zipSelected == null) {
-	        logger.error("[C01] 郵遞/區域 下拉選擇失敗");
-	        return false;
+	    if (zipSelected == null || zipSelected.isBlank()) {
+	        // ★ 最後後援：用 selectpicker('val', ...) 並觸發 changed.bs.select
+	        try {
+	            String id = zipSelectEl.getAttribute("id");
+	            if (id != null && !id.isBlank()) {
+	                setBootstrapSelectValueJS("select#" + id, TARGET_ZIP_VALUE);
+	                // 驗證是否真的有值
+	                String finalVal = zipSelectEl.getAttribute("value");
+	                if (finalVal == null || finalVal.isBlank()) {
+	                    // 再從顯示文字讀一次
+	                    String show = getSelectedText(getByOf(zipSelectEl));
+	                    if (show == null || show.isBlank()) {
+	                        logger.error("[C01] 郵遞/區域 下拉選擇失敗");
+	                        return false;
+	                    }
+	                }
+	            }
+	        } catch (Exception e) {
+	            logger.error("[C01] selectpicker JS 設值例外: " + e.getMessage());
+	            return false;
+	        }
 	    }
 	    waitForStable(); // 有些頁面選區域會觸發地址欄位重繪
 
-	    // 2) 地址 input → 輸入「永吉路30巷99號」
+	    // 2) 地址 input → 輸入
 	    WebElement addressEl = findFirstPresent(addrCandidates, 3000);
 	    if (addressEl == null) {
 	        logger.error("[C01] 找不到地址輸入框");
@@ -643,24 +675,33 @@ public class CSROneCallPass extends AbstractBasePage {
 	        return false;
 	    }
 
-	    // 3) 戶籍公司電話 → 輸入「02 37621960」
-	    boolean phoneOk = setCompanyPhoneRobust(PHONE_AREA, PHONE_NUMBER, "");
-	    if (!phoneOk) {
-	        // 單欄備援（label 鄰近找第一個 text）
-	        try {
-	            WebElement oneField = findElementIsDisplayed(
-	                By.xpath("//*[self::label or self::th or self::td or self::div][contains(normalize-space(),'公司') and contains(normalize-space(),'電話')]/following::*[self::input and @type='text'][1]"),
-	                true, 1200
-	            );
-	            if (oneField != null) {
-	                input(oneField, PHONE_AREA + " " + PHONE_NUMBER);
-	                phoneOk = true;
-	            }
-	        } catch (Exception ignore) {}
-	        if (!phoneOk) logger.warn("[C01] 公司電話欄位未找到或不可填（不致命）");
+	    // 3) 住家電話（若版面有）
+	    inputByCandidates(homeAreaCands,  HOME_AREA);
+	    inputByCandidates(homePhoneCands, HOME_PHONE);
+
+	    // 4) 公司電話 → 先試三欄；若找不到，走 Robust
+	    boolean officeOk = false;
+	    WebElement offArea = findFirstPresent(offAreaCands,  600);
+	    WebElement offNo   = findFirstPresent(offPhoneCands, 600);
+	    WebElement offExt  = findFirstPresent(offExtCands,   600);
+	    if (offArea != null || offNo != null) {
+	        tryInput(offArea, OFFICE_AREA);
+	        tryInput(offNo,   OFFICE_PHONE);
+	        tryInput(offExt,  OFFICE_EXT);
+	        officeOk = true;
+	    }
+	    if (!officeOk) {
+	        officeOk = setCompanyPhoneRobust(OFFICE_AREA, OFFICE_PHONE, OFFICE_EXT);
+	        if (!officeOk) logger.warn("[C01] 公司電話欄位未找到或不可填（不致命）");
 	    }
 
-	    logger.debug("[C01] 已填：戶籍=110 台北市信義區、地址=" + TARGET_ADDRESS + "、公司電話=" + PHONE_AREA + " " + PHONE_NUMBER);
+	    // 5) 行動電話 / Email（若版面有）
+	    inputByCandidates(mobileCands, MOBILE);
+	    inputByCandidates(emailCands,  EMAIL);
+
+	    logger.debug("[C01] 已填：區域=110 台北市信義區、地址=" + TARGET_ADDRESS + "、住家=" + HOME_AREA + "-" + HOME_PHONE
+	            + "、公司=" + OFFICE_AREA + "-" + OFFICE_PHONE + " ext " + OFFICE_EXT
+	            + "、行動=" + MOBILE + "、Email=" + EMAIL);
 	    return true;
 	}
 
@@ -1313,7 +1354,6 @@ public class CSROneCallPass extends AbstractBasePage {
 			try {
 				WebElement any = null;
 				try { any = row.findElement(By.xpath(".//label[contains(@for,'checkbox') or self::label]")); } catch (Exception ignore) {}
-				if (any == null) { try { any = row.findElement(By.xpath(".//input[@type='checkbox']")); } catch (Exception ignore) {} }
 				if (any != null) {
 					try { js.executeScript("arguments[0].scrollIntoView({block:'center'});", any); } catch (Exception ignore) {}
 					try { any.click(); } catch (Exception e) { try { js.executeScript("arguments[0].click();", any); } catch (Exception ignore) {} }
@@ -2099,5 +2139,58 @@ public class CSROneCallPass extends AbstractBasePage {
 	        return true;
 	    }
 	    return false;
+	}
+
+	/* ======== 這裡開始是新增的小工具（整合自前段回覆，用在 C01） ======== */
+
+	/** 使用 jQuery selectpicker 強制設值並觸發事件（確保畫面/模型同步） */
+	private void setBootstrapSelectValueJS(String selectCss, String value) {
+		String js =
+			"var s=document.querySelector(arguments[0]);"
+		  + "if(!s) return 'notfound';"
+		  + "if(window.jQuery && jQuery(s).selectpicker){"
+		  + "  jQuery(s).selectpicker('val', arguments[1]);"
+		  + "  jQuery(s).trigger('changed.bs.select');"
+		  + "}else{"
+		  + "  s.value = arguments[1];"
+		  + "  s.dispatchEvent(new Event('change',{bubbles:true}));"
+		  + "}"
+		  + "return 'ok';";
+		try {
+			((JavascriptExecutor) driver).executeScript(js, selectCss, value);
+		} catch (Exception ignore) {}
+	}
+
+	/** 安全地滾動到元素中央 */
+	private void safeScrollIntoView(WebElement el) {
+		try {
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", el);
+		} catch (Exception ignore) {}
+	}
+
+	/** 嘗試對 By 輸入（元素可見即輸入） */
+	private boolean tryInput(By by, String val) {
+		try {
+			WebElement el = findElementIsDisplayed(by, true, 1200);
+			return tryInput(el, val);
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	/** 嘗試對元素輸入（可見即輸入） */
+	private boolean tryInput(WebElement el, String val) {
+		try {
+			if (el == null) return false;
+			safeScrollIntoView(el);
+			el.clear();
+			el.sendKeys(val);
+			return true;
+		} catch (Exception e) { return false; }
+	}
+
+	/** 在候選定位器中選第一個可輸入者並輸入 */
+	private void inputByCandidates(By[] cands, String val) {
+		WebElement el = findFirstPresent(cands, 800);
+		if (el != null) tryInput(el, val);
 	}
 }
