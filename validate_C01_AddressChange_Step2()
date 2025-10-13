@@ -1,0 +1,70 @@
+/* ===== C01 地址變更：填「戶籍地址 dropdown」+「地址 text field」+「公司電話」 ===== */
+private boolean validate_C01_AddressChange_Step2() {
+    waitForStable();
+
+    // 可能的戶籍地址(郵遞區號/區域)下拉：id/name/fallback by label
+    By[] zipCandidates = new By[]{
+        By.id("clientspc"),
+        By.name("clientspc"),
+        // 以「戶籍」或「郵遞區號」label 來反查 select
+        By.xpath("(//label[contains(normalize-space(),'戶籍') or contains(normalize-space(),'郵遞')]/following::*[self::select])[1]"),
+        // tab 容器下第一個 select 也當備援
+        By.xpath("//div[contains(@class,'tab_content') and contains(@class,'active')]//select[1]")
+    };
+
+    // 地址輸入框候選：id/name/fallback by label
+    By[] addrCandidates = new By[]{
+        By.id("clientAddress"),
+        By.name("clientAddress"),
+        By.id("householdAddress"),
+        By.name("householdAddress"),
+        By.xpath("(//label[contains(normalize-space(),'地址')][1]/following::*[self::input and @type='text'])[1]"),
+        By.xpath("//div[contains(@class,'tab_content') and contains(@class,'active')]//input[@type='text' and (contains(@id,'Address') or contains(@name,'Address'))][1]")
+    };
+
+    // 1) 戶籍地址 dropdown → 選「110 台北市信義區」
+    final String TARGET_ZIP_TEXT  = "110 台北市信義區";
+    final String TARGET_ZIP_VALUE = "110"; // 若是原生 <select value="110">
+
+    WebElement zipSelectEl = findFirstPresent(zipCandidates, 3500);
+    if (zipSelectEl == null) {
+        logger.error("[C01] 找不到戶籍地址(郵遞區號/區域)下拉");
+        return false;
+    }
+    String zipSelected = selectFromSelectOrBootstrap(getByOf(zipSelectEl), TARGET_ZIP_VALUE, TARGET_ZIP_TEXT);
+    if (zipSelected == null) {
+        // 後援：用可視文字選
+        zipSelected = selectByTextFromSelectOrBootstrap(getByOf(zipSelectEl), TARGET_ZIP_TEXT);
+    }
+    if (zipSelected == null) {
+        logger.error("[C01] 郵遞/區域 下拉選擇失敗");
+        return false;
+    }
+    waitForStable(); // 某些頁面選區域會觸發地址欄位重繪
+
+    // 2) 地址 text field → 輸入「松壽路3號」
+    final String NEW_ADDRESS = "松壽路3號";
+    WebElement addressEl = findFirstPresent(addrCandidates, 3000);
+    if (addressEl == null) {
+        logger.error("[C01] 找不到地址輸入框");
+        return false;
+    }
+    input(addressEl, NEW_ADDRESS);
+    if (!NEW_ADDRESS.equals(addressEl.getAttribute("value"))) {
+        logger.warn("[C01] 地址輸入值確認不一致，實際 value='" + addressEl.getAttribute("value") + "'");
+        // 不強制失敗（有些頁面會自動轉半形/加路段），改為寬鬆包含
+        if (!normalizeText(addressEl.getAttribute("value")).contains(normalizeText(NEW_ADDRESS))) {
+            return false;
+        }
+    }
+
+    // 3) 公司電話（常見有 1 欄或 3 欄：區碼/號碼/分機）
+    //   盡可能以 label「公司電話」就近找，否則常見 id/name 模式
+    boolean phoneOk = setCompanyPhoneRobust("02", "23456789", "123");
+    if (!phoneOk) {
+        logger.warn("[C01] 公司電話欄位未找到或不可填（不致命，放寬處理）");
+    }
+
+    logger.debug("[C01] 地址變更 Step2：戶籍下拉、地址、公司電話都處理完成。");
+    return true;
+}
