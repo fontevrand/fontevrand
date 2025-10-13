@@ -68,3 +68,102 @@ private boolean validate_C01_AddressChange_Step2() {
     logger.debug("[C01] 地址變更 Step2：戶籍下拉、地址、公司電話都處理完成。");
     return true;
 }
+
+/** 在多個 By 候選中，回傳第一個可見且可互動的元素 */
+private WebElement findFirstPresent(By[] candidates, int eachTimeoutMs) {
+    for (By by : candidates) {
+        try {
+            WebElement el = findElementIsDisplayed(by, true, eachTimeoutMs);
+            if (el != null) return el;
+        } catch (Exception ignore) {}
+    }
+    return null;
+}
+
+/** 由元素反推出一個可用的 By（優先 id/name；退而求其次用 XPath by position） */
+private By getByOf(WebElement el) {
+    try {
+        String id = el.getAttribute("id");
+        if (id != null && !id.isBlank()) return By.id(id);
+    } catch (Exception ignore) {}
+    try {
+        String name = el.getAttribute("name");
+        if (name != null && !name.isBlank()) return By.name(name);
+    } catch (Exception ignore) {}
+    // 備援：用相對 XPath（僅用在 selectFromSelectOrBootstrap/讀取文字時）
+    String jsPath =
+        "function xp(n){var p='';while(n&&n.nodeType===1){var i=1,s=n.previousSibling;while(s){if(s.nodeType===1&&s.tagName===n.tagName)i++;s=s.previousSibling;}p='/' + n.tagName + '['+i+']'+p;n=n.parentNode;}return p.toLowerCase();}return xp(arguments[0]);";
+    try {
+        String path = (String)((JavascriptExecutor)driver).executeScript(jsPath, el);
+        return By.xpath(path);
+    } catch (Exception e) {
+        return By.xpath("(//*)[1]"); // 不會真的被用到
+    }
+}
+
+/** 盡可能填「公司電話」：支援 1 欄或 3 欄（區碼/號碼/分機），並嘗試以 label 鄰近反查 */
+private boolean setCompanyPhoneRobust(String area, String number, String ext) {
+    // A. 先試「公司電話」標籤就近的三欄/單欄
+    try {
+        // 以『公司電話』或『公司  電話』等變體查找
+        WebElement phoneBlock = findElementIsDisplayed(
+            By.xpath("//*[self::label or self::th or self::td or self::div][contains(normalize-space(), '公司') and contains(normalize-space(), '電話')]"),
+            true, 1500
+        );
+        if (phoneBlock != null) {
+            // 先找三欄
+            List<WebElement> inputs = phoneBlock.findElements(By.xpath("./following::*[self::input and @type='text'][position()<=4]"));
+            if (inputs.size() >= 2) {
+                // 嘗試辨識含區碼/分機的欄位（看 placeholder/name/id）
+                WebElement areaEl = null, numEl = null, extEl = null;
+                for (WebElement in : inputs) {
+                    String ph = (in.getAttribute("placeholder") + "").toLowerCase();
+                    String nm = (in.getAttribute("name") + "").toLowerCase();
+                    String id = (in.getAttribute("id") + "").toLowerCase();
+                    if (areaEl == null && (ph.contains("區碼") || nm.contains("area") || id.contains("area"))) areaEl = in;
+                    else if (extEl == null && (ph.contains("分機") || nm.contains("ext")  || id.contains("ext")))  extEl = in;
+                    else if (numEl == null) numEl = in;
+                }
+                if (areaEl != null) input(areaEl, area);
+                if (numEl  != null) input(numEl,  number);
+                if (extEl  != null && ext != null && !ext.isEmpty()) input(extEl,  ext);
+                // 確認至少一欄被填到
+                if ((areaEl != null && !areaEl.getAttribute("value").isEmpty()) ||
+                    (numEl  != null && !numEl.getAttribute("value").isEmpty())) {
+                    return true;
+                }
+            }
+            // 退回單欄
+            WebElement oneField = phoneBlock.findElement(By.xpath("./following::*[self::input and @type='text'][1]"));
+            if (oneField != null) {
+                input(oneField, (ext==null||ext.isEmpty()) ? (area + number) : (area + number + " ext " + ext));
+                return true;
+            }
+        }
+    } catch (Exception ignore) {}
+
+    // B. 常見 id/name（單欄）
+    By[] oneField = new By[]{
+        By.id("companyPhone"), By.name("companyPhone"),
+        By.id("officePhone"),  By.name("officePhone"),
+        By.id("company_tel"),  By.name("company_tel"),
+        By.id("companyTel"),   By.name("companyTel")
+    };
+    WebElement single = findFirstPresent(oneField, 800);
+    if (single != null) {
+        input(single, (ext==null||ext.isEmpty()) ? (area + number) : (area + number + " ext " + ext));
+        return true;
+    }
+
+    // C. 常見三欄型式
+    WebElement areaEl = findFirstPresent(new By[]{ By.id("companyArea"), By.name("companyArea"), By.id("telArea"), By.name("telArea") }, 500);
+    WebElement numEl  = findFirstPresent(new By[]{ By.id("companyTel"),  By.name("companyTel"),  By.id("telNo"),   By.name("telNo")   }, 500);
+    WebElement extEl  = findFirstPresent(new By[]{ By.id("companyExt"),  By.name("companyExt"),  By.id("telExt"),  By.name("telExt")  }, 500);
+    if (areaEl != null || numEl != null) {
+        if (areaEl != null) input(areaEl, area);
+        if (numEl  != null) input(numEl,  number);
+        if (extEl  != null && ext != null && !ext.isEmpty()) input(extEl,  ext);
+        return true;
+    }
+    return false;
+}
