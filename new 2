@@ -28,7 +28,8 @@ import submodule.com.autotest.commonpage.AbstractBasePage;
 public class CSROneCallPass extends AbstractBasePage {
 
 	// ===== 常數 =====
-	private static final String POLICY_NO = "80241059";
+	// CHANGE: 改為可注入，並保留預設無參數建構子
+	private final String POLICY_NO;
 
 	// Step1
 	private String selectPolicyChangeTableMenuLocator = "//table[@width='100%' and contains(@class,'search-table')] //tr[2]/th[not(contains(@class,'pc_hide'))]";
@@ -131,6 +132,11 @@ public class CSROneCallPass extends AbstractBasePage {
     }
 
 	public CSROneCallPass() {
+		this("80241059");
+	}
+
+	public CSROneCallPass(String policyNo) {
+		this.POLICY_NO = policyNo;
 		pageDisplayCorrectlyLocator = By
 				.xpath("//th[text()='選擇異動保單']/ancestor::table[@class='table table-bordered search-table']");
 	}
@@ -337,10 +343,9 @@ public class CSROneCallPass extends AbstractBasePage {
 			if (!runPolicyChange_AllSelect_FilterAndEnterStep2()) return false;
             
             // NEW: 處理 Step 2 中所有 Tab 共同的區塊 (補費/付款/收件人)
-            // 這裡將保單借款/契約終止中通用的付款/收件人邏輯抽取出來
             if (!handleCommonStep2Sections()) return false; 
 
-			// 目前先接好 C01（地址變更）Step2 骨架；其餘項目之後可逐步擴充
+			// 目前先接好 C01（地址變更）與 C02 範例；其餘項目可逐步擴充
 			if (!dispatchPolicyChangeStep2Validation()) return false;
 
 			return true;
@@ -368,7 +373,7 @@ public class CSROneCallPass extends AbstractBasePage {
 			waitForStable();
 		}
 
-		// 全選所有 Cxx
+		// 全選所有 Cxx/Axx
 		selectAllPolicyChangeCheckboxes(/*alsoClearFirst=*/true);
 
 		// 按下一步
@@ -385,7 +390,7 @@ public class CSROneCallPass extends AbstractBasePage {
 
 			// 沒紅字 → 直接到 Step2
 			if (!hasErr) {
-				// 記錄目前仍被勾選的 Cxx
+				// 記錄目前仍被勾選的 Cxx/Axx
 				allowedPolicyChangeCodes = getCheckedPolicyChangeCodes();
 				logger.debug("[PolicyChange] 進 Step2，允許項目=" + allowedPolicyChangeCodes);
 				return true;
@@ -405,7 +410,7 @@ public class CSROneCallPass extends AbstractBasePage {
 				continue; // 進入下一輪檢查
 			}
 
-			// 有紅字：解析出對應要反勾的 Cxx
+			// 有紅字：解析出對應要反勾的 Cxx/Axx
 			Set<String> toUncheck = parsePolicyChangeErrorToCodes(errText);
 			if (toUncheck.isEmpty()) {
 				logger.debug("[PolicyChange] 有紅字但無法解析對應代碼；err=" + errText);
@@ -503,6 +508,7 @@ public class CSROneCallPass extends AbstractBasePage {
 		return true;
 	}
     
+	// CHANGE: 更健壯的 Tab 切換
 	private boolean activateTab(String code) {
 		Integer tabIndex = POLICY_CODE_TO_TAB_INDEX.get(code);
 		if (tabIndex == null) {
@@ -510,17 +516,26 @@ public class CSROneCallPass extends AbstractBasePage {
 			return true; 
 		}
 		
-		// 根據 rel 屬性定位 Tab 標籤並點擊 (例如 rel="tab_1")
-		By tabLocator = By.xpath("//div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_" + tabIndex + "']");
-		WebElement tabElement = findElementIsDisplayed(tabLocator, true, 3000);
+		// 可能的 tab 定位
+		By[] tabs = new By[] {
+			By.xpath("//div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_" + tabIndex + "']"),
+			By.xpath("//div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@data-tab='tab_" + tabIndex + "']"),
+			By.xpath("//div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[contains(@class,'tab') and contains(@rel,'" + tabIndex + "')]")
+		};
+
+		WebElement tabElement = null;
+		for (By by : tabs) {
+			tabElement = findElementIsDisplayed(by, true, 3000);
+			if (tabElement != null) break;
+		}
 		
 		if (tabElement == null) {
-			logger.warn("Cannot find tab element for code " + code + " (rel=tab_" + tabIndex + ")");
+			logger.warn("Cannot find tab element for code " + code + " (index=" + tabIndex + ")");
 			return false;
 		}
 		
 		// 檢查是否已經是 active 狀態
-		if (!tabElement.getAttribute("class").contains("active")) {
+		if (!String.valueOf(tabElement.getAttribute("class")).contains("active")) {
 			logger.info("Activating tab for code: " + code);
 			try {
 				click(tabElement, true);
@@ -532,14 +547,14 @@ public class CSROneCallPass extends AbstractBasePage {
 			}
 		}
 		
-		// 驗證 Tab 內容是否顯示
-		By contentLocator = By.xpath("//div[@class='tab_content tab_" + tabIndex + "' and contains(@class,'active')]");
+		// 驗證 Tab 內容是否顯示（以是否出現對應內容容器為準）
+		By contentLocator = By.xpath("//div[contains(@class,'tab_content') and contains(@class,'tab_" + tabIndex + "')]");
 		WebElement content = findElement(contentLocator, false, 2000);
 		return content != null && content.isDisplayed();
 	}
 
 	private boolean dispatchPolicyChangeStep2Validation() {
-		// 允許的 Cxx，依序做 Step2 驗證（同一個 Step2 畫面可能同時含多個模組）
+		// 允許的 Cxx/Axx，依序做 Step2 驗證（同一個 Step2 畫面可能同時含多個模組）
 		if (allowedPolicyChangeCodes == null || allowedPolicyChangeCodes.isEmpty()) {
 			logger.debug("[PolicyChange] 無允許項目可驗證，略過。");
 			return true;
@@ -560,7 +575,7 @@ public class CSROneCallPass extends AbstractBasePage {
 			switch (code) {
 				case "C01":
 					ok = validate_C01_AddressChange_Step2();
-					// ✅ 完成 C01 之後，直接按「申請完成-預覽異動內容」並結束
+					// 完成 C01 後，直接按「申請完成-預覽異動內容」並結束
 					if (ok) {
 						if (!clickReviewForPolicyChange()) {
 							logger.error("[PolicyChange] 按『申請完成-預覽異動內容』失敗");
@@ -572,7 +587,6 @@ public class CSROneCallPass extends AbstractBasePage {
                 case "C02":
                     ok = validate_C02_BillingChannelChange_Step2(); 
                     break;
-				// TODO: 後續逐步擴充其他 Cxx...
 				default:
 					logger.debug("[PolicyChange] 暫無驗證實作或跳過: " + code + "（略過但不判 fail）");
 					ok = true;
@@ -627,7 +641,7 @@ public class CSROneCallPass extends AbstractBasePage {
 	    final String MOBILE           = "0912123456";
 	    final String EMAIL            = "test@example.com";
 
-	    // 1) 戶籍地址 dropdown → 先用點選方式；失敗再用 JS selectpicker
+	    // 1) 戶籍地址 dropdown
 	    WebElement zipSelectEl = findFirstPresent(zipCandidates, 3500);
 	    if (zipSelectEl == null) {
 	        logger.error("[C01] 找不到戶籍地址(郵遞區號/區域)下拉");
@@ -639,20 +653,15 @@ public class CSROneCallPass extends AbstractBasePage {
 	        zipSelected = selectByTextFromSelectOrBootstrap(getByOf(zipSelectEl), TARGET_ZIP_TEXT);
 	    }
 	    if (zipSelected == null || zipSelected.isBlank()) {
-	        // ★ 最後後援：用 selectpicker('val', ...) 並觸發 changed.bs.select
+	        // 最後後援：用 selectpicker('val', ...) 並觸發 changed.bs.select
 	        try {
-	            String id = zipSelectEl.getAttribute("id");
-	            if (id != null && !id.isBlank()) {
-	                setBootstrapSelectValueJS("select#" + id, TARGET_ZIP_VALUE);
-	                // 驗證是否真的有值
-	                String finalVal = zipSelectEl.getAttribute("value");
-	                if (finalVal == null || finalVal.isBlank()) {
-	                    // 再從顯示文字讀一次
-	                    String show = getSelectedText(getByOf(zipSelectEl));
-	                    if (show == null || show.isBlank()) {
-	                        logger.error("[C01] 郵遞/區域 下拉選擇失敗");
-	                        return false;
-	                    }
+	            setBootstrapSelectValueJS(zipSelectEl, TARGET_ZIP_VALUE);
+	            String finalVal = zipSelectEl.getAttribute("value");
+	            if (finalVal == null || finalVal.isBlank()) {
+	                String show = getSelectedText(getByOf(zipSelectEl));
+	                if (show == null || show.isBlank()) {
+	                    logger.error("[C01] 郵遞/區域 下拉選擇失敗");
+	                    return false;
 	                }
 	            }
 	        } catch (Exception e) {
@@ -662,10 +671,11 @@ public class CSROneCallPass extends AbstractBasePage {
 	    }
 	    waitForStable(); // 有些頁面選區域會觸發地址欄位重繪
 
-	    // 2) 地址 input → 輸入
-	    WebElement addressEl = findFirstPresent(addrCandidates, 3000);
+	    // 2) (CHANGE) 區域選定後，可能重繪，重新抓一次地址欄位
+	    try { Thread.sleep(120); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+	    WebElement addressEl = findFirstPresent(addrCandidates, 1500);
 	    if (addressEl == null) {
-	        logger.error("[C01] 找不到地址輸入框");
+	        logger.error("[C01] 找不到地址輸入框（選區重繪後）");
 	        return false;
 	    }
 	    input(addressEl, TARGET_ADDRESS);
@@ -740,13 +750,7 @@ public class CSROneCallPass extends AbstractBasePage {
     // 示例：C02 收費管道變更
 	private boolean validate_C02_BillingChannelChange_Step2() {
 		By billingChannelSelect = By.id("billingChannel" + POLICY_NO);
-        // 假設我們需要選擇 "自行繳費" (value="H" 或 text="自行繳費")
-        // 如果有多個選項，可以改為選擇第一個非預設值
-        
 		String selected = selectByTextFromSelectOrBootstrap(billingChannelSelect, "自行繳費");
-        // 如果選擇第一個選項，則可以這樣寫：
-        // String selected = selectFirstOptionFromSelectOrBootstrap(billingChannelSelect);
-        
 		if (selected == null) {
 			logger.error("[C02] Failed to validate billing channel.");
 			return false;
@@ -764,9 +768,9 @@ public class CSROneCallPass extends AbstractBasePage {
 		String plain = normalizeText(errFullText);
 		if (plain.isEmpty()) return codes;
 
-		// 依 <br> 或 。 斷句 
+		// CHANGE: 依 <br> 、 。 、； ; 、、 或換行 斷句 
 		List<String> lines = new ArrayList<>();
-		for (String s : plain.split("(?:<br>|。|\\n)+")) {
+		for (String s : plain.split("(?:<br>|。|；|;|、|\\n)+")) {
 			String t = s.trim();
 			if (!t.isEmpty()) lines.add(t);
 		}
@@ -778,7 +782,6 @@ public class CSROneCallPass extends AbstractBasePage {
 			String phrase = line;
 			
             // 增強切割邏輯：專注於找出不可辦理的項目名稱
-            // 刪除常見的開頭語句，留下核心項目名稱
 			phrase = phrase.replaceAll("選取之保單(，)?包含不可辦理", "")
                            .replaceAll("選取之保單不可辦理", "")
                            .replaceAll("包含不可辦理", "")
@@ -846,6 +849,8 @@ public class CSROneCallPass extends AbstractBasePage {
 	/* =========================
 	  勾/反勾：保單變更 Cxx/Axx
 	  ========================= */
+
+	// CHANGE: 強化全選 + 驗證 + 自動補勾
 	private void selectAllPolicyChangeCheckboxes(boolean alsoClearFirst) {
 		try {
 			// 修正 XPath 以包含 Cxx 和 Axx
@@ -856,16 +861,14 @@ public class CSROneCallPass extends AbstractBasePage {
 			if (alsoClearFirst) {
 				for (WebElement lb : labels) {
 					String code = lb.getAttribute("for");
-					if (code == null) continue;
-					try { setPolicyChangeChecked(code, false); } catch (Exception ignore) {}
+					if (code != null) setPolicyChangeChecked(code, false);
 				}
 			}
 			
 			// 步驟 2: 嘗試勾選所有選項
 			for (WebElement lb : labels) {
 				String code = lb.getAttribute("for");
-				if (code == null) continue;
-				setPolicyChangeChecked(code, true);
+				if (code != null) setPolicyChangeChecked(code, true);
 			}
 			
 			// 步驟 3: 驗證並強制設定狀態（防止點擊失敗）
@@ -897,90 +900,67 @@ public class CSROneCallPass extends AbstractBasePage {
 		setPolicyChangeChecked(code, false);
 	}
 
-	// 核心修正：使用 JS 強制設定狀態，提高可靠性
+	// CHANGE: 核心修正：使用 Label 點擊 + Stale 重試 + 最終 JS 強制設定狀態，提高可靠性
 	private void setPolicyChangeChecked(String code, boolean checked) {
-		// 檢查 code 格式，兼容 Cxx 和 Axx
-		if (code == null || code.length() != 3 || !Character.isLetter(code.charAt(0)) || !Character.isDigit(code.charAt(1)) || !Character.isDigit(code.charAt(2))) return;
-		
-		By inputBy = By.id(code);
-		By labelBy = By.xpath("//label[@for='" + code + "']");
-		JavascriptExecutor js = (JavascriptExecutor) driver;
+		if (code == null || !code.matches("^[CA]\\d{2}$")) return;
 
-		WebElement input = findElement(inputBy, false, 300);
-		WebElement label = findElement(labelBy, false, 300);
+		final JavascriptExecutor js = (JavascriptExecutor) driver;
+		final By inputBy = By.id(code);
+		final By labelBy = By.xpath("//label[@for='" + code + "']");
 
-		if (input == null) {
-            // 如果 input 找不到，嘗試用 JS 獲取其 DOM 元素引用
-            try {
-                input = (WebElement) js.executeScript("return document.getElementById(arguments[0]);", code);
-            } catch (Exception jsIgnore) {
-                logger.debug("Cannot find input element #" + code + " even via Javascript.");
-                return; 
-            }
-        }
-        
-        if (input == null) return;
+		int attempts = 0;
+		while (attempts < 3) {
+			attempts++;
+			WebElement input = null, label = null;
+			try {
+				input = findElement(inputBy, false, 400);
+				label = findElement(labelBy, false, 400);
 
-		try {
-			// 1. 判斷目前狀態
-			boolean now = false;
-			try { now = input.isSelected(); } 
-            catch (Exception e) { 
-                String checkedStatus = input.getAttribute("checked");
-                now = checkedStatus != null && checkedStatus.equalsIgnoreCase("true");
-            }
-            
-            // 2. 如果所需狀態與目前狀態不同，則執行操作
-			if (checked != now) {
-				logger.debug("[Checkbox Click] Target " + code + " to " + checked + ". Current is " + now);
-                
-                boolean clickSuccess = false;
-
-                // 嘗試點擊 Label (最可靠的方式，因為 Label 是可視元素)
-                if (label != null) {
-                    try { js.executeScript("arguments[0].scrollIntoView({block:'center'});", label); } catch (Exception ignore) {}
-                    try { label.click(); clickSuccess = true; } 
-                    catch (Exception e) { 
-                        // Fallback: JS click label
-                        try { js.executeScript("arguments[0].click();", label); clickSuccess = true; } catch (Exception ignore) {} 
-                    }
-                } else if (input.isDisplayed()) {
-                    // 如果 input 可見 (不太可能，但預防)
-                    try { js.executeScript("arguments[0].scrollIntoView({block:'center'});", input); } catch (Exception ignore) {}
-                    try { input.click(); clickSuccess = true; } 
-                    catch (Exception e) { 
-                        // Fallback: JS click input
-                        try { js.executeScript("arguments[0].click();", input); clickSuccess = true; } catch (Exception ignore) {} 
-                    }
-                }
-                
-                // 點擊後短暫等待，讓網頁框架處理事件（這是關鍵）
-                if (clickSuccess) try { Thread.sleep(250); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
-				
-				// 3. 再次檢查狀態
-                boolean afterClickNow = false;
-                try { afterClickNow = input.isSelected(); } 
-                catch (Exception e) { 
-                    String checkedStatus = input.getAttribute("checked");
-                    afterClickNow = checkedStatus != null && checkedStatus.equalsIgnoreCase("true");
-                }
-				
-				// 4. (最終保險) 如果 Click 後狀態仍不對（即 Click 被網頁框架重置了），強制使用 JavaScript
-				if (checked != afterClickNow) {
-					logger.warn("[Checkbox Force Override] Click failed/reset for " + code + ". Forcing state to " + checked + " via JS.");
-					
-					// 強制設定 checked 屬性
-					js.executeScript("arguments[0].checked = arguments[1];", input, checked);
-					
-					// 觸發 change/click 事件，希望能讓網頁框架的監聽器同步數據模型
-					js.executeScript("arguments[0].dispatchEvent(new Event('change', {bubbles:true}));", input);
-                    js.executeScript("arguments[0].dispatchEvent(new Event('click', {bubbles:true}));", input);
-					
-					try { Thread.sleep(150); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+				// 當前狀態
+				boolean now = false;
+				if (input != null) {
+					try { now = input.isSelected(); }
+					catch (Exception se) { now = "true".equalsIgnoreCase(String.valueOf(input.getAttribute("checked"))); }
 				}
+				if (now == checked) return;
+
+				// 優先點 Label（大多數情況最可靠）
+				if (label != null) {
+					try { js.executeScript("arguments[0].scrollIntoView({block:'center'});", label); } catch (Exception ignore) {}
+					try { label.click(); } catch (Exception e) { js.executeScript("arguments[0].click();", label); }
+				} else if (input != null && input.isDisplayed()) {
+					try { js.executeScript("arguments[0].scrollIntoView({block:'center'});", input); } catch (Exception ignore) {}
+					try { input.click(); } catch (Exception e) { js.executeScript("arguments[0].click();", input); }
+				}
+
+				// 等一下讓框架處理
+				try { Thread.sleep(220); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+
+				// 再讀一次
+				input = findElement(inputBy, false, 400);
+				boolean after = false;
+				if (input != null) {
+					try { after = input.isSelected(); }
+					catch (Exception se) { after = "true".equalsIgnoreCase(String.valueOf(input.getAttribute("checked"))); }
+				}
+				if (after == checked) return;
+
+				// 最終保險：直接 JS 設值 + 觸發事件
+				if (input != null) {
+					js.executeScript(
+						"arguments[0].checked = arguments[1];" +
+						"arguments[0].dispatchEvent(new Event('change', {bubbles:true}));" +
+						"arguments[0].dispatchEvent(new Event('click', {bubbles:true}));",
+						input, checked
+					);
+					try { Thread.sleep(120); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+					return;
+				}
+			} catch (org.openqa.selenium.StaleElementReferenceException stale) {
+				// 重試
+			} catch (Exception e) {
+				if (attempts >= 3) logger.warn("setPolicyChangeChecked failed for " + code + ": " + e.getMessage());
 			}
-		} catch (Exception e) {
-             logger.warn("Error setting policy change checkbox " + code + ": " + e.getMessage());
 		}
 	}
 
@@ -1010,8 +990,9 @@ public class CSROneCallPass extends AbstractBasePage {
 		try { ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", reviewBtn); } catch (Exception ignore) {}
 		try { click(reviewBtn, true); } catch (Exception e) { ((JavascriptExecutor) driver).executeScript("arguments[0].click();", reviewBtn); }
 
-		// 新增：等待視窗穩定 → 點一下空白處關閉「下載泡泡」→ 鎖回主視窗
+		// (CHANGE) 先鎖主視窗，再處理泡泡
 		waitForWindowHandlesToSettle(700, 10000);
+		preferMainWindowFocus();
 		tapBlankToDismissDownloadBubble();
 		preferMainWindowFocus();
 		waitForStable();
@@ -1102,8 +1083,9 @@ public class CSROneCallPass extends AbstractBasePage {
 		try { ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", reviewBtn); } catch (Exception ignore) {}
 		try { click(reviewBtn, true); } catch (Exception e) { ((JavascriptExecutor) driver).executeScript("arguments[0].click();", reviewBtn); }
 
-		// 新增：等待視窗穩定 → 點空白處消泡泡 → 鎖回主視窗
+		// (CHANGE) 先鎖主視窗，再處理泡泡
 		waitForWindowHandlesToSettle(700, 10000);
+		preferMainWindowFocus();
 		tapBlankToDismissDownloadBubble();
 		preferMainWindowFocus();
 		waitForStable();
@@ -1189,8 +1171,9 @@ public class CSROneCallPass extends AbstractBasePage {
 		try { ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", reviewBtn); } catch (Exception ignore) {}
 		try { click(reviewBtn, true); } catch (Exception e) { ((JavascriptExecutor) driver).executeScript("arguments[0].click();", reviewBtn); }
 
-		// 與借款/解約相同的穩定處理
+		// (CHANGE) 先鎖主視窗，再處理泡泡
 		waitForWindowHandlesToSettle(700, 10000);
+		preferMainWindowFocus();
 		tapBlankToDismissDownloadBubble();
 		preferMainWindowFocus();
 		waitForStable();
@@ -1434,7 +1417,12 @@ public class CSROneCallPass extends AbstractBasePage {
 		}
 		String finalVal = selectEl.getAttribute("value");
 		if (finalVal == null || finalVal.isBlank()) {
-			finalVal = getSelectedText(selectBy); // 至少回傳顯示文字
+			// CHANGE: 用 selectpicker 強制同步
+			setBootstrapSelectValueJS(selectEl, targetValue);
+			finalVal = selectEl.getAttribute("value");
+			if (finalVal == null || finalVal.isBlank()) {
+				finalVal = getSelectedText(selectBy); // 至少回傳顯示文字
+			}
 		}
 		return finalVal;
 	}
@@ -1563,7 +1551,7 @@ public class CSROneCallPass extends AbstractBasePage {
 		try { step1Handle = driver.getWindowHandle(); } catch (Exception ignore) {}
 	}
 
-	/** 優先嘗試：點擊第 2 個「取消申請」按鈕（若存在） */
+	/** 優先嘗試：點『取消申請』的第二顆（常見在底部） */
 	private boolean clickSecondCancelIfPresent() {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		// 嚴格匹配：class 完全等於 "btn btn-default"
@@ -1617,9 +1605,7 @@ public class CSROneCallPass extends AbstractBasePage {
 		if (clickSecondCancelIfPresent()) return true;
 
 		By[] backBtnLocators = new By[] {
-			// 指定第 2 個取消鈕（備援；前面的專用方法已先嘗試過）
 			By.xpath("(//a[@class='btn btn-default' and normalize-space()='取消申請'])[2]"),
-			// 其餘常見返回鍵
 			By.xpath("//a[@class='btn btn-default' and normalize-space()='取消申請']"),
 			By.xpath("//a[contains(@class,'btn') and contains(normalize-space(),'取消申請')]"),
 			By.xpath("(//button[contains(@class,'btn') and contains(@class,'btn-default') and normalize-space()='取消申請'])[1]"),
@@ -1924,7 +1910,7 @@ public class CSROneCallPass extends AbstractBasePage {
 	}
 
 	// =========================
-	// jQuery/DOM 穩定等待
+	// jQuery/DOM 穩定等待（CHANGE: 移除外層 catch(InterruptedException)）
 	// =========================
 	private void waitForStable() {
 		try {
@@ -1939,8 +1925,6 @@ public class CSROneCallPass extends AbstractBasePage {
 				} catch (Exception e) { return true; }
 			});
 			try { Thread.sleep(200); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
-		} catch (InterruptedException ie) {
-			Thread.currentThread().interrupt();
 		} catch (Exception ignore) {}
 	}
 
@@ -2141,9 +2125,25 @@ public class CSROneCallPass extends AbstractBasePage {
 	    return false;
 	}
 
-	/* ======== 這裡開始是新增的小工具（整合自前段回覆，用在 C01） ======== */
+	/* ======== 新增的小工具 ======== */
 
-	/** 使用 jQuery selectpicker 強制設值並觸發事件（確保畫面/模型同步） */
+	/** 使用 jQuery selectpicker 強制設值並觸發事件（確保畫面/模型同步） - 依元素 */
+	private void setBootstrapSelectValueJS(WebElement selectEl, String value) {
+		String js =
+			"var s=arguments[0];"
+		  + "if(window.jQuery && jQuery(s).selectpicker){"
+		  + "  jQuery(s).selectpicker('val', arguments[1]);"
+		  + "  jQuery(s).trigger('changed.bs.select');"
+		  + "}else{"
+		  + "  s.value=arguments[1];"
+		  + "  s.dispatchEvent(new Event('change',{bubbles:true}));"
+		  + "}";
+		try {
+			((JavascriptExecutor) driver).executeScript(js, selectEl, value);
+		} catch (Exception ignore) {}
+	}
+
+	/** 使用 jQuery selectpicker 強制設值並觸發事件（確保畫面/模型同步） - 依 CSS */
 	private void setBootstrapSelectValueJS(String selectCss, String value) {
 		String js =
 			"var s=document.querySelector(arguments[0]);"
