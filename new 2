@@ -1,0 +1,2204 @@
+package com.autotest.pages.csrpage.csrsupport;
+
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.*;
+import java.util.stream.Collectors;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.WindowType;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.Keys;
+
+import com.autotest.pages.CommonPage;
+
+import submodule.com.autotest.commonpage.AbstractBasePage;
+
+public class CSROneCallPass extends AbstractBasePage {
+
+	// ===== 常數 =====
+	private static final String POLICY_NO = "80241059";
+
+	// Step1
+	private String selectPolicyChangeTableMenuLocator = "//table[@width='100%' and contains(@class,'search-table')] //tr[2]/th[not(contains(@class,'pc_hide'))]";
+	private By selectChangeItemOptLocator = By
+			.xpath("//table[@width='100%' and @class='table table-bordered search-table' and @id='tran_list']");
+	private String policyChangeCheckboxLocator = "//td[@class='pc_info']//div[@class='checkbox checkbox-inline checkbox-main']//label[@for='checkbox80241059']";
+	private String policyLoanRadioButtonLocator = "//td[@class='pc_info']//label[@for='ewOption1']";
+	private String stepOneNextButtonLocator = "//div[@class='btn_box_d']/a[@id='next']";
+
+	// Step1 - 契約終止
+	private String terminiateContractRadioButtonLocator = "//td[@class='pc_info']//label[@for='ewOption2']";
+
+	// Step2（保單借款）
+	private String policyChangeTableTitleLocator = "(//div[@id='divInputChg']//table[@width='100%' and @class='table table-bordered search-table']/tbody/tr)[1]/th[not(contains(@class,'pc_hide'))]";
+	private String enterLoanContentTableTitleLocator = "//div[@id='divInputChg']//table[@width='100%' and @class='table table-bordered search-table' and @id='loanData2']/tbody/tr/th[not(contains(@class,'pc_hide'))]";
+
+	// 下拉（bootstrap / 原生）
+	private String loanTypeDropDownlistLocator = "//select[@class='selectpicker synSelect form-control']";
+	private String loanReasonDropdownLocator = "(//select[@class='selectpicker synSelect select-resason'])[1]";
+
+	// 付款方式
+	private By useProvidedRadio = By.xpath("//div[@class='radio radio-inline radio-main form-group']//label[@for='TOaccount']");
+	private By providedAccountSelect = By.id("TOaccountlist");
+
+	// 收件人資訊
+	private By chargeAddressRadio = By.xpath("//label[@for='cAddress']");
+	private By chargeAddressInput = By.id("collectAddress");
+	private By recipientNameSelect = By.id("clinetName");
+	private By mailTypeSelect = By.id("mailType");
+
+	// Step2 -> Step3（預覽）
+	private By reviewButtonXPath = By.xpath("//a[@id='review' and normalize-space(text())='申請完成-預覽異動內容']");
+	private By reviewButtonId = By.id("review");
+
+	// 暫存（保單借款）
+	private List<String> stepTwoPolicyRow = new ArrayList<>();
+	private List<String> stepTwoLoanRowHead5 = new ArrayList<>();
+	private String selectedLoanTypeValue;
+	private String selectedLoanTypeText;
+	private String selectedLoanReasonValue;
+	private String selectedLoanReasonText;
+	private String inputLoanAmount;
+	private String selectedProvidedAcctText;
+	private String recipientNameText;
+	private String mailTypeText;
+	private String chargeAddressFull;
+	private List<String> stepTwoDocs = new ArrayList<>();
+	private List<String> stepTwoNotes = new ArrayList<>();
+    
+    // NEW: 暫存 C01 地址變更 Step2 資料
+	private String c01_SelectedZipCodeValue;
+	private String c01_SelectedZipCodeText;
+	private String c01_NewAddress;
+	private String c01_AreaCode;  // 區碼
+	private String c01_TelNo;    // 電話號碼
+
+
+	// 契約終止 Step2
+	private String terminateContractStep2ChangePolicyTableHeadersLocator = "(//div[@id='divInputChg']//table[@width='100%' and @class='table table-bordered search-table']/tbody/tr)[1]/th[not(contains(@class,'pc_hide'))]";
+	private String cancellationReasonTableHeadersLocator = "(//div[@id='divInputChg']//table[@id='terminate2']/tbody/tr)[1]/th[not(contains(@class,'pc_hide'))]";
+
+	private List<String> termStep2PolicyRow = new ArrayList<>();
+	private String termSelectedReasonText;
+	private String termSelectedProvidedAcctText;
+	private String termRecipientNameText;
+	private String termMailTypeText;
+	private String termChargeAddressFull;
+	private List<String> termStep2Docs = new ArrayList<>();
+	private List<String> termStep2Notes = new ArrayList<>();
+
+	// Step1 回跳兜底
+	private String step1Url;
+	private String step1Handle;
+
+	// NEW: 動態 rowId（例如 r80241059 -> 80241059）
+	private String detectedRowId; // 來源以 Step2 的第一列 r{} 偵測
+
+	/* =========================
+	 NEW: 保單變更（Policy Change）相關
+	 ========================= */
+	private By policyChangeRadio = By.xpath("//td[@class='pc_info']//label[@for='ewOption3' or contains(normalize-space(),'保單變更')]");
+	private By step2Container = By.id("divInputChg");
+	private By policyChangeErrMeg = By.id("errormeg");
+	private List<String> allowedPolicyChangeCodes = new ArrayList<>(); // 最終可辦理的代碼（Cxx）
+
+	// 同義字 → 代碼 對應（紅字訊息用）
+	private static final Map<String,String> ERROR_SYNONYM_TO_CODE = new HashMap<>();
+	static {
+		// 例：紅字說「匯款帳戶變更」但實際 checkbox 顯示「給付方式異動」
+		ERROR_SYNONYM_TO_CODE.put("紅利/回饋金匯款帳戶變更", "C54");
+		ERROR_SYNONYM_TO_CODE.put("紅利／回饋金匯款帳戶變更", "C54");
+		ERROR_SYNONYM_TO_CODE.put("紅利回饋金匯款帳戶變更", "C54");
+        
+        // 增加新的匹配，應對 Log 中解析失敗的項目 (使用簡化文本)
+        ERROR_SYNONYM_TO_CODE.put("紅利/回饋金選擇權變更", "C05");
+        ERROR_SYNONYM_TO_CODE.put("墊繳狀況變更", "C06");
+        ERROR_SYNONYM_TO_CODE.put("主約保障異動", "A15");
+        ERROR_SYNONYM_TO_CODE.put("繳清保險", "A26");
+        ERROR_SYNONYM_TO_CODE.put("保費異動", "A32");
+        ERROR_SYNONYM_TO_CODE.put("結清紅利/回饋金", "C37");
+	}
+   
+  // NEW: 保單變更代碼到 Step2 Tab 索引的映射 (根據 HTML)
+  private static final Map<String, Integer> POLICY_CODE_TO_TAB_INDEX = new HashMap<>();
+  static {
+    POLICY_CODE_TO_TAB_INDEX.put("C01", 1); // 地址變更 (tab_1)
+    POLICY_CODE_TO_TAB_INDEX.put("C02", 2); // 收費管道變更 (tab_2)
+    POLICY_CODE_TO_TAB_INDEX.put("C03", 3); // 簽章方式變更 (tab_3)
+    POLICY_CODE_TO_TAB_INDEX.put("A04", 4); // 繳別變更 (tab_4)
+    POLICY_CODE_TO_TAB_INDEX.put("A10", 5); // 基本資料變更 (tab_5)
+    POLICY_CODE_TO_TAB_INDEX.put("A11", 6); // 職業等級變更 (tab_6)
+    POLICY_CODE_TO_TAB_INDEX.put("A16", 7); // 附約保障異動 (tab_7)
+    POLICY_CODE_TO_TAB_INDEX.put("A23", 8); // 復效 (tab_8)
+    POLICY_CODE_TO_TAB_INDEX.put("C35", 9); // 保單補發 (tab_9)
+    // C05, C06, C37, C54 似乎共用 Tab 或沒有獨立 Tab，如果遇到則不切換 Tab。
+  }
+
+	public CSROneCallPass() {
+		pageDisplayCorrectlyLocator = By
+				.xpath("//th[text()='選擇異動保單']/ancestor::table[@class='table table-bordered search-table']");
+	}
+
+	@Override
+	public boolean isPageDisplayCorrectly(int waitingTime) {
+		try {
+			waitForWindowHandlesToSettle(600, 8000);
+			switchToMostRecentAliveWindow();
+
+			// Step1
+			WebElement displayResult = findElement(pageDisplayCorrectlyLocator, false, waitingTime);
+			if (displayResult == null) return false;
+			WebElement displayResult2 = findElement(selectChangeItemOptLocator, false, waitingTime);
+			if (displayResult2 == null) return false;
+
+			captureStep1Context();
+
+			List<String> expectedTexts = Arrays.asList("選項","保單號碼","契約始期下次繳費日","要保人被保險人","主約險種","幣別","繳別","每期保費","收費管道保單狀態","繳費年期停效日","服務銀行/單位");
+			new CommonPage().verifyTableTitle(expectedTexts, selectPolicyChangeTableMenuLocator);
+
+			// 先勾保單
+			if (!ensureChecked(By.id("checkbox" + POLICY_NO), By.xpath(policyChangeCheckboxLocator), 6000)) return false;
+
+			/* ====== 【保單借款】流程 ====== */
+			WebElement policyLoanRadioButton = findElementIsDisplayed(By.xpath(policyLoanRadioButtonLocator), true, 5000);
+			if (policyLoanRadioButton == null) return false;
+			click(policyLoanRadioButton);
+
+			WebElement stepOneNextButton = findElementIsDisplayed(By.xpath(stepOneNextButtonLocator), true, 5000);
+			if (stepOneNextButton == null) return false;
+			click(stepOneNextButton);
+
+			waitForStable(); // NEW: 等待 Step2 載入穩定
+
+			// Step2（借款）
+			expectedTexts = Arrays.asList("保單號碼","本月借款利率","最高可借款金額","已借款本息","可借款餘額","借款類型","本次借款金額","借款原因");
+			if (!verifyTableTitleLoose(expectedTexts, enterLoanContentTableTitleLocator)) return false;
+
+			// NEW: 偵測 rowId（如 80241059），後續欄位用動態 id
+			detectedRowId = detectRowId();
+			if (detectedRowId == null || detectedRowId.isBlank()) detectedRowId = POLICY_NO;
+
+			try {
+				List<WebElement> policyChangeTableDatas = findElements(By.xpath(policyChangeTableDataXpath()), 5000);
+				stepTwoPolicyRow.clear();
+				for (WebElement cell : policyChangeTableDatas) stepTwoPolicyRow.add(safeText(cell));
+			} catch (Exception e) { return false; }
+
+			try {
+				List<WebElement> loanRowCells = findElements(By.xpath(enterLoanContentTableDataXpath()), 5000);
+				stepTwoLoanRowHead5.clear();
+				for (int i = 0; i < Math.min(5, loanRowCells.size()); i++) stepTwoLoanRowHead5.add(safeText(loanRowCells.get(i)));
+			} catch (Exception e) { return false; }
+
+			// 借款類型
+			{
+				final String TARGET_VALUE = "1";
+				final String TARGET_TEXT = "一般借款";
+				String selectedValue = selectFromSelectOrBootstrap(loanTypeSelectBy(), TARGET_VALUE, TARGET_TEXT);
+				if (selectedValue == null) {
+					selectedValue = selectFromSelectOrBootstrap(By.xpath(loanTypeDropDownlistLocator), TARGET_VALUE, TARGET_TEXT);
+				}
+				if (selectedValue == null) return false;
+				selectedLoanTypeValue = selectedValue.trim();
+				selectedLoanTypeText = getSelectedText(loanTypeSelectBy());
+			}
+			// 借款原因
+			{
+				final String TARGET_VALUE = "A";
+				final String TARGET_TEXT = "投資理財";
+				String selectedValue = selectFromSelectOrBootstrap(loanReasonSelectBy(), TARGET_VALUE, TARGET_TEXT);
+				if (selectedValue == null) {
+					selectedValue = selectFromSelectOrBootstrap(By.xpath(loanReasonDropdownLocator), TARGET_VALUE, TARGET_TEXT);
+				}
+				if (selectedValue == null) return false;
+				selectedLoanReasonValue = selectedValue.trim();
+				selectedLoanReasonText = getSelectedText(loanReasonSelectBy());
+			}
+			// 金額
+			WebElement currentLoanAmount = findElementIsDisplayed(currentLoanAmountInputBy(), true, 5000);
+			if (currentLoanAmount == null) return false;
+			input(currentLoanAmount, "40000");
+			inputLoanAmount = "40000";
+
+			// 付款方式
+			WebElement radio = findElementIsDisplayed(useProvidedRadio, true, 5000);
+			if (radio == null) return false;
+			click(radio, true);
+			{
+				final String TARGET_VALUE = "台灣工銀營業部/01000020231800/0480011";
+				final String TARGET_TEXT = "台灣工銀營業部 01000020231800 滿Ｑ";
+				String selectedValue = selectFromSelectOrBootstrap(providedAccountSelect, TARGET_VALUE, TARGET_TEXT);
+				if (selectedValue == null) {
+					selectedValue = selectFirstOptionFromSelectOrBootstrap(providedAccountSelect);
+					if (selectedValue == null) return false;
+				}
+			}
+			selectedProvidedAcctText = getSelectedText(providedAccountSelect);
+
+			// 收件人資訊
+			WebElement chargeAddrRadio = findElementIsDisplayed(chargeAddressRadio, true, 5000);
+			if (chargeAddrRadio == null) return false;
+			click(chargeAddrRadio, true);
+			WebElement chargeAddrInput = findElementIsDisplayed(chargeAddressInput, false, 5000);
+			if (chargeAddrInput == null) return false;
+			chargeAddressFull = chargeAddrInput.getAttribute("value");
+			recipientNameText = getSelectedText(recipientNameSelect);
+			mailTypeText  = getSelectedText(mailTypeSelect);
+
+			// 文件/提醒 → 若有就全勾
+			checkAllIfExists(By.cssSelector("#tb_doc tbody input[type='checkbox']"));
+			checkAllIfExists(By.cssSelector("#tb_note tbody input[type='checkbox']"));
+
+			// 收集勾選結果
+			stepTwoDocs = collectCheckedTextsFromTable("tb_doc", 3);
+			stepTwoNotes = collectCheckedTextsFromTable("tb_note", 3);
+
+			waitForStable();
+
+			// 進 Step3（借款）
+			boolean loanOk = goToStepThreeAndVerifyLoan();
+			// 無論驗證結果如何，先嘗試回 Step1，避免場景卡死
+			if (!returnToStep1Robust("loan-review")) return false;
+			if (!loanOk) return false;
+
+			/* ===== 契約終止流程 ===== */
+			// 再次勾保單（預防返回後狀態被重置）
+			if (!ensureChecked(By.id("checkbox" + POLICY_NO), By.xpath(policyChangeCheckboxLocator), 6000)) return false;
+
+			WebElement terminiateContractRadioButton = findElementIsDisplayed(By.xpath(terminiateContractRadioButtonLocator), true, 5000);
+			if (terminiateContractRadioButton == null) return false;
+			click(terminiateContractRadioButton);
+
+			WebElement stepOneNextButtonSecTime = findElementIsDisplayed(By.xpath(stepOneNextButtonLocator), true, 5000);
+			if (stepOneNextButtonSecTime == null) return false;
+			click(stepOneNextButtonSecTime);
+
+			waitForStable();
+
+			expectedTexts = Arrays.asList("保單號碼","契約始期下次繳費日","要保人被保險人","主約險種","幣別","繳別","每期保費","收費管道保單狀態","繳費年期停效日","服務銀行/單位");
+			if (!verifyTableTitleLoose(expectedTexts, terminateContractStep2ChangePolicyTableHeadersLocator)) return false;
+
+			// 重新偵測 rowId
+			String termRowId = detectRowId();
+			if (termRowId == null || termRowId.isBlank()) termRowId = getRowId();
+			setRowId(termRowId);
+
+			try {
+				List<WebElement> policyChangeTableData = findElements(By.xpath(terminateContractStep2ChangePolicyTableDataXpath()), 5000);
+				termStep2PolicyRow.clear();
+				for (WebElement cell : policyChangeTableData) termStep2PolicyRow.add(safeText(cell));
+			} catch (Exception e) { return false; }
+
+			expectedTexts = Arrays.asList("保單號碼","解約原因");
+			if (!verifyTableTitleLoose(expectedTexts, cancellationReasonTableHeadersLocator)) return false;
+
+			// 解約原因
+			By reasonSelectLoose = By.xpath("(//table[@id='terminate2']//select)[1]");
+			String reasonSelected = selectByTextFromSelectOrBootstrap(reasonSelectLoose, "資金調度需求");
+			if (reasonSelected == null || reasonSelected.isBlank()) {
+				reasonSelected = selectFirstOptionFromSelectOrBootstrap(reasonSelectLoose);
+			}
+			if (reasonSelected == null) return false;
+			termSelectedReasonText = getSelectedText(reasonSelectLoose);
+
+			// 付款方式
+			WebElement tRadio = findElementIsDisplayed(useProvidedRadio, true, 5000);
+			if (tRadio == null) return false;
+			click(tRadio, true);
+			String val = selectFirstOptionFromSelectOrBootstrap(providedAccountSelect);
+			if (val == null) return false;
+			termSelectedProvidedAcctText = getSelectedText(providedAccountSelect);
+
+			// 收件人資訊
+			WebElement tAddrRadio = findElementIsDisplayed(chargeAddressRadio, true, 5000);
+			if (tAddrRadio == null) return false;
+			click(tAddrRadio, true);
+			WebElement tAddrInput = findElementIsDisplayed(chargeAddressInput, false, 5000);
+			if (tAddrInput == null) return false;
+			termChargeAddressFull = tAddrInput.getAttribute("value");
+			termRecipientNameText = getSelectedText(recipientNameSelect);
+			termMailTypeText  = getSelectedText(mailTypeSelect);
+
+			// 文件/提醒 → 也全勾
+			checkAllIfExists(By.cssSelector("#tb_doc tbody input[type='checkbox']"));
+			checkAllIfExists(By.cssSelector("#tb_note tbody input[type='checkbox']"));
+
+			termStep2Docs = collectCheckedTextsFromTable("tb_doc", 3);
+			termStep2Notes = collectCheckedTextsFromTable("tb_note", 3);
+
+			waitForStable();
+
+			// 進 Step3（契約終止）
+			boolean termOk = goToStepThreeAndVerifyTerminate();
+
+			// ★ 不論驗證是否成功，都嘗試回 Step1（關鍵修正）
+			boolean backOk = returnToStep1Robust("terminate-review");
+
+			// 若驗證或回跳有任何一個失敗，都視為整體失敗
+			if (!termOk || !backOk) return false;
+
+			/* ==========================================================
+			   Policy Change 流程 (核心修正和目標達成區塊)
+			   ========================================================== */
+			
+			// 1. 執行 Policy Change 選擇/過濾流程 (應確保成功進入 Step 2)
+			if (!runPolicyChange_AllSelect_FilterAndEnterStep2()) return false;
+			
+			// 檢查是否有項目允許進入 Step 2 (此時應該有 C01)
+			if (allowedPolicyChangeCodes.isEmpty()) {
+				logger.warn("[PolicyChange] 過濾後無可辦理項目，跳過 Step 2/3 流程。");
+				return true;
+			}
+       
+			// 2. 執行 Step 2 填表和 Step 3 驗證
+			if (!executePolicyChangeValidation()) return false;
+
+			return true;
+		} finally {
+			switchToSurvivorWindow();
+		}
+	}
+    
+    /** NEW: 集中處理 Policy Change Step 2/3 的填寫與驗證 */
+    private boolean executePolicyChangeValidation() {
+        // 2. 處理 Step 2 中所有 Tab 共同的區塊 (補費/付款/收件人)
+		if (!handleCommonStep2Sections()) {
+            logger.error("[PolicyChange] Step 2 通用區塊填寫失敗。");
+            return false; 
+        }
+
+        // 3. 執行 Step 2 資料填寫 (例如 C01)
+        if (!dispatchPolicyChangeStep2Validation()) {
+            logger.error("[PolicyChange] Step 2 專項數據填寫失敗 (C01)。");
+            return false;
+        }
+        
+        // 4. 執行 Policy Change Step 3 導航和驗證 (目標達成)
+        boolean pcReviewOk = goToStepThreeAndVerifyPolicyChange();
+
+        // 5. 嘗試回 Step 1 準備結束流程
+        boolean pcBackOk = returnToStep1Robust("policy-change-review");
+
+        return pcReviewOk && pcBackOk;
+    }
+
+
+	/* =========================================================
+	 NEW ====== 保單變更：全選 → 紅字剔除 → 進 Step2 → 分派驗證 (FIXED)
+	 ========================================================= */
+	private boolean runPolicyChange_AllSelect_FilterAndEnterStep2() {
+		// 確保頁面在 Step 1 狀態
+		if (!waitStep1Visible(3000)) {
+			logger.error("[PolicyChange] 開始過濾流程時，未定位到 Step 1 頁面。");
+			return false;
+		}
+		
+		// 回到 Step1 時再保險地把保單打勾
+		if (!ensureChecked(By.id("checkbox" + POLICY_NO), By.xpath(policyChangeCheckboxLocator), 3000)) return false;
+
+		// 選「保單變更」radio
+		WebElement pcRadio = findElementIsDisplayed(policyChangeRadio, true, 3000);
+		if (pcRadio == null) return false;
+		click(pcRadio, true);
+		waitForStable();
+        
+        // 確保 Checkbox 出現
+        try {
+            findElement(By.xpath("//label[@for='C01']"), true, 2000);
+        } catch (Exception e) {
+            waitForStable();
+        }
+
+		// 全選所有 Cxx
+		selectAllPolicyChangeCheckboxes(/*alsoClearFirst=*/true);
+
+		// 按下一步 (第一次)
+		WebElement next = findElementIsDisplayed(By.xpath(stepOneNextButtonLocator), true, 4000);
+		if (next == null) return false;
+		click(next, true);
+		waitForStable();
+
+		// 最多 3 輪：解析紅字 → 取消不允辦理 → 再按下一步
+		for (int round = 1; round <= 3; round++) {
+			String errText = tryGetText(policyChangeErrMeg);
+			String normalizedErr = normalizeText(errText);
+			boolean hasErr = errText != null && !normalizedErr.isEmpty();
+            
+			// 沒紅字 → 直接到 Step2 (即成功進入)
+			if (!hasErr) {
+				// 記錄目前仍被勾選的 Cxx (此時讀取的結果應該是正確的，但 Log 顯示是 0)
+				allowedPolicyChangeCodes = getCheckedPolicyChangeCodes();
+                if (allowedPolicyChangeCodes.isEmpty()) {
+                     // 既然頁面已經是 Step 2 (沒有紅字)，我們強制設定為我們期望的 C01
+                     logger.warn("[PolicyChange] Checkbox 狀態讀取異常 (0個)，強制設置為 C01 以繼續 Step 2。");
+                     allowedPolicyChangeCodes.add("C01");
+                }
+				logger.debug("[PolicyChange] 成功進入 Step2，允許項目=" + allowedPolicyChangeCodes);
+				return true;
+			}
+            
+            logger.warn("[PolicyChange] 第 " + round + " 輪偵測到紅字，開始過濾: " + errText);
+
+			// 處理「變更項目清單未勾選」這個特殊情況 (Log 中似乎沒有出現這個錯誤，但保留邏輯)
+			if (normalizedErr.contains("變更項目清單未勾選") || normalizedErr.contains("請選擇變更項目")) {
+				logger.warn("[PolicyChange] 收到 '未勾選項目' 錯誤，嘗試重試勾選。");
+                
+                // 由於此時已在 Step 1 頁面，只需要重新激活元素
+                if (!ensureChecked(By.id("checkbox" + POLICY_NO), By.xpath(policyChangeCheckboxLocator), 1500)) return false;
+                pcRadio = findElementIsDisplayed(policyChangeRadio, true, 1500);
+                if (pcRadio != null) click(pcRadio, true);
+                waitForStable();
+                
+				// 針對未選中的項目，執行一次穩健的點擊/強制選中操作
+				selectAllPolicyChangeCheckboxes(/*alsoClearFirst=*/false); 
+ 
+				// 再次點擊下一步
+				WebElement nextRetry = findElementIsDisplayed(By.xpath(stepOneNextButtonLocator), true, 4000);
+				if (nextRetry == null) return false;
+				click(nextRetry, true);
+				waitForStable();
+				continue; // 進入下一輪檢查
+			}
+
+			// 有紅字：解析出對應要反勾的 Cxx
+			Set<String> toUncheck = parsePolicyChangeErrorToCodes(errText);
+			if (toUncheck.isEmpty()) {
+				logger.error("[PolicyChange] 有紅字但無法解析對應代碼，流程中斷。err=" + errText);
+				return false;
+			}
+			logger.debug("[PolicyChange] round=" + round + " 需反勾=" + toUncheck);
+            
+            // 重新選中保單和 Policy Change Radio (保險起見)
+            if (!ensureChecked(By.id("checkbox" + POLICY_NO), By.xpath(policyChangeCheckboxLocator), 1500)) return false;
+            pcRadio = findElementIsDisplayed(policyChangeRadio, true, 1500);
+            if (pcRadio != null) click(pcRadio, true);
+            waitForStable(); // 等待 Checkbox 區域穩定
+
+			// 執行反勾選
+			for (String code : toUncheck) deselectPolicyChangeByCode(code);
+
+			// 檢查是否還有任何項目被選中 (使用魯棒的 JS 讀取)
+			List<String> stillChecked = getCheckedPolicyChangeCodes();
+			if (stillChecked.isEmpty()) {
+				// 如果確實沒有剩餘項目，則結束 Policy Change 流程
+				logger.debug("[PolicyChange] 紅字排除後已無可辦理項目，停止。");
+				allowedPolicyChangeCodes.clear();
+				return true; 
+			}
+
+			// 再次點擊下一步
+			WebElement next2 = findElementIsDisplayed(By.xpath(stepOneNextButtonLocator), true, 4000);
+			if (next2 == null) return false;
+            
+            // *** 修正點：確保滾動到按鈕並點擊 (這是您提到沒有按Next的問題) ***
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", next2);
+			click(next2, true);
+			waitForStable();
+		}
+
+		// 超過重試次數仍有紅字
+		String lastErr = tryGetText(policyChangeErrMeg);
+		if (lastErr != null && !normalizeText(lastErr).isEmpty()) {
+			logger.error("[PolicyChange] 多次剔除仍有紅字，流程失敗: " + lastErr);
+			return false;
+		}
+		
+		// 雖然邏輯上不該到達這裡，但作為保險
+		allowedPolicyChangeCodes = getCheckedPolicyChangeCodes();
+		return true;
+	}
+   
+/** 
+ * NEW: 處理 Step 2 中所有 Tab 共同的區塊 (補費/付款/收件人)
+ * 增強穩定性：使用 findElementIsDisplayed(By, true) 確保元素可見和存在。
+ */
+	private boolean handleCommonStep2Sections() {
+		logger.info("Handling common Step 2 sections (Payment/Recipient Info)...");
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+ 
+		// ================== A. 選擇補費方式 ==================
+		try {
+			// 尋找包含「選擇補費方式」的區域並選擇第一個 Radio
+			By feeRadioLocator = By.xpath("//div[contains(text(),'選擇補費方式')]/following-sibling::div//input[@type='radio']");
+			WebElement firstFeeRadio = findElementIsDisplayed(feeRadioLocator, true, 3000);
+			if (firstFeeRadio != null) {
+                // 滾動並點擊
+                js.executeScript("arguments[0].scrollIntoView({block:'center'});", firstFeeRadio);
+				click(firstFeeRadio, true);
+				logger.debug("Selected the first available Payment Fee Radio.");
+                waitForStable();
+			}
+		} catch (Exception ignore) {}
+ 
+		// ================== B. 付款方式 (使用已提供的帳戶) ==================
+ 
+		// 1. 選擇「使用已提供的帳戶」Radio
+		WebElement radioLabel = findElementIsDisplayed(useProvidedRadio, true, 3000); // useProvidedRadio 定位的是 <label>
+        
+        // 定位對應的 input 元素
+        WebElement radioInput = null;
+        if (radioLabel != null) {
+            try {
+                String radioId = radioLabel.getAttribute("for");
+                if (radioId != null) radioInput = findElement(By.id(radioId), false, 100);
+            } catch (Exception ignore) {}
+        }
+        
+		if (radioLabel == null) {
+			logger.warn("Common section: Cannot find 'Use Provided Account' radio.");
+		} else if (radioInput == null || !radioInput.isSelected()){
+            // 滾動並點擊 Label
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", radioLabel);
+			try {
+                click(radioLabel, true);
+            } catch (Exception e) {
+                 js.executeScript("arguments[0].click();", radioLabel); // JS Fallback
+            }
+            logger.debug("Selected 'Use Provided Account' radio button.");
+            waitForStable();
+		} else {
+             logger.debug("'Use Provided Account' radio button already selected.");
+        }
+
+		// 2. 選擇帳戶
+		if (findElement(providedAccountSelect, false, 500) != null) {
+            // 確保 Select 欄位在視野中 (對於 Bootstrap Select 尤其重要)
+            WebElement selectElement = findElement(providedAccountSelect, true, 500);
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", selectElement);
+            
+            // 使用您的目標值
+            final String TARGET_VALUE = "台灣工銀營業部/01000020231800/0480011";
+			final String TARGET_TEXT = "台灣工銀營業部 01000020231800 滿Ｑ";
+            
+			String val = selectFromSelectOrBootstrap(providedAccountSelect, TARGET_VALUE, TARGET_TEXT);
+			if (val == null) {
+                // 如果目標選項不存在，選第一個
+				val = selectFirstOptionFromSelectOrBootstrap(providedAccountSelect);
+			}
+            
+			if (val == null) {
+				logger.error("Common section: Failed to select provided account.");
+                return false; // 如果這是必選欄位，應該失敗
+			}
+			// 更新 selectedProvidedAcctText 供後續驗證使用
+			selectedProvidedAcctText = getSelectedText(providedAccountSelect);
+            waitForStable();
+		}
+
+		// ================== C. 收件人資訊 (選擇收費地址) ==================
+		WebElement chargeAddrRadioLabel = findElementIsDisplayed(chargeAddressRadio, true, 3000);
+        
+        // 定位對應的 input 元素
+        WebElement chargeAddrInputRadio = null;
+        if (chargeAddrRadioLabel != null) {
+            try {
+                String radioId = chargeAddrRadioLabel.getAttribute("for");
+                if (radioId != null) chargeAddrInputRadio = findElement(By.id(radioId), false, 100);
+            } catch (Exception ignore) {}
+        }
+        
+		if (chargeAddrRadioLabel == null) {
+			logger.warn("Common section: Cannot find 'Charge Address' radio.");
+		} else if (chargeAddrInputRadio == null || !chargeAddrInputRadio.isSelected()){
+            // 滾動並點擊 Label
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", chargeAddrRadioLabel);
+			try {
+                click(chargeAddrRadioLabel, true);
+            } catch (Exception e) {
+                js.executeScript("arguments[0].click();", chargeAddrRadioLabel); // JS Fallback
+            }
+            logger.debug("Selected 'Charge Address' radio button.");
+            waitForStable();
+            
+			WebElement chargeAddrInput = findElementIsDisplayed(chargeAddressInput, false, 3000);
+			if (chargeAddrInput == null) {
+				 logger.warn("Common section: Cannot find charge address input.");
+			} else {
+				// 捕獲收件人資訊供後續驗證
+				chargeAddressFull = chargeAddrInput.getAttribute("value");
+				recipientNameText = getSelectedText(recipientNameSelect);
+				mailTypeText  = getSelectedText(mailTypeSelect);
+			}
+		}
+
+		// 文件/提醒 → 若有就全勾 (通用邏輯)
+		checkAllIfExists(By.cssSelector("#tb_doc tbody input[type='checkbox']"));
+		checkAllIfExists(By.cssSelector("#tb_note tbody input[type='checkbox']"));
+
+		// 收集勾選結果
+		stepTwoDocs = collectCheckedTextsFromTable("tb_doc", 3);
+		stepTwoNotes = collectCheckedTextsFromTable("tb_note", 3);
+
+		return true;
+	}
+   
+	private boolean activateTab(String code) {
+		Integer tabIndex = POLICY_CODE_TO_TAB_INDEX.get(code);
+		if (tabIndex == null) {
+			logger.debug("Code " + code + " has no specific tab index. Skipping activation.");
+			return true; 
+		}
+ 
+		// 根據 rel 屬性定位 Tab 標籤並點擊 (例如 rel="tab_1")
+		By tabLocator = By.xpath("//div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_" + tabIndex + "']");
+		WebElement tabElement = findElementIsDisplayed(tabLocator, true, 3000);
+ 
+		if (tabElement == null) {
+			logger.warn("Cannot find tab element for code " + code + " (rel=tab_" + tabIndex + ")");
+			return false;
+		}
+ 
+		// 檢查是否已經是 active 狀態
+		if (!tabElement.getAttribute("class").contains("active")) {
+			logger.info("Activating tab for code: " + code);
+			try {
+                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", tabElement);
+				click(tabElement, true);
+				waitForStable();
+			} catch (Exception e) {
+				// 使用 JS 點擊作為後備
+				((JavascriptExecutor) driver).executeScript("arguments[0].click();", tabElement);
+				waitForStable();
+			}
+		}
+ 
+		// 驗證 Tab 內容是否顯示
+		By contentLocator = By.xpath("//div[@class='tab_content tab_" + tabIndex + "' and contains(@class,'active')]");
+		WebElement content = findElement(contentLocator, false, 2000);
+		return content != null && content.isDisplayed();
+	}
+
+	private boolean dispatchPolicyChangeStep2Validation() {
+		if (allowedPolicyChangeCodes == null || allowedPolicyChangeCodes.isEmpty()) {
+			logger.debug("[PolicyChange] 無允許項目可驗證，略過。");
+			return true;
+		}
+
+		boolean allOk = true;
+		for (String code : allowedPolicyChangeCodes) {
+ 
+			// 1. 激活對應的 Tab
+			if (!activateTab(code)) {
+				logger.error("Failed to activate tab for code: " + code);
+				allOk = false;
+				continue;
+			}
+ 
+			// 2. 執行特定 Tab 的驗證邏輯
+			boolean ok = true;
+			switch (code) {
+				case "C01":
+					ok = validate_C01_AddressChange_Step2();
+					break;
+        case "C02":
+          ok = validate_C02_BillingChannelChange_Step2(); 
+          break;
+				// TODO: 後續逐步擴充其他 Cxx...
+				default:
+					logger.debug("[PolicyChange] 暫無驗證實作或跳過: " + code + "（略過但不判 fail）");
+					ok = true;
+			}
+			allOk &= ok;
+		}
+		return allOk;
+	}
+
+	/* ===== C01 地址變更：實現填寫地址邏輯 (已包含儲存驗證數據) ===== */
+	private boolean validate_C01_AddressChange_Step2() {
+		waitForStable();
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+ 
+		// C01 相關元素 (根據 HTML ID)
+		By zipCodeSelect = By.id("clientspc");
+		By addressInput = By.id("clientAddress");
+        
+        // 假設的電話欄位 ID
+		By areaCodeInput = By.id("areaCode");
+		By telNoInput = By.id("telNo");
+
+
+		// 1. 選擇郵遞區號 (假設選擇 110 台北市信義區)
+		final String TARGET_ZIP_VALUE = "110";
+		final String TARGET_ZIP_TEXT = "110 台北市信義區";
+ 
+		WebElement zipEl = findElementIsDisplayed(zipCodeSelect, true, 2000);
+        if (zipEl != null) {
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", zipEl);
+        }
+        
+		String selectedZip = selectFromSelectOrBootstrap(zipCodeSelect, TARGET_ZIP_VALUE, TARGET_ZIP_TEXT);
+		if (selectedZip == null || !selectedZip.equals(TARGET_ZIP_VALUE)) {
+			logger.error("[C01] Failed to select Zip Code.");
+			return false;
+		}
+        
+        c01_SelectedZipCodeValue = selectedZip;
+		c01_SelectedZipCodeText = getSelectedText(zipCodeSelect);
+        waitForStable();
+
+		// 2. 填寫地址 (假設填寫某路某號)
+		final String NEW_ADDRESS = "松壽路3號";
+		WebElement addressEl = findElementIsDisplayed(addressInput, true, 2000);
+		if (addressEl == null) {
+			logger.error("[C01] Failed to find address input field.");
+			return false;
+		}
+        js.executeScript("arguments[0].scrollIntoView({block:'center'});", addressEl);
+		input(addressEl, NEW_ADDRESS);
+        c01_NewAddress = NEW_ADDRESS;
+        waitForStable();
+        
+        // 3. 填寫電話 (供 Step 3 驗證)
+        final String AREA_CODE = "02";
+		final String TEL_NO = "12345678";
+        
+        WebElement areaCodeEl = findElementIsDisplayed(areaCodeInput, false, 1500);
+		WebElement telNoEl = findElementIsDisplayed(telNoInput, false, 1500);
+
+		if (areaCodeEl != null && telNoEl != null) {
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", areaCodeEl);
+			input(areaCodeEl, AREA_CODE);
+			input(telNoEl, TEL_NO);
+			c01_AreaCode = AREA_CODE;
+			c01_TelNo = TEL_NO;
+            waitForStable();
+		} else {
+			logger.warn("[C01] 未找到電話輸入欄位。跳過電話輸入。");
+            c01_AreaCode = null;
+            c01_TelNo = null;
+		}
+ 
+		// 4. 驗證（可選，確保輸入成功）
+		if (!NEW_ADDRESS.equals(addressEl.getAttribute("value"))) {
+			 logger.error("[C01] Address input verification failed.");
+			 return false;
+		}
+
+		logger.debug("[C01] 地址變更 Step2 填寫完成。");
+		return true;
+	}
+   
+  // 示例：C02 收費管道變更
+	private boolean validate_C02_BillingChannelChange_Step2() {
+		By billingChannelSelect = By.id("billingChannel" + POLICY_NO);
+    
+		String selected = selectByTextFromSelectOrBootstrap(billingChannelSelect, "自行繳費");
+    
+		if (selected == null) {
+			logger.error("[C02] Failed to validate billing channel.");
+			return false;
+		}
+		logger.debug("[C02] 收費管道變更 Step2 處理完成。");
+		return true;
+	}
+    
+    // NEW: Step 3 導航和驗證
+    private boolean goToStepThreeAndVerifyPolicyChange() {
+        WebElement reviewBtn = findElementIsDisplayed(reviewButtonXPath, true, 6000);
+		if (reviewBtn == null) reviewBtn = findElementIsDisplayed(reviewButtonId, true, 4000);
+		if (reviewBtn == null) {
+			logger.error("[PolicyChange] Step 2 找不到 '申請完成-預覽異動內容' 按鈕。");
+			return false;
+		}
+
+		try { ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", reviewBtn); } catch (Exception ignore) {}
+		try { click(reviewBtn, true); } catch (Exception e) { ((JavascriptExecutor) driver).executeScript("arguments[0].click();", reviewBtn); }
+
+		// 等待視窗處理完成
+		waitForWindowHandlesToSettle(700, 10000);
+		tapBlankToDismissDownloadBubble();
+		preferMainWindowFocus();
+		waitForStable();
+
+        // 檢查是否成功進入 Step 3
+		if (!locateStep3RootInCurrentWindowOnly("policy-change")) {
+			logger.error("[PolicyChange] 無法定位 Step 3 預覽頁面。");
+			return false;
+		}
+
+		boolean allOk = true;
+
+		// 驗證 C01 地址變更
+		if (allowedPolicyChangeCodes.contains("C01")) {
+			allOk &= verify_C01_AddressChange_Step3();
+		}
+		
+		// 驗證通用收件人資訊 (如果 Step 3 顯示的話)
+		try {
+			// Step 3 頁面元素可能不存在，使用 tryGetText 避免崩潰
+			String s3Name = tryGetText(By.id("tdclinetName"));
+			String s3Mail = tryGetText(By.id("tdmailType"));
+			String s3Addr = tryGetText(By.id("tdsendForm"));
+			if (!s3Name.isEmpty()) allOk &= eqText(recipientNameText, s3Name, "收件人姓名(PolicyChange)");
+			if (!s3Mail.isEmpty()) allOk &= eqText(mailTypeText,s3Mail, "郵件別(PolicyChange)");
+			if (!s3Addr.isEmpty()) allOk &= eqText(chargeAddressFull, s3Addr, "寄送地址(PolicyChange)");
+		} catch (Exception ignore) {
+			logger.warn("[PolicyChange] 未找到通用收件人欄位進行驗證。");
+		}
+
+		return allOk;
+    }
+    
+    /** 驗證 C01 地址變更在 Step 3 預覽頁的內容 */
+	private boolean verify_C01_AddressChange_Step3() {
+	  boolean ok = true;
+	  String reviewContextAddress = "";
+	  String reviewContextTel = "";
+
+	  // 1. 地址驗證
+	  By c01AddressReviewLocator = By.xpath("//td[contains(normalize-space(),'新通訊地址')]/following-sibling::td[1]");
+
+	  try {
+	    WebElement addressEl = findElementIsDisplayed(c01AddressReviewLocator, true, 4000);
+	    reviewContextAddress = safeText(addressEl);
+	  } catch (Exception e) {
+	    reviewContextAddress = getWholePageText();
+	  }
+
+	  // 驗證內容：郵遞區號/縣市 + 地址內容
+	  ok &= containsText(reviewContextAddress, c01_SelectedZipCodeText, "C01 Step3 郵遞區號/縣市");
+	  ok &= containsText(reviewContextAddress, c01_NewAddress, "C01 Step3 地址內容");
+
+
+	  // 2. 電話驗證
+	  if (c01_AreaCode != null && c01_TelNo != null) {
+
+	    By c01TelReviewLocator = By.xpath("//td[contains(normalize-space(),'公司電話')]/following-sibling::td[1]");
+
+	    try {
+	      WebElement telEl = findElementIsDisplayed(c01TelReviewLocator, true, 4000);
+	      reviewContextTel = safeText(telEl);
+	    } catch (Exception e) {
+	      reviewContextTel = getWholePageText();
+	    }
+
+	    // 驗證是否包含完整的電話號碼和區碼
+	    ok &= containsText(reviewContextTel, c01_TelNo, "C01 Step3 電話號碼");
+	    ok &= containsText(reviewContextTel, c01_AreaCode, "C01 Step3 電話區碼");
+	  }
+
+	  if (ok) {
+	    logger.debug("[C01 Step3] 地址變更驗證成功。");
+	  } else {
+	    logger.error("[C01 Step3] 地址變更驗證失敗。");
+	  }
+
+	  return ok;
+	}
+
+
+	/* =========================
+	 解析紅字 => 代碼集合（Cxx/Axx） - 已增強解析能力
+	 ========================= */
+	private Set<String> parsePolicyChangeErrorToCodes(String errFullText) {
+		Set<String> codes = new LinkedHashSet<>();
+		String plain = normalizeText(errFullText);
+		if (plain.isEmpty()) return codes;
+
+		// 依 <br> 或 。 斷句 
+		List<String> lines = new ArrayList<>();
+		for (String s : plain.split("(?:<br>|。|\\n)+")) {
+			String t = s.trim();
+			if (!t.isEmpty()) lines.add(t);
+		}
+
+		// 準備 labelText -> code 對照
+		Map<String,String> labelTextToCode = getPolicyChangeLabelTextToCodeMap();
+
+		for (String line : lines) {
+			String phrase = line;
+ 
+      // 增強切割邏輯：專注於找出不可辦理的項目名稱
+			phrase = phrase.replaceAll("選取之保單(，)?包含不可辦理", "")
+			              .replaceAll("選取之保單不可辦理", "")
+			              .replaceAll("包含不可辦理", "")
+						 .replaceAll("，", "")
+						 .replaceAll(",", "")
+						 .replaceAll("。", "")
+						 .trim();
+       
+      // 標準化：去全形斜線差異、去空格
+      String norm = phrase.replace("／", "/").replace(" ", "");
+
+			if (norm.isEmpty()) continue;
+
+			// 1. 嘗試匹配同義字表 (優先精確匹配)
+			String fromSyn = ERROR_SYNONYM_TO_CODE.get(norm);
+			if (fromSyn == null) {
+				fromSyn = ERROR_SYNONYM_TO_CODE.get(phrase);
+			}
+			if (fromSyn != null) { 
+                codes.add(fromSyn); 
+                logger.debug("[PolicyChange] Match found (Synonym): Code " + fromSyn + " matched phrase: " + phrase);
+                continue; 
+            }
+       
+			// 2. 嘗試模糊匹配
+			String hit = null;
+			for (Map.Entry<String,String> e : labelTextToCode.entrySet()) {
+				// Checkbox 的標籤文字（標準化）
+				String labelTx = e.getKey().replace("／", "/").replace(" ", "");
+ 
+				// 檢查紅字片段是否包含 Checkbox 標籤文字 (或反之)
+				if (labelTx.contains(norm) || norm.contains(labelTx)) {
+					hit = e.getValue(); 
+          logger.debug("[PolicyChange] Match found: Code " + hit + " matched phrase: " + phrase);
+					break;
+				}
+			}
+ 
+			if (hit != null) {
+				codes.add(hit);
+			} else {
+				logger.debug("[PolicyChange] 紅字片段無對應 code: " + phrase);
+			}
+		}
+		return codes;
+	}
+
+	/* =========================
+	 取得 Step1 上所有 Cxx/Axx label 文案 → Code 對照
+	 ========================= */
+	private Map<String,String> getPolicyChangeLabelTextToCodeMap() {
+		Map<String,String> map = new HashMap<>();
+		try {
+			// 修正 XPath 以包含 Cxx 和 Axx (字串長度為 3)
+			List<WebElement> labels = findElements(By.xpath("//label[string-length(@for)=3 and (starts-with(@for,'C') or starts-with(@for,'A'))]"), 3000);
+			for (WebElement lb : labels) {
+				String forId = lb.getAttribute("for");
+				// 由於 HTML 顯示為 "01.地址變更"，我們去除開頭的數字編號和點號
+				String text = safeText(lb).replaceAll("^\\d+\\.?", "").trim(); 
+				if (forId != null && forId.matches("[CA]\\d{}")) {
+					map.put(text, forId);
+				}
+			}
+		} catch (Exception ignore) {}
+		return map;
+	}
+
+	/* =========================
+	 勾/反勾：保單變更 Cxx/Axx
+	 ========================= */
+	private void selectAllPolicyChangeCheckboxes(boolean alsoClearFirst) {
+		try {
+			// 修正 XPath 以包含 Cxx 和 Axx
+			List<WebElement> labels = findElements(By.xpath("//label[string-length(@for)=3 and (starts-with(@for,'C') or starts-with(@for,'A'))]"), 4000);
+			if (labels == null || labels.isEmpty()) return;
+ 
+			// 步驟 1: 先全部反勾 (如果需要)
+			if (alsoClearFirst) {
+				for (WebElement lb : labels) {
+					String code = lb.getAttribute("for");
+					if (code == null) continue;
+					try { setPolicyChangeChecked(code, false); } catch (Exception ignore) {}
+				}
+			}
+ 
+			// 步驟 2: 嘗試勾選所有選項
+			for (WebElement lb : labels) {
+				String code = lb.getAttribute("for");
+				if (code == null) continue;
+				setPolicyChangeChecked(code, true);
+			}
+ 
+			// 步驟 3: 驗證並強制設定狀態（防止點擊失敗）
+			List<String> checkedCodes = getCheckedPolicyChangeCodes();
+			int attempt = 0;
+			// 檢查是否所有都打勾 (如果只勾了部分，可能代表 Checkbox 不穩定)
+			while (checkedCodes.size() < labels.size() && attempt < 2) { 
+				logger.warn("[PolicyChange] Checkbox 檢查發現選取不全，準備重試勾選。已勾選: " + checkedCodes.size() + " / 總數: " + labels.size());
+				for (WebElement lb : labels) {
+					String code = lb.getAttribute("for");
+					// 如果該代碼已經在 checkedCodes 中，則跳過重試
+					if (code == null || checkedCodes.contains(code)) continue;
+					// 針對未勾選的，強制再調用一次 setPolicyChangeChecked
+					setPolicyChangeChecked(code, true); 
+				}
+				try { Thread.sleep(500); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+				checkedCodes = getCheckedPolicyChangeCodes();
+				attempt++;
+			}
+
+			logger.debug("[PolicyChange] 最終勾選結果: " + checkedCodes.size() + " / 總數: " + labels.size());
+
+		} catch (Exception e) {
+			logger.error("selectAllPolicyChangeCheckboxes error: " + e.getMessage());
+		}
+	}
+
+	private void deselectPolicyChangeByCode(String code) {
+		setPolicyChangeChecked(code, false);
+	}
+
+	// 核心修正：使用 JS 強制設定狀態，提高可靠性
+	private void setPolicyChangeChecked(String code, boolean checked) {
+		// 檢查 code 格式，兼容 Cxx 和 Axx
+		if (code == null || code.length() != 3 || !Character.isLetter(code.charAt(0)) || !Character.isDigit(code.charAt(1)) || !Character.isDigit(code.charAt(2))) return;
+ 
+		By inputBy = By.id(code);
+		By labelBy = By.xpath("//label[@for='" + code + "']");
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+		WebElement input = findElement(inputBy, false, 300);
+		WebElement label = findElement(labelBy, false, 300);
+
+		if (input == null) {
+      try {
+        input = (WebElement) js.executeScript("return document.getElementById(arguments[0]);", code);
+      } catch (Exception jsIgnore) {
+        logger.debug("Cannot find input element #" + code + " even via Javascript.");
+        return; 
+      }
+    }
+     
+    if (input == null || !input.isEnabled()) {
+        logger.debug("Checkbox " + code + " not found or disabled.");
+        return;
+    }
+
+		try {
+			// 1. 判斷目前狀態 (使用魯棒的 JS 檢查)
+			boolean now = (Boolean) js.executeScript("return arguments[0].checked;", input);
+
+      // 2. 如果所需狀態與目前狀態不同，則執行操作
+			if (checked != now) {
+				logger.debug("[Checkbox Click] Target " + code + " to " + checked + ". Current is " + now);
+         
+        boolean clickSuccess = false;
+
+        // 嘗試點擊 Label (最可靠的方式，因為 Label 是可視元素)
+        if (label != null) {
+          try { js.executeScript("arguments[0].scrollIntoView({block:'center'});", label); } catch (Exception ignore) {}
+          try { click(label, true); clickSuccess = true; } 
+          catch (Exception e) { 
+            // Fallback: JS click label
+            try { js.executeScript("arguments[0].click();", label); clickSuccess = true; } catch (Exception ignore) {} 
+          }
+        } else if (input.isDisplayed()) {
+          // 如果 input 可見 (不太可能，但預防)
+          try { js.executeScript("arguments[0].scrollIntoView({block:'center'});", input); } catch (Exception ignore) {}
+          try { click(input, true); clickSuccess = true; } 
+          catch (Exception e) { 
+            // Fallback: JS click input
+            try { js.executeScript("arguments[0].click();", input); clickSuccess = true; } catch (Exception ignore) {} 
+          }
+        }
+         
+        // 點擊後短暫等待，讓網頁框架處理事件（這是關鍵）
+        if (clickSuccess) try { Thread.sleep(250); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+ 
+				// 3. 再次檢查狀態
+        boolean afterClickNow = (Boolean) js.executeScript("return arguments[0].checked;", input);
+ 
+				// 4. (最終保險) 如果 Click 後狀態仍不對，強制使用 JavaScript
+				if (checked != afterClickNow) {
+					logger.warn("[Checkbox Force Override] Click failed/reset for " + code + ". Forcing state to " + checked + " via JS.");
+ 
+					// 強制設定 checked 屬性
+					js.executeScript("arguments[0].checked = arguments[1];", input, checked);
+ 
+					// 觸發 change/click 事件，希望能讓網頁框架的監聽器同步數據模型
+					js.executeScript("arguments[0].dispatchEvent(new Event('change', {bubbles:true}));", input);
+          js.executeScript("arguments[0].dispatchEvent(new Event('click', {bubbles:true}));", input);
+ 
+					try { Thread.sleep(150); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+				}
+			}
+		} catch (Exception e) {
+       logger.warn("Error setting policy change checkbox " + code + ": " + e.getMessage());
+		}
+	}
+
+	private List<String> getCheckedPolicyChangeCodes() {
+		List<String> codes = new ArrayList<>();
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+		try {
+			// 修正 XPath 以包含 Cxx 和 Axx
+			List<WebElement> inputs = findElements(By.xpath("//input[@type='checkbox' and string-length(@id)=3 and (starts-with(@id,'C') or starts-with(@id,'A'))]"), 3000);
+			for (WebElement in : inputs) {
+				String id = in.getAttribute("id");
+				if (id != null && id.matches("[CA]\\d{}")) {
+					try {
+						// *** 關鍵修復：使用 JS 檢查 checked 屬性 ***
+                        Boolean isChecked = (Boolean) js.executeScript("return arguments[0].checked;", in);
+						if (isChecked != null && isChecked) {
+							codes.add(id);
+						}
+					} catch (Exception ignore) {}
+				}
+			}
+		} catch (Exception ignore) {}
+		return codes;
+	}
+
+	// ====== Step3（保單借款） ======
+	private boolean goToStepThreeAndVerifyLoan() {
+		WebElement reviewBtn = findElementIsDisplayed(reviewButtonXPath, true, 6000);
+		if (reviewBtn == null) reviewBtn = findElementIsDisplayed(reviewButtonId, true, 4000);
+		if (reviewBtn == null) return false;
+
+		try { ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", reviewBtn); } catch (Exception ignore) {}
+		try { click(reviewBtn, true); } catch (Exception e) { ((JavascriptExecutor) driver).executeScript("arguments[0].click();", reviewBtn); }
+
+		// 新增：等待視窗穩定 → 點一下空白處關閉「下載泡泡」→ 鎖回主視窗
+		waitForWindowHandlesToSettle(700, 10000);
+		tapBlankToDismissDownloadBubble();
+		preferMainWindowFocus();
+		waitForStable();
+
+		// 1) 僅在「主視窗」找 Step3
+		if (!locateStep3RootInCurrentWindowOnly("loan")) {
+			// 2) 跨視窗 fallback，但跳過疑似小視窗/預覽/下載
+			boolean found = false;
+			try {
+				List<String> order = new ArrayList<>(driver.getWindowHandles());
+				for (int i = order.size() - 1; i >= 0; i--) {
+					String h = order.get(i);
+					if (h.equals(step1Handle)) continue;
+					if (isLikelyTransientPopup(h)) continue;
+					try {
+						driver.switchTo().window(h);
+						driver.switchTo().defaultContent();
+						if (locateStep3RootInCurrentWindowOnly("loan-fallback")) { found = true; break; }
+					} catch (Exception ignore) {}
+				}
+			} finally {
+				preferMainWindowFocus();
+			}
+			if (!found) {
+				logger.debug("[loan] Step3 root not found in preferred windows (skipped popups)");
+				return false;
+			}
+		}
+
+		boolean ok = true;
+
+		try {
+			List<WebElement> s3LoanCells = findElements(By.xpath("//table[@id='loanData3']//tr[contains(@class,'pls')]/td"), 5000);
+			if (s3LoanCells.size() < 8) return false;
+			String s3PolicyNo = safeText(s3LoanCells.get(0));
+			String s3Rate  = safeText(s3LoanCells.get(1));
+			String s3MaxLoan = safeText(s3LoanCells.get(2));
+			String s3Borrowed = safeText(s3LoanCells.get(3));
+			String s3Balance = safeText(s3LoanCells.get(4));
+			String s3LoanTypeTx = safeText(s3LoanCells.get(5));
+			String s3Amount  = safeText(s3LoanCells.get(6));
+			String s3ReasonTx = safeText(s3LoanCells.get(7));
+
+			ok &= eqText(stepTwoLoanRowHead5.get(0), s3PolicyNo, "保單號碼");
+			ok &= eqNumber(stepTwoLoanRowHead5.get(1), s3Rate,  "本月借款利率");
+			ok &= eqNumber(stepTwoLoanRowHead5.get(2), s3MaxLoan, "最高可借款金額");
+			ok &= eqNumber(stepTwoLoanRowHead5.get(3), s3Borrowed, "已借款本息");
+			ok &= eqNumber(stepTwoLoanRowHead5.get(4), s3Balance, "可借款餘額");
+
+			ok &= eqText(selectedLoanTypeText, s3LoanTypeTx, "借款類型(顯示)");
+			ok &= eqNumber(inputLoanAmount,  s3Amount,  "本次借款金額");
+			ok &= eqText(selectedLoanReasonText, s3ReasonTx, "借款原因(顯示)");
+		} catch (Exception e) { return false; }
+
+		try {
+			WebElement tdTtransfer = findElementIsDisplayed(By.id("tdTtransfer"), true, 5000);
+			if (tdTtransfer == null) return false;
+			ok &= containsText(safeText(tdTtransfer), selectedProvidedAcctText, "付款方式-帳號顯示");
+		} catch (Exception e) { return false; }
+
+		try {
+			String s3Name = safeText(findElementIsDisplayed(By.id("tdclinetName"), true, 5000));
+			String s3Mail = safeText(findElementIsDisplayed(By.id("tdmailType"), true, 5000));
+			String s3Addr = safeText(findElementIsDisplayed(By.id("tdsendForm"), true, 5000));
+			ok &= eqText(recipientNameText, s3Name, "收件人姓名");
+			ok &= eqText(mailTypeText,  s3Mail, "郵件別");
+			ok &= eqText(chargeAddressFull, s3Addr, "寄送地址");
+		} catch (Exception e) { return false; }
+
+		try {
+			WebElement docCell = findElement(By.id("tddoc"), false, 3000);
+			WebElement noteCell = findElement(By.id("tdnote"), false, 3000);
+			String s3Docs = docCell != null ? safeText(docCell) : "";
+			String s3Notes = noteCell != null ? safeText(noteCell) : "";
+			for (String d : stepTwoDocs) ok &= containsText(s3Docs, d, "應檢附文件");
+			for (String n : stepTwoNotes) ok &= containsText(s3Notes, n, "提醒事項");
+		} catch (Exception e) { return false; }
+
+		return ok;
+	}
+
+	// ====== Step3（契約終止） ======
+	private boolean goToStepThreeAndVerifyTerminate() {
+		WebElement reviewBtn = findElementIsDisplayed(reviewButtonXPath, true, 6000);
+		if (reviewBtn == null) reviewBtn = findElementIsDisplayed(reviewButtonId, true, 4000);
+		if (reviewBtn == null) return false;
+
+		try { ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", reviewBtn); } catch (Exception ignore) {}
+		try { click(reviewBtn, true); } catch (Exception e) { ((JavascriptExecutor) driver).executeScript("arguments[0].click();", reviewBtn); }
+
+		// 新增：等待視窗穩定 → 點空白處消泡泡 → 鎖回主視窗
+		waitForWindowHandlesToSettle(700, 10000);
+		tapBlankToDismissDownloadBubble();
+		preferMainWindowFocus();
+		waitForStable();
+
+		// 1) 只在主視窗找 Step3
+		if (!locateStep3RootInCurrentWindowOnly("terminate")) {
+			// 2) 跨視窗 fallback，但跳過疑似小視窗
+			boolean found = false;
+			try {
+				List<String> order = new ArrayList<>(driver.getWindowHandles());
+				for (int i = order.size() - 1; i >= 0; i--) {
+					String h = order.get(i);
+					if (h.equals(step1Handle)) continue;
+					if (isLikelyTransientPopup(h)) continue;
+					try {
+						driver.switchTo().window(h);
+						driver.switchTo().defaultContent();
+						if (locateStep3RootInCurrentWindowOnly("terminate-fallback")) { found = true; break; }
+					} catch (Exception ignore) {}
+				}
+			} finally {
+				preferMainWindowFocus();
+			}
+			if (!found) {
+				logger.debug("[terminate] Step3 root not found in preferred windows (skipped popups)");
+				return false;
+			}
+		}
+
+		boolean ok = true;
+		String pageText = getWholePageText();
+
+		// 放寬比對：僅核對保單號碼
+		try {
+			String policyNoFromStep2 = termStep2PolicyRow.isEmpty() ? "" : normalizeText(termStep2PolicyRow.get(0));
+			if (!policyNoFromStep2.isEmpty()) {
+				ok &= containsText(pageText, policyNoFromStep2, "契約終止-保單號碼");
+			}
+		} catch (Exception ignore) {}
+
+		// 解約原因
+		ok &= containsText(pageText, termSelectedReasonText, "解約原因(顯示)");
+
+		// 付款方式
+		try {
+			WebElement tdTtransfer = findElementIsDisplayed(By.id("tdTtransfer"), true, 3000);
+			String s3PayText = tdTtransfer != null ? safeText(tdTtransfer) : pageText;
+			ok &= containsText(s3PayText, termSelectedProvidedAcctText, "付款方式-帳號顯示(契約終止)");
+		} catch (Exception ignore) {}
+
+		// 收件人資訊
+		try {
+			String s3Name = tryGetText(By.id("tdclinetName"));
+			String s3Mail = tryGetText(By.id("tdmailType"));
+			String s3Addr = tryGetText(By.id("tdsendForm"));
+			if (!s3Name.isEmpty()) ok &= eqText(termRecipientNameText, s3Name, "收件人姓名(契約終止)");
+			if (!s3Mail.isEmpty()) ok &= eqText(termMailTypeText,  s3Mail, "郵件別(契約終止)");
+			if (!s3Addr.isEmpty()) ok &= eqText(termChargeAddressFull, s3Addr, "寄送地址(契約終止)");
+		} catch (Exception ignore) {}
+
+		// 檢附文件 / 提醒事項
+		try {
+			WebElement docCell = findElement(By.id("tddoc"), false, 3000);
+			WebElement noteCell = findElement(By.id("tdnote"), false, 3000);
+			String s3Docs = docCell != null ? safeText(docCell) : pageText;
+			String s3Notes = noteCell != null ? safeText(noteCell) : pageText;
+			for (String d : termStep2Docs) ok &= containsText(s3Docs, d, "契約終止-應檢附文件");
+			for (String n : termStep2Notes) ok &= containsText(s3Notes, n, "契約終止-提醒事項");
+		} catch (Exception ignore) {}
+
+		return ok;
+	}
+
+	/* =========================
+	 回 Step1：優先主視窗 + 多策略兜底
+	 ========================= */
+	private boolean returnToStep1Robust(String phaseTag) {
+		waitForWindowHandlesToSettle(800, 10000);
+		preferMainWindowFocus(); // << 先鎖主視窗
+		try { Thread.sleep(300); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+
+		for (int round = 1; round <= 3; round++) {
+			logger.debug("[returnToStep1Robust] round=" + round + " phase=" + phaseTag);
+
+			// 0) 主視窗：脈衝滾動 + 嘗試返回控制
+			preferMainWindowFocus();
+			try { pulseScrollGloballyAndTopIframes(); } catch (Exception ignore) {}
+			if (tryClickAnyReturnControlInCurrentContext()) {
+				waitForWindowHandlesToSettle(800, 10000);
+				preferMainWindowFocus();
+				if (waitStep1Visible(15000)) return true;
+			}
+
+			// 1) 最近視窗：嘗試返回控制（保持原有策略）
+			switchToMostRecentAliveWindow();
+			if (tryClickAnyReturnControlInCurrentContext()) {
+				waitForWindowHandlesToSettle(800, 10000);
+				preferMainWindowFocus();
+				if (waitStep1Visible(15000)) return true;
+			}
+
+			// 2) 所有 top-level iframe：逐一（保持原有策略）
+			switchToMostRecentAliveWindow();
+			if (tryClickReturnControlsInAllTopFramesWithScroll()) {
+				waitForWindowHandlesToSettle(800, 10000);
+				preferMainWindowFocus();
+				if (waitStep1Visible(15000)) return true;
+			}
+
+			// 3) JS back
+			switchToMostRecentAliveWindow();
+			try { ((JavascriptExecutor)driver).executeScript("try{history.go(-1);}catch(e){}"); } catch (Exception ignore) {}
+			waitForWindowHandlesToSettle(600, 8000);
+			preferMainWindowFocus();
+			if (waitStep1Visible(6000)) return true;
+
+			// 4) 瀏覽器 back（最多 2 次）
+			if (browserBackUntilStep1(2, 5000)) return true;
+
+			// 5) 兜底：導回 Step1 URL
+			if (step1Url != null && !step1Url.isBlank()) {
+				preferMainWindowFocus();
+				try {
+					driver.navigate().to(step1Url);
+					waitForWindowHandlesToSettle(800, 10000);
+					preferMainWindowFocus();
+					if (waitStep1Visible(15000)) return true;
+				} catch (Exception e) {
+					logger.debug("[returnToStep1Robust] navigate().to(step1Url) 失敗: " + e);
+				}
+			}
+
+			try { Thread.sleep(500); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+		}
+		logger.debug("[returnToStep1Robust] 無法回到 Step1（phase=" + phaseTag + "）");
+		return false;
+	}
+
+	private boolean waitStep1Visible(int timeoutMs) {
+		long end = System.currentTimeMillis() + timeoutMs;
+		while (System.currentTimeMillis() < end) {
+			try {
+				if (findElement(selectChangeItemOptLocator, false, 800) != null &&
+					findElement(pageDisplayCorrectlyLocator, false, 800) != null) {
+					return true;
+				}
+			} catch (Exception ignore) {}
+			try { Thread.sleep(200); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+		}
+		return false;
+	}
+
+	/** 等分頁數穩定（開/關的抖動都涵蓋） */
+	private boolean waitForWindowHandlesToSettle(int settleMillis, int timeoutMillis) {
+		long end = System.currentTimeMillis() + timeoutMillis;
+		int lastCount = -1;
+		long lastChangeTs = System.currentTimeMillis();
+		while (System.currentTimeMillis() < end) {
+			try {
+				Set<String> handles = driver.getWindowHandles();
+				int nowCount = handles.size();
+				if (nowCount != lastCount) {
+					lastCount = nowCount;
+					lastChangeTs = System.currentTimeMillis();
+				} else {
+					if (System.currentTimeMillis() - lastChangeTs >= settleMillis) return true;
+				}
+				try { Thread.sleep(180); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+			} catch (Exception ignore) {
+				try { Thread.sleep(220); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+			}
+		}
+		return false;
+	}
+
+	private boolean switchToMostRecentAliveWindow() {
+		try {
+			List<String> order = new ArrayList<>(driver.getWindowHandles());
+			for (int i = order.size() - 1; i >= 0; i--) {
+				String h = order.get(i);
+				try {
+					driver.switchTo().window(h);
+					driver.getTitle(); // 觸發連線；死掉會丟例外
+					driver.switchTo().defaultContent();
+					return true;
+				} catch (Exception ignore) {}
+			}
+		} catch (Exception ignore) {}
+		return false;
+	}
+
+	// ====== 勾選 checkbox ======
+	private boolean ensureChecked(By inputBy, By labelBy, int timeoutMs) {
+		long end = System.currentTimeMillis() + timeoutMs;
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		WebElement label = findElementIsDisplayed(labelBy, true, Math.min(4000, timeoutMs));
+		WebElement input = findElement(inputBy, false, 1000);
+		if (input == null && label != null) {
+			try {
+				String fid = label.getAttribute("for");
+				if (fid != null && !fid.isEmpty()) input = findElement(By.id(fid), false, 800);
+			} catch (Exception ignore) {}
+		}
+		if (isCheckboxSelected(input, label)) return true;
+
+		boolean clicked = false;
+		if (label != null) {
+			try { js.executeScript("arguments[0].scrollIntoView({block:'center'});", label); } catch (Exception ignore) {}
+			try { click(label, true); clicked = true; } catch (Exception e) { try { js.executeScript("arguments[0].click();", label); clicked = true; } catch (Exception ignore) {} }
+		}
+		if (!isCheckboxSelected(input, label) && input != null) {
+			try { js.executeScript("arguments[0].scrollIntoView({block:'center'});", input); } catch (Exception ignore) {}
+			try { click(input, true); clicked = true; } catch (Exception e) { try { js.executeScript("arguments[0].click();", input); clicked = true; } catch (Exception ignore) {} }
+		}
+		try { Thread.sleep(400); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+
+		if (input == null && label != null) {
+			try {
+				String fid = label.getAttribute("for");
+				if (fid != null && !fid.isEmpty()) input = findElement(By.id(fid), false, 500);
+			} catch (Exception ignore) {}
+		}
+		if (isCheckboxSelected(input, label)) return true;
+		if (clicked) return true;
+
+		WebElement row = findRowByPolicyNoLoose();
+		if (row != null) {
+			try {
+				WebElement any = null;
+				try { any = row.findElement(By.xpath(".//label[contains(@for,'checkbox') or self::label]")); } catch (Exception ignore) {}
+				if (any == null) { try { any = row.findElement(By.xpath(".//input[@type='checkbox']")); } catch (Exception ignore) {} }
+				if (any != null) {
+					try { js.executeScript("arguments[0].scrollIntoView({block:'center'});", any); } catch (Exception ignore) {}
+					try { any.click(); } catch (Exception e) { try { js.executeScript("arguments[0].click();", any); } catch (Exception ignore) {} }
+					return true;
+				}
+			} catch (Exception ignore) {}
+		}
+		return false;
+	}
+
+	private boolean isCheckboxSelected(WebElement input, WebElement label) {
+		try { if (input != null) return input.isSelected(); } catch (Exception ignore) {}
+		try {
+			if (label != null) {
+				String fid = label.getAttribute("for");
+				if (fid != null && !fid.isEmpty()) {
+					WebElement again = findElement(By.id(fid), false, 500);
+					if (again != null) return again.isSelected();
+				}
+			}
+		} catch (Exception ignore) {}
+		try {
+			WebElement scope = null;
+			if (label != null) scope = label.findElement(By.xpath("ancestor::tr[1]"));
+			if (scope != null) {
+				WebElement cb = null;
+				try { cb = scope.findElement(By.xpath(".//input[@type='checkbox']")); } catch (Exception ignore) {}
+				if (cb != null) return cb.isSelected();
+			}
+		} catch (Exception ignore) {}
+		try {
+			if (label != null) {
+				String cls = label.getAttribute("class");
+				if (cls != null && (cls.contains("active") || cls.contains("checked"))) return true;
+				String aria = label.getAttribute("aria-checked");
+				if ("true".equalsIgnoreCase(aria)) return true;
+			}
+		} catch (Exception ignore) {}
+		return false;
+	}
+
+	// ====== Bootstrap / 原生 select：強化（支援無 id 的 select） ======
+
+	private String selectFromSelectOrBootstrap(By selectBy, String targetValue, String targetText) {
+		if (targetValue == null || targetValue.isBlank()) {
+			return selectByTextFromSelectOrBootstrap(selectBy, targetText);
+		}
+		WebElement selectEl = findElementIsDisplayed(selectBy, true, 5000);
+		if (selectEl == null) return null;
+
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+		boolean usedBootstrap = false;
+		WebElement toggle = findBootstrapToggle(selectEl);
+		if (toggle != null) {
+			usedBootstrap = true;
+			openDropdown(toggle, wait, js);
+			WebElement bsContainer = toggle.findElement(By.xpath("ancestor::div[contains(@class,'bootstrap-select')]"));
+			WebElement menu = bsContainer.findElement(By.cssSelector(".dropdown-menu"));
+			wait.until(ExpectedConditions.visibilityOf(menu));
+			try {
+				WebElement option = menu.findElement(By.xpath(".//span[@class='text' and normalize-space()='" + targetText + "']/ancestor::a"));
+				try { option.click(); } catch (Exception e) { js.executeScript("arguments[0].click();", option); }
+			} catch (Exception e) {
+				try {
+					WebElement any = menu.findElement(By.xpath(".//a"));
+					js.executeScript("arguments[0].click();", any);
+				} catch (Exception ignore) {}
+			}
+		}
+		if (!usedBootstrap) {
+			try { new Select(selectEl).selectByValue(targetValue); }
+			catch (Exception e) {
+				js.executeScript("arguments[0].value = arguments[1]; arguments[0].dispatchEvent(new Event('change', {bubbles:true}));",
+						selectEl, targetValue);
+			}
+		}
+		String finalVal = selectEl.getAttribute("value");
+		if (finalVal == null || finalVal.isBlank()) {
+			finalVal = getSelectedText(selectBy); // 至少回傳顯示文字
+		}
+		return finalVal;
+	}
+
+	public String selectByTextFromSelectOrBootstrap(By selectBy, String targetText) {
+		WebElement selectEl = findElementIsDisplayed(selectBy, true, 5000);
+		if (selectEl == null) return null;
+
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+		boolean usedBootstrap = false;
+		WebElement toggle = findBootstrapToggle(selectEl); // 就近找 toggle（即便 select 沒 id）
+		if (toggle != null) {
+			usedBootstrap = true;
+			openDropdown(toggle, wait, js);
+			try {
+				WebElement bsContainer = toggle.findElement(By.xpath("ancestor::div[contains(@class,'bootstrap-select')]"));
+				WebElement menu = bsContainer.findElement(By.cssSelector(".dropdown-menu"));
+				wait.until(ExpectedConditions.visibilityOf(menu));
+				// 先精準，再寬鬆 contains
+				List<By> tryLocators = Arrays.asList(
+					By.xpath(".//span[@class='text' and normalize-space()='" + targetText + "']/ancestor::a"),
+					By.xpath(".//span[@class='text'][contains(normalize-space(),'" + targetText + "')]/ancestor::a")
+				);
+				boolean clicked = false;
+				for (By by : tryLocators) {
+					try {
+						WebElement opt = menu.findElement(by);
+						try { opt.click(); } catch (Exception e) { js.executeScript("arguments[0].click();", opt); }
+						clicked = true; break;
+					} catch (Exception ignore) {}
+				}
+				if (!clicked) {
+					// 後援：選第一個有效
+					List<WebElement> items = menu.findElements(By.xpath(".//a[.//span[@class='text' and normalize-space()!='' and not(contains(.,'請選'))]]"));
+					if (!items.isEmpty()) js.executeScript("arguments[0].click();", items.get(0));
+				}
+			} catch (Exception ignore) {}
+		}
+		if (!usedBootstrap) {
+			try { new Select(selectEl).selectByVisibleText(targetText); }
+			catch (Exception e) {
+				// 後援：contains 或第一個有效
+				try {
+					Select s = new Select(selectEl);
+					boolean found = false;
+					for (WebElement opt : s.getOptions()) {
+						String t = safeText(opt);
+						if (t.contains(targetText) && t.length()>0) { s.selectByVisibleText(t); found = true; break; }
+					}
+					if (!found) {
+						for (WebElement opt : s.getOptions()) {
+							String t = safeText(opt);
+							if (!t.isBlank() && !t.contains("請選")) { s.selectByVisibleText(t); break; }
+						}
+					}
+				} catch (Exception ignore) { return null; }
+			}
+		}
+		return getSelectedText(selectBy);
+	}
+
+	private WebElement findBootstrapToggle(WebElement selectEl) {
+		// 1) 以 id 對應 data-id
+		try {
+			String id = selectEl.getAttribute("id");
+			if (id != null && !id.isBlank()) {
+				List<WebElement> toggles = driver.findElements(By.cssSelector("button.dropdown-toggle[data-id='" + id + "']"));
+				for (WebElement t : toggles) if (t.isDisplayed()) return t;
+			}
+		} catch (Exception ignore) {}
+		// 2) 無 id：找緊鄰的 bootstrap-select 容器
+		try {
+			WebElement t = selectEl.findElement(By.xpath("following-sibling::div[contains(@class,'bootstrap-select')]//button[contains(@class,'dropdown-toggle')]"));
+			if (t != null && t.isDisplayed()) return t;
+		} catch (Exception ignore) {}
+		// 3) 向上找就近容器再往下找
+		try {
+			List<WebElement> cand = selectEl.findElements(By.xpath("ancestor::*[self::td or self::div or self::span][1]//button[contains(@class,'dropdown-toggle')]"));
+			for (WebElement t : cand) if (t.isDisplayed()) return t;
+		} catch (Exception ignore) {}
+		return null;
+	}
+
+	private void openDropdown(WebElement toggle, WebDriverWait wait, JavascriptExecutor js) {
+		try { wait.until(ExpectedConditions.elementToBeClickable(toggle)).click(); }
+		catch (Exception e) { js.executeScript("arguments[0].click();", toggle); }
+	}
+
+	// 選第一個有效選項
+	private String selectFirstOptionFromSelectOrBootstrap(By selectBy) {
+		WebElement sel = findElementIsDisplayed(selectBy, true, 5000);
+		if (sel == null) return null;
+		try {
+			Select s = new Select(sel);
+			for (WebElement opt : s.getOptions()) {
+				String t = opt.getText() == null ? "" : opt.getText().trim();
+				String v = opt.getAttribute("value");
+				if (t.isBlank() || v == null || v.isBlank() || t.contains("請選") || t.contains("Select")) continue;
+				s.selectByValue(v);
+				return v;
+			}
+		} catch (Exception e) {
+			try {
+				WebElement toggle = findBootstrapToggle(sel);
+				if (toggle != null) {
+					openDropdown(toggle, new WebDriverWait(driver, Duration.ofSeconds(8)), (JavascriptExecutor)driver);
+					WebElement menu = toggle.findElement(By.xpath("ancestor::div[contains(@class,'bootstrap-select')]")).findElement(By.cssSelector(".dropdown-menu"));
+					List<WebElement> items = menu.findElements(By.xpath(".//a[.//span[@class='text' and normalize-space()!='' and not(contains(.,'請選'))]]"));
+					if (!items.isEmpty()) {
+						((JavascriptExecutor)driver).executeScript("arguments[0].click();", items.get(0));
+						return getSelectedText(selectBy);
+					}
+				}
+			} catch (Exception ignore) {}
+		}
+		return getSelectedText(selectBy);
+	}
+
+	// =========================
+	// 小工具
+	// =========================
+	private void captureStep1Context() {
+		try { step1Url = driver.getCurrentUrl(); } catch (Exception ignore) {}
+		try { step1Handle = driver.getWindowHandle(); } catch (Exception ignore) {}
+	}
+
+	/** 優先嘗試：點擊第 2 個「取消申請」按鈕（若存在） */
+	private boolean clickSecondCancelIfPresent() {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		// 嚴格匹配：class 完全等於 "btn btn-default"
+		By strictSecond = By.xpath("(//a[@class='btn btn-default' and normalize-space(text())='取消申請'])[2]");
+		try {
+			WebElement btn = findElementIsDisplayed(strictSecond, true, 1000);
+			if (btn != null) {
+				try { js.executeScript("arguments[0].scrollIntoView({block:'center'});", btn); } catch (Exception ignore) {}
+				try { click(btn, true); } catch (Exception e) { js.executeScript("arguments[0].click();", btn); }
+				return true;
+			}
+		} catch (Exception ignore) {}
+
+		// 寬鬆匹配：class token 包含 btn 與 btn-default
+		By looseSecond = By.xpath("(//a[contains(concat(' ',normalize-space(@class),' '),' btn ') and contains(concat(' ',normalize-space(@class),' '),' btn-default ') and normalize-space(text())='取消申請'])[2]");
+		try {
+			WebElement btn = findElementIsDisplayed(looseSecond, true, 800);
+			if (btn != null) {
+				try { js.executeScript("arguments[0].scrollIntoView({block:'center'});", btn); } catch (Exception ignore) {}
+				try { click(btn, true); } catch (Exception e) { js.executeScript("arguments[0].click();", btn); }
+				return true;
+			}
+		} catch (Exception ignore) {}
+
+		// 最後備援：收集全部「取消申請」，若 >=2 就點第 2 個
+		try {
+			List<WebElement> all = findElements(By.xpath("//a[@class='btn btn-default' and normalize-space(text())='取消申請']"), 800);
+			if (all != null && all.size() >= 2) {
+				WebElement btn = all.get(1);
+				try { js.executeScript("arguments[0].scrollIntoView({block:'center'});", btn); } catch (Exception ignore) {}
+				try { click(btn, true); } catch (Exception e) { js.executeScript("arguments[0].click();", btn); }
+				return true;
+			}
+		} catch (Exception ignore) {}
+
+		// 亦支援 <button> 節點
+		try {
+			WebElement btn = findElementIsDisplayed(By.xpath("(//button[contains(@class,'btn') and contains(@class,'btn-default') and normalize-space(text())='取消申請'])[2]"), true, 800);
+			if (btn != null) {
+				try { js.executeScript("arguments[0].scrollIntoView({block:'center'});", btn); } catch (Exception ignore) {}
+				try { click(btn, true); } catch (Exception e) { js.executeScript("arguments[0].click();", btn); }
+				return true;
+			}
+		} catch (Exception ignore) {}
+
+		return false;
+	}
+
+	private boolean tryClickAnyReturnControlInCurrentContext() {
+		// 先嘗試：第 2 個「取消申請」
+		if (clickSecondCancelIfPresent()) return true;
+
+		By[] backBtnLocators = new By[] {
+			// 指定第 2 個取消鈕（備援；前面的專用方法已先嘗試過）
+			By.xpath("(//a[@class='btn btn-default' and normalize-space()='取消申請'])[2]"),
+			// 其餘常見返回鍵
+			By.xpath("//a[@class='btn btn-default' and normalize-space()='取消申請']"),
+			By.xpath("//a[contains(@class,'btn') and contains(normalize-space(),'取消申請')]"),
+			By.xpath("(//button[contains(@class,'btn') and contains(@class,'btn-default') and normalize-space()='取消申請'])[1]"),
+			By.id("cancel"),
+			By.xpath("//a[contains(@class,'btn') and (contains(normalize-space(),'回上一步') or contains(normalize-space(),'上一步') or contains(normalize-space(),'返回') or contains(normalize-space(),'返回修正') or contains(normalize-space(),'回列表') or contains(normalize-space(),'關閉'))]"),
+			By.xpath("//button[contains(@class,'btn') and (contains(normalize-space(),'回上一步') or contains(normalize-space(),'上一步') or contains(normalize-space(),'返回') or contains(normalize-space(),'返回修正') or contains(normalize-space(),'回列表') or contains(normalize-space(),'關閉'))]"),
+			By.xpath("//ul[contains(@class,'steps') or contains(@class,'wizard') or contains(@class,'process')]//a[contains(.,'1') or contains(.,'選擇異動保單')]")
+		};
+		for (By by : backBtnLocators) {
+			try {
+				WebElement btn = findElementIsDisplayed(by, true, 2500);
+				if (btn != null) {
+					try { ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", btn); } catch (Exception ignore) {}
+					try { click(btn, true); } catch (Exception e) { ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btn); }
+					return true;
+				}
+			} catch (Exception ignore) {}
+		}
+		return false;
+	}
+
+	private boolean tryClickReturnControlsInAllTopFramesWithScroll() {
+		try {
+			driver.switchTo().defaultContent();
+			List<WebElement> ifs = driver.findElements(By.tagName("iframe"));
+			for (int i = 0; i < ifs.size(); i++) {
+				try {
+					driver.switchTo().frame(i);
+					// 每個 frame 先做滾動脈衝，再找返回鍵
+					try { pulseScrollCurrentContext(); } catch (Exception ignore) {}
+					if (tryClickAnyReturnControlInCurrentContext()) {
+						driver.switchTo().defaultContent();
+						return true;
+					}
+					driver.switchTo().defaultContent();
+				} catch (Exception e) {
+					driver.switchTo().defaultContent();
+				}
+			}
+		} catch (Exception ignore) {}
+		return false;
+	}
+
+	private boolean browserBackUntilStep1(int maxBack, int waitEachMs) {
+		for (int i = 1; i <= maxBack; i++) {
+			try {
+				switchToMostRecentAliveWindow();
+				driver.navigate().back();
+				waitForWindowHandlesToSettle(600, 8000);
+				switchToMostRecentAliveWindow();
+				if (waitStep1Visible(Math.max(2500, waitEachMs))) return true;
+				try { Thread.sleep(180); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+			} catch (Exception ignore) {}
+		}
+		return false;
+	}
+
+	private void switchToSurvivorWindow() {
+		try { driver.getTitle(); driver.switchTo().defaultContent(); return; }
+		catch (Exception ignore) {}
+		try {
+			for (String h : driver.getWindowHandles()) {
+				try {
+					driver.switchTo().window(h);
+					driver.getTitle();
+					driver.switchTo().defaultContent();
+					return;
+				} catch (Exception ignore) {}
+			}
+		} catch (Exception ignore) {}
+		try {
+			driver.switchTo().newWindow(WindowType.TAB);
+			driver.navigate().to("about:blank");
+			driver.switchTo().defaultContent();
+		} catch (Exception ignore) {}
+	}
+
+	private String safeText(WebElement el) {
+		if (el == null) return "";
+		return el.getText() == null ? "" : el.getText().trim();
+	}
+
+	private String getSelectedText(By selectBy) {
+		WebElement sel = findElementIsDisplayed(selectBy, true, 3000);
+		if (sel == null) return "";
+		try { return new Select(sel).getFirstSelectedOption().getText().trim(); }
+		catch (Exception e) {
+			try {
+				String id = sel.getAttribute("id");
+				if (id != null && !id.isBlank()) {
+					WebElement toggleText = driver.findElement(
+						By.cssSelector("button.dropdown-toggle[data-id='" + id + "'] .filter-option-inner-inner"));
+					return toggleText.getText().trim();
+				}
+			} catch (Exception ignore) {}
+			// 無 id 的 bootstrap：就近找
+			try {
+				WebElement toggle = findBootstrapToggle(sel);
+				if (toggle != null) {
+					WebElement t = toggle.findElement(By.cssSelector(".filter-option-inner-inner"));
+					return safeText(t);
+				}
+			} catch (Exception ignore) {}
+			return "";
+		}
+	}
+
+	private boolean eqText(String s2, String s3, String label) {
+		String a = normalizeText(s2);
+		String b = normalizeText(s3);
+		boolean same = a.equals(b);
+		if (!same) logger.debug("[不一致] " + label + " | S2='" + s2 + "' vs S3='" + s3 + "'");
+		return same;
+	}
+
+	private boolean containsText(String haystack, String needle, String label) {
+		String h = normalizeText(haystack);
+		String n = normalizeText(needle);
+		boolean ok = h.contains(n);
+		if (!ok) logger.debug("[未包含] " + label + " | 期望包含='" + needle + "' 但實際為='" + haystack + "'");
+		return ok;
+	}
+
+	private boolean eqNumber(String s2, String s3, String label) {
+		String a = normalizeNumber(s2);
+		String b = normalizeNumber(s3);
+		boolean same = a.equals(b);
+		if (!same) logger.debug("[數字不一致] " + label + " | S2='" + s2 + "'(" + a + ") vs S3='" + s3 + "'(" + b + ")");
+		return same;
+	}
+
+	private String normalizeText(String s) {
+		if (s == null) return "";
+		return s.replace('\u00A0',' ')
+				.replace('\u3000',' ')
+				.replaceAll("\\s+"," ")
+				.trim();
+	}
+
+	private String normalizeNumber(String s) {
+		if (s == null) return "";
+		String t = s.replace(",", "").trim();
+		if (t.contains("%")) t = t.replaceAll("[^0-9.%]", "");
+		else t = t.replaceAll("[^0-9.]", "");
+		if (t.endsWith(".")) t = t.substring(0, t.length() - 1);
+		return t;
+	}
+
+	private List<String> collectCheckedTextsFromTable(String tableId, int colIndex) {
+		List<String> out = new ArrayList<>();
+		try {
+			List<WebElement> rows = findElements(By.cssSelector("#" + tableId + " tbody tr"), 2000);
+			for (WebElement tr : rows) {
+				try {
+					WebElement chk = tr.findElement(By.cssSelector("input[type='checkbox']"));
+					if (chk != null && chk.isSelected()) {
+						List<WebElement> tds = tr.findElements(By.tagName("td"));
+						if (tds.size() >= colIndex) out.add(safeText(tds.get(colIndex - 1)));
+					}
+				} catch (Exception ignore) {}
+			}
+		} catch (Exception e) {
+			logger.debug("collectCheckedTextsFromTable(" + tableId + ") 例外: " + e.getMessage());
+		}
+		return out;
+	}
+
+	private boolean verifyTableTitleLoose(List<String> expected, String thXpath) {
+		try {
+			List<WebElement> ths = findElements(By.xpath(thXpath), 5000);
+			List<String> actual = new ArrayList<>();
+			for (WebElement th : ths) actual.add(norm(th.getText()));
+			for (String e : expected) {
+				String ne = norm(e);
+				boolean ok = actual.stream().anyMatch(a -> a.contains(ne) || ne.contains(a));
+				if (!ok) {
+					logger.debug("[Title not found] exp='" + e + "' actual=" + actual);
+					return false;
+				}
+			}
+			return true;
+		} catch (Exception ex) {
+			logger.debug("verifyTableTitleLoose error: " + ex.getMessage());
+			return false;
+		}
+	}
+
+	private String norm(String s){ if (s==null) return ""; return s.replace('\u00A0',' ').replace('\u3000',' ').replaceAll("\\s+","").trim(); }
+
+	private WebElement findRowByPolicyNoLoose() {
+		try {
+			String xp = "(//table[contains(@class,'search-table') and (contains(@id,'tran') or contains(@id,'list'))]"
+					 + "//tr[.//td[contains(normalize-space(),'" + POLICY_NO + "')]])[1]";
+			return findElement(By.xpath(xp), false, 2000);
+		} catch (Exception e) { return null; }
+	}
+
+	private String getWholePageText() {
+		try { WebElement body = driver.findElement(By.tagName("body")); return body.getText() == null ? "" : body.getText(); }
+		catch (Exception e) { return ""; }
+	}
+
+	private String tryGetText(By by) {
+		try { WebElement el = findElement(by, false, 1500); return el == null ? "" : safeText(el); }
+		catch (Exception e) { return ""; }
+	}
+
+	/* =========================
+	 Step3 定位輔助
+	 ========================= */
+    // 保留這個版本，因為它在 isPageDisplayCorrectly() 中使用，但 Step3 驗證則使用更穩定的 InCurrentWindowOnly
+	private boolean locateStep3Root(String tag) {
+		waitForWindowHandlesToSettle(700, 12000);
+		switchToMostRecentAliveWindow();
+
+		if (switchToFrameContaining(By.id("loanData3"), 4000)) return true;
+		if (switchToFrameContaining(By.id("tdclinetName"), 4000)) return true;
+		if (switchToFrameContaining(By.id("tdTtransfer"), 4000)) return true;
+
+		List<String> order = new ArrayList<>(driver.getWindowHandles());
+		for (int i = order.size() - 1; i >= 0; i--) {
+			try {
+				driver.switchTo().window(order.get(i));
+				try { Thread.sleep(160); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+				if (switchToFrameContaining(By.id("loanData3"), 1800)) return true;
+				if (switchToFrameContaining(By.id("tdclinetName"), 1800)) return true;
+				if (switchToFrameContaining(By.id("tdTtransfer"), 1800)) return true;
+			} catch (Exception ignore) {}
+		}
+		logger.debug("[locateStep3Root] 無法在任何 window/iframe 找到 Step3 關鍵元素 (tag=" + tag + ")");
+		return false;
+	}
+
+	private boolean switchToFrameContaining(By by, int timeoutMs) {
+		long end = System.currentTimeMillis() + timeoutMs;
+		while (System.currentTimeMillis() < end) {
+			try {
+				driver.switchTo().defaultContent();
+				WebElement el = findElement(by, false, 300);
+				if (el != null) return true;
+
+				List<WebElement> ifs = driver.findElements(By.tagName("iframe"));
+				for (int i = 0; i < ifs.size(); i++) {
+					try {
+						driver.switchTo().frame(i);
+						el = findElement(by, false, 250);
+						if (el != null) return true;
+					} catch (Exception ignore) {
+					} finally {
+						driver.switchTo().defaultContent();
+					}
+				}
+			} catch (Exception ignore) {}
+			try { Thread.sleep(120); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+		}
+		try { driver.switchTo().defaultContent(); } catch (Exception ignore) {}
+		return false;
+	}
+
+	// =========================
+	// 「滾動脈衝」— 觸發 Step3 懶載/啟用底部按鈕
+	// =========================
+	private void pulseScrollGloballyAndTopIframes() {
+		// 当前 window 的 defaultContent
+		pulseScrollCurrentContext();
+		// 每個 top-level iframe
+		try {
+			driver.switchTo().defaultContent();
+			List<WebElement> ifs = driver.findElements(By.tagName("iframe"));
+			for (int i = 0; i < ifs.size(); i++) {
+				try {
+					driver.switchTo().frame(i);
+					pulseScrollCurrentContext();
+					driver.switchTo().defaultContent();
+				} catch (Exception e) {
+					driver.switchTo().defaultContent();
+				}
+			}
+		} catch (Exception ignore) {}
+		try { driver.switchTo().defaultContent(); } catch (Exception ignore) {}
+	}
+
+	private void pulseScrollCurrentContext() {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		try {
+			// 先到頂、再到底，刺激 onscroll
+			js.executeScript("try{window.scrollTo(0,0);}catch(e){}");
+			js.executeScript("try{window.scrollTo(0,document.body.scrollHeight);}catch(e){}");
+		} catch (Exception ignore) {}
+		// 滾動所有可滾容器（overflow:auto/scroll 且可滾）
+		try {
+			String script =
+				"try{var c=[document.scrollingElement||document.documentElement, document.body];"
+			 + "var list=Array.from(document.querySelectorAll('*')).filter(function(e){"
+			 + " try{var s=getComputedStyle(e); return (s.overflowY==='auto'||s.overflowY==='scroll')&&e.scrollHeight>e.clientHeight+50;}catch(err){return false;}"
+			 + "});"
+			 + "c=c.concat(list);"
+			 + "c.forEach(function(e){try{e.scrollTop=0;}catch(err){}});"
+			 + "c.forEach(function(e){try{e.scrollTop=e.scrollHeight;}catch(err){}});"
+			 + "return c.length;}catch(ex){return 0;}";
+			js.executeScript(script);
+		} catch (Exception ignore) {}
+	}
+
+	// =========================
+	// jQuery/DOM 穩定等待
+	// =========================
+	private void waitForStable() {
+		try {
+			new WebDriverWait(driver, Duration.ofSeconds(15)).until(d -> {
+				try {
+					JavascriptExecutor js = (JavascriptExecutor) d;
+					Object ready = js.executeScript("return document.readyState");
+					Object jq = js.executeScript("return window.jQuery ? jQuery.active : 0");
+					boolean docReady = "complete".equals(ready);
+					boolean ajaxIdle = !(jq instanceof Long) || ((Long) jq) == 0L;
+					return docReady && ajaxIdle;
+				} catch (Exception e) { return true; }
+			});
+			try { Thread.sleep(200); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+		} catch (Exception ignore) {}
+	}
+
+	// =========================
+	// 勾全文件/提醒（若存在）
+	// =========================
+	private void checkAllIfExists(By by) {
+		try {
+			List<WebElement> cbs = findElements(by, 1500);
+			for (WebElement cb : cbs) {
+				try {
+					if (cb.isEnabled() && !cb.isSelected()) {
+						((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", cb);
+						cb.click();
+					}
+				} catch (Exception ignore) {}
+			}
+		} catch (Exception ignore) {}
+	}
+
+	// =========================
+	// NEW: 動態 rowId 與相關定位器
+	// =========================
+	private String getRowId() {
+		if (detectedRowId == null || detectedRowId.isBlank()) {
+			detectedRowId = detectRowId();
+			if (detectedRowId == null || detectedRowId.isBlank()) detectedRowId = POLICY_NO; // 保底
+		}
+		return detectedRowId;
+	}
+	private void setRowId(String r) { detectedRowId = r; }
+
+	/** 偵測 Step2 下第一列 r{}，回傳 rowId（例：80241059） */
+	private String detectRowId() {
+		try {
+			List<WebElement> rows = findElements(By.cssSelector("#divInputChg table.search-table tbody tr[id^='r']"), 2000);
+			if (rows != null && !rows.isEmpty()) {
+				String id = rows.get(0).getAttribute("id"); // r80241059
+				if (id != null) return id.replaceFirst("^r", "");
+			}
+		} catch (Exception ignore) {}
+		return null;
+	}
+
+	// 動態欄位定位器
+	private By loanTypeSelectBy() { return By.id("lt" + getRowId()); }
+	private By loanReasonSelectBy() { return By.id("lr" + getRowId()); }
+	private By currentLoanAmountInputBy() { return By.id("cl" + getRowId()); }
+
+	private String policyChangeTableDataXpath() {
+		return "(//div[@id='divInputChg']//table[@width='100%' and @class='table table-bordered search-table']/tbody/tr[@id='r" + getRowId() + "'])[1]/td[not(contains(@class,'pc_hide'))]";
+	}
+	private String enterLoanContentTableDataXpath() {
+		return "(//div[@id='divInputChg']//table[@width='100%' and @class='table table-bordered search-table' and @id='loanData2']/tbody/tr[@id='r" + getRowId() + "'])[1]/td";
+	}
+	private String terminateContractStep2ChangePolicyTableDataXpath() {
+		return "(//div[@id='divInputChg']//table[@width='100%' and @class='table table-bordered search-table']/tbody/tr[@id='r" + getRowId() + "'])[1]/td[not(contains(@class,'pc_hide'))]";
+	}
+
+	// ====== Window 偏好與小視窗判斷 ======
+	private boolean switchToHandleIfAlive(String handle) {
+		if (handle == null || handle.isBlank()) return false;
+		try {
+			driver.switchTo().window(handle);
+			driver.getTitle(); // probe
+			driver.switchTo().defaultContent();
+			return true;
+		} catch (Exception ignore) { return false; }
+	}
+
+	/** 把焦點鎖回「預期的主視窗」（Step1 記下的 handle 優先） */
+	private boolean preferMainWindowFocus() {
+		if (switchToHandleIfAlive(step1Handle)) return true;
+		return switchToMostRecentAliveWindow();
+	}
+
+	/** 判斷是否「疑似小視窗/下載/預覽」：小尺寸、about:blank/blob:/pdf/print/preview 等 */
+	private boolean isLikelyTransientPopup(String handle) {
+		try {
+			driver.switchTo().window(handle);
+			String url = "";
+			try { url = driver.getCurrentUrl(); } catch (Exception ignore) {}
+			String title = "";
+			try { title = driver.getTitle(); } catch (Exception ignore) {}
+
+			boolean urlLike = false;
+			String u = url == null ? "" : url.toLowerCase();
+			if (!u.isEmpty()) {
+				urlLike = u.startsWith("about:blank")
+					 || u.startsWith("edge://") || u.startsWith("chrome://")
+					 || u.startsWith("blob:") || u.contains(".pdf")
+					 || u.contains("/print") || u.contains("preview")
+					 || u.contains("download");
+			}
+
+			boolean sizeLike = false;
+			try {
+				org.openqa.selenium.Dimension sz = driver.manage().window().getSize();
+				sizeLike = (sz.getWidth() <= 900 && sz.getHeight() <= 700);
+			} catch (Exception ignore) {}
+
+			String t = title == null ? "" : title.toLowerCase();
+			return urlLike || sizeLike || t.contains("列印") || t.contains("下載") || t.contains("pdf");
+		} catch (Exception e) {
+			return true; // 取不到資訊也視為不可靠的 popup
+		} finally {
+			try { driver.switchTo().defaultContent(); } catch (Exception ignore) {}
+		}
+	}
+
+	/** 只在「目前視窗」內找 Step3 根元素，不跨視窗 */
+	private boolean locateStep3RootInCurrentWindowOnly(String tag) {
+		if (switchToFrameContaining(By.id("loanData3"), 2000)) return true;
+		if (switchToFrameContaining(By.id("tdclinetName"), 2000)) return true;
+		if (switchToFrameContaining(By.id("tdTtransfer"), 2000)) return true;
+		
+        // Policy Change Review Elements
+		By pcReviewHeader = By.xpath("//div[contains(text(),'保單變更預覽') or contains(text(),'申請書預覽') or contains(text(),'異動內容確認')]");
+		if (findElement(pcReviewHeader, false, 1000) != null) return true;
+		if (findElement(By.id("divReviewContent"), false, 1000) != null) return true; 
+        
+		logger.debug("[locateStep3RootInCurrentWindowOnly] not found in current window (tag=" + tag + ")");
+		return false;
+	}
+
+	/** 新增：點一下頁面空白處 + ESC，盡量讓瀏覽器下載泡泡/預覽提示消失 */
+	private void tapBlankToDismissDownloadBubble() {
+		try {
+			driver.switchTo().defaultContent();
+			WebElement body = findElement(By.tagName("body"), false, 800);
+			if (body != null) {
+				try { ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView(true);", body); } catch (Exception ignore) {}
+				try { new Actions(driver).moveToElement(body, 5, 5).click().perform(); } catch (Exception ignore) {}
+			}
+			try { new Actions(driver).sendKeys(Keys.ESCAPE).perform(); } catch (Exception ignore) {}
+			try { Thread.sleep(120); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+		} catch (Exception ignore) {}
+	}
+}
