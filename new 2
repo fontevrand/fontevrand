@@ -560,6 +560,14 @@ public class CSROneCallPass extends AbstractBasePage {
 			switch (code) {
 				case "C01":
 					ok = validate_C01_AddressChange_Step2();
+					// ✅ 完成 C01 之後，直接按「申請完成-預覽異動內容」並結束
+					if (ok) {
+						if (!clickReviewForPolicyChange()) {
+							logger.error("[PolicyChange] 按『申請完成-預覽異動內容』失敗");
+							allOk = false;
+						}
+						return allOk && ok; // 這次需求：C01 完成即預覽並返回
+					}
 					break;
                 case "C02":
                     ok = validate_C02_BillingChannelChange_Step2(); 
@@ -574,7 +582,7 @@ public class CSROneCallPass extends AbstractBasePage {
 		return allOk;
 	}
 
-	/* ===== C01 地址變更：填「戶籍地址 dropdown」+「地址 text field」+「公司電話」 ===== */
+	/* ===== C01 地址變更：戶籍地址下拉 + 地址輸入 + 公司電話 +（完成後按預覽） ===== */
 	private boolean validate_C01_AddressChange_Step2() {
 	    waitForStable();
 
@@ -584,7 +592,7 @@ public class CSROneCallPass extends AbstractBasePage {
 	        By.name("clientspc"),
 	        // 以「戶籍」或「郵遞區號」label 來反查 select
 	        By.xpath("(//label[contains(normalize-space(),'戶籍') or contains(normalize-space(),'郵遞')]/following::*[self::select])[1]"),
-	        // tab 容器下第一個 select 也當備援
+	        // 當前啟用中的 tab 的第一個 select 當備援
 	        By.xpath("//div[contains(@class,'tab_content') and contains(@class,'active')]//select[1]")
 	    };
 
@@ -598,10 +606,14 @@ public class CSROneCallPass extends AbstractBasePage {
 	        By.xpath("//div[contains(@class,'tab_content') and contains(@class,'active')]//input[@type='text' and (contains(@id,'Address') or contains(@name,'Address'))][1]")
 	    };
 
-	    // 1) 戶籍地址 dropdown → 選「110 台北市信義區」
+	    // 你要的目標值
 	    final String TARGET_ZIP_TEXT  = "110 台北市信義區";
-	    final String TARGET_ZIP_VALUE = "110"; // 若是原生 <select value="110">
+	    final String TARGET_ZIP_VALUE = "110";
+	    final String TARGET_ADDRESS   = "永吉路30巷99號";
+	    final String PHONE_AREA       = "02";
+	    final String PHONE_NUMBER     = "37621960";
 
+	    // 1) 戶籍地址 dropdown → 選「110 台北市信義區」
 	    WebElement zipSelectEl = findFirstPresent(zipCandidates, 3500);
 	    if (zipSelectEl == null) {
 	        logger.error("[C01] 找不到戶籍地址(郵遞區號/區域)下拉");
@@ -616,32 +628,39 @@ public class CSROneCallPass extends AbstractBasePage {
 	        logger.error("[C01] 郵遞/區域 下拉選擇失敗");
 	        return false;
 	    }
-	    waitForStable(); // 某些頁面選區域會觸發地址欄位重繪
+	    waitForStable(); // 有些頁面選區域會觸發地址欄位重繪
 
-	    // 2) 地址 text field → 輸入「松壽路3號」
-	    final String NEW_ADDRESS = "松壽路3號";
+	    // 2) 地址 input → 輸入「永吉路30巷99號」
 	    WebElement addressEl = findFirstPresent(addrCandidates, 3000);
 	    if (addressEl == null) {
 	        logger.error("[C01] 找不到地址輸入框");
 	        return false;
 	    }
-	    input(addressEl, NEW_ADDRESS);
-	    if (!NEW_ADDRESS.equals(addressEl.getAttribute("value"))) {
-	        logger.warn("[C01] 地址輸入值確認不一致，實際 value='" + addressEl.getAttribute("value") + "'");
-	        // 不強制失敗（有些頁面會自動轉半形/加路段），改為寬鬆包含
-	        if (!normalizeText(addressEl.getAttribute("value")).contains(normalizeText(NEW_ADDRESS))) {
-	            return false;
-	        }
+	    input(addressEl, TARGET_ADDRESS);
+	    String addrVal = addressEl.getAttribute("value");
+	    if (addrVal == null || addrVal.isBlank()) {
+	        logger.error("[C01] 地址輸入未生效");
+	        return false;
 	    }
 
-	    // 3) 公司電話（常見有 1 欄或 3 欄：區碼/號碼/分機）
-	    //   盡可能以 label「公司電話」就近找，否則常見 id/name 模式
-	    boolean phoneOk = setCompanyPhoneRobust("02", "23456789", "123");
+	    // 3) 戶籍公司電話 → 輸入「02 37621960」
+	    boolean phoneOk = setCompanyPhoneRobust(PHONE_AREA, PHONE_NUMBER, "");
 	    if (!phoneOk) {
-	        logger.warn("[C01] 公司電話欄位未找到或不可填（不致命，放寬處理）");
+	        // 單欄備援（label 鄰近找第一個 text）
+	        try {
+	            WebElement oneField = findElementIsDisplayed(
+	                By.xpath("//*[self::label or self::th or self::td or self::div][contains(normalize-space(),'公司') and contains(normalize-space(),'電話')]/following::*[self::input and @type='text'][1]"),
+	                true, 1200
+	            );
+	            if (oneField != null) {
+	                input(oneField, PHONE_AREA + " " + PHONE_NUMBER);
+	                phoneOk = true;
+	            }
+	        } catch (Exception ignore) {}
+	        if (!phoneOk) logger.warn("[C01] 公司電話欄位未找到或不可填（不致命）");
 	    }
 
-	    logger.debug("[C01] 地址變更 Step2：戶籍下拉、地址、公司電話都處理完成。");
+	    logger.debug("[C01] 已填：戶籍=110 台北市信義區、地址=" + TARGET_ADDRESS + "、公司電話=" + PHONE_AREA + " " + PHONE_NUMBER);
 	    return true;
 	}
 
@@ -668,7 +687,7 @@ public class CSROneCallPass extends AbstractBasePage {
 	    } catch (Exception ignore) {}
 	    // 備援：用相對 XPath（僅用在 selectFromSelectOrBootstrap/讀取文字時）
 	    String jsPath =
-	        "function xp(n){var p='';while(n&&n.nodeType===1){var i=1,s=n.previousSibling;while(s){if(s.nodeType===1&&s.tagName===n.tagName)i++;s=s.previousSibling;}p='/' + n.tagName + '['+i+']'+p;n=n.parentNode;}return p.toLowerCase();}return xp(arguments[0]);";
+	        "function xp(n){var p='';while(n&&n.nodeType===1){var i=1,s=n.previousSibling;while(s){if(s.nodeType===1&&s.tagName===n.tagName)i++;s=s.previousSibling;}p='/' + n.tagName + '['+i+']'+p;n=n.parentNode;}return p.toLowerCase();";
 	    try {
 	        String path = (String)((JavascriptExecutor)driver).executeScript(jsPath, el);
 	        return By.xpath(path);
@@ -821,7 +840,7 @@ public class CSROneCallPass extends AbstractBasePage {
 					// 針對未勾選的，強制再調用一次 setPolicyChangeChecked
 					setPolicyChangeChecked(code, true); 
 				}
-				Thread.sleep(500); // 等待網頁反應
+				try { Thread.sleep(500); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
 				checkedCodes = getCheckedPolicyChangeCodes();
 				attempt++;
 			}
@@ -895,7 +914,7 @@ public class CSROneCallPass extends AbstractBasePage {
                 }
                 
                 // 點擊後短暫等待，讓網頁框架處理事件（這是關鍵）
-                if (clickSuccess) Thread.sleep(250); 
+                if (clickSuccess) try { Thread.sleep(250); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
 				
 				// 3. 再次檢查狀態
                 boolean afterClickNow = false;
@@ -916,7 +935,7 @@ public class CSROneCallPass extends AbstractBasePage {
 					js.executeScript("arguments[0].dispatchEvent(new Event('change', {bubbles:true}));", input);
                     js.executeScript("arguments[0].dispatchEvent(new Event('click', {bubbles:true}));", input);
 					
-					Thread.sleep(150);
+					try { Thread.sleep(150); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
 				}
 			}
 		} catch (Exception e) {
@@ -1115,6 +1134,26 @@ public class CSROneCallPass extends AbstractBasePage {
 		} catch (Exception ignore) {}
 
 		return ok;
+	}
+
+	/** 共用：點『申請完成-預覽異動內容』按鈕 + 下載泡泡處理 + 視窗聚焦 */
+	private boolean clickReviewForPolicyChange() {
+		waitForStable();
+		WebElement reviewBtn = findElementIsDisplayed(reviewButtonXPath, true, 6000);
+		if (reviewBtn == null) reviewBtn = findElementIsDisplayed(reviewButtonId, true, 4000);
+		if (reviewBtn == null) {
+			logger.error("[PolicyChange] 找不到『申請完成-預覽異動內容』按鈕");
+			return false;
+		}
+		try { ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", reviewBtn); } catch (Exception ignore) {}
+		try { click(reviewBtn, true); } catch (Exception e) { ((JavascriptExecutor) driver).executeScript("arguments[0].click();", reviewBtn); }
+
+		// 與借款/解約相同的穩定處理
+		waitForWindowHandlesToSettle(700, 10000);
+		tapBlankToDismissDownloadBubble();
+		preferMainWindowFocus();
+		waitForStable();
+		return true;
 	}
 
 	/* =========================
@@ -1592,7 +1631,7 @@ public class CSROneCallPass extends AbstractBasePage {
 				waitForWindowHandlesToSettle(600, 8000);
 				switchToMostRecentAliveWindow();
 				if (waitStep1Visible(Math.max(2500, waitEachMs))) return true;
-				Thread.sleep(180);
+				try { Thread.sleep(180); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
 			} catch (Exception ignore) {}
 		}
 		return false;
@@ -1859,7 +1898,7 @@ public class CSROneCallPass extends AbstractBasePage {
 					return docReady && ajaxIdle;
 				} catch (Exception e) { return true; }
 			});
-			Thread.sleep(200);
+			try { Thread.sleep(200); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
 		} catch (InterruptedException ie) {
 			Thread.currentThread().interrupt();
 		} catch (Exception ignore) {}
