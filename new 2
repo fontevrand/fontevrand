@@ -927,7 +927,7 @@ public class CSROneCallPass extends AbstractBasePage {
             }
             
 			if (checked != now) {
-				logger.debug("[Checkbox Click] Target " + code + " to " + checked + ". Current is " + now);
+				logger.debug("[Checkbox Click] Target " + code " to " + checked + ". Current is " + now);
                 boolean clickSuccess = false;
 
                 if (label != null) {
@@ -1411,6 +1411,7 @@ public class CSROneCallPass extends AbstractBasePage {
 						selectEl, targetValue);
 			}
 		}
+		waitGlobalMasksGone(8);
 		String finalVal = selectEl.getAttribute("value");
 		if (finalVal == null || finalVal.isBlank()) {
 			finalVal = getSelectedText(selectBy); // 至少回傳顯示文字
@@ -1474,6 +1475,7 @@ public class CSROneCallPass extends AbstractBasePage {
 				} catch (Exception ignore) { return null; }
 			}
 		}
+		waitGlobalMasksGone(8);
 		return getSelectedText(selectBy);
 	}
 
@@ -1515,6 +1517,7 @@ public class CSROneCallPass extends AbstractBasePage {
 				String v = opt.getAttribute("value");
 				if (t.isBlank() || v == null || v.isBlank() || t.contains("請選") || t.contains("Select")) continue;
 				s.selectByValue(v);
+				waitGlobalMasksGone(5);
 				return v;
 			}
 		} catch (Exception e) {
@@ -1526,6 +1529,7 @@ public class CSROneCallPass extends AbstractBasePage {
 					List<WebElement> items = menu.findElements(By.xpath(".//a[.//span[@class='text' and normalize-space()!='' and not(contains(.,'請選'))]]"));
 					if (!items.isEmpty()) {
 						((JavascriptExecutor)driver).executeScript("arguments[0].click();", items.get(0));
+						waitGlobalMasksGone(5);
 						return getSelectedText(selectBy);
 					}
 				}
@@ -2044,10 +2048,10 @@ public class CSROneCallPass extends AbstractBasePage {
 	}
 
 	/* =========================
-	   ★★★ 新增方法：只做 C01，並送預覽 ★★★
+	   ★★★ 修正版：只做 C01，並送預覽（加強等待/iframe/遮罩/穩健定位） ★★★
 	   ========================= */
 
-	// 確保某代碼的 Tab 可操作（緊抓 active 或內容可見任一條件）
+	// 等分頁內容真的 active + 顯示，並等遮罩消失
 	private boolean ensureTabActiveByCode(String code) {
 		try {
 			Integer idx = POLICY_CODE_TO_TAB_INDEX.get(code);
@@ -2056,35 +2060,20 @@ public class CSROneCallPass extends AbstractBasePage {
 				return false;
 			}
 			By li = By.xpath("//div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_" + idx + "']");
-			WebElement tabLi = findElementIsDisplayed(li, true, 3000);
+			WebElement tabLi = findElementIsDisplayed(li, true, 4000);
 			if (tabLi == null) {
 				logger.error("[Tab] Cannot find tab li for code: " + code);
 				return false;
 			}
 			click(tabLi, true);
 
-			// 自行輪詢等待 (避免依賴外部 waitUntil)
-			long end = System.currentTimeMillis() + 2500;
-			boolean ok;
-			do {
-				ok = false;
-				try {
-					WebElement liEl = findElement(li, false, 200);
-					boolean liActive = liEl != null && liEl.getAttribute("class") != null && liEl.getAttribute("class").contains("active");
+			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+			By content = By.xpath(
+				"//div[contains(@class,'tab_content') and contains(@class,'tab_" + idx + "')]");
+			wait.until(ExpectedConditions.attributeContains(li, "class", "active"));
+			wait.until(ExpectedConditions.visibilityOfElementLocated(content));
+			waitGlobalMasksGone(10);
 
-					By content = By.xpath(
-						"//div[contains(@class,'tab_content') and contains(@class,'tab_" + idx + "')" +
-						" and (contains(@class,'active') or not(contains(@style,'display: none')))]"
-					);
-					WebElement contentEl = findElement(content, false, 200);
-					boolean contentVisible = contentEl != null;
-
-					ok = liActive || contentVisible;
-				} catch (Exception ignore) {}
-				if (!ok) try { Thread.sleep(120); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
-			} while (!ok && System.currentTimeMillis() < end);
-
-			if (!ok) logger.warn("[Tab] Tab for " + code + " might not strictly report 'active'; proceeding by visibility.");
 			return true;
 		} catch (Exception e) {
 			logger.error("[Tab] ensureTabActiveByCode failed: " + e.getMessage());
@@ -2092,38 +2081,127 @@ public class CSROneCallPass extends AbstractBasePage {
 		}
 	}
 
-	// 填 C01 地址變更欄位（戶籍地址 + 公司電話）
+	// 等常見遮罩消失
+	private void waitGlobalMasksGone(int seconds) {
+		try {
+			WebDriverWait w = new WebDriverWait(driver, Duration.ofSeconds(seconds));
+			By mask = By.cssSelector(".loading, .modal-backdrop, .blockUI, .spinner");
+			w.until(ExpectedConditions.invisibilityOfElementLocated(mask));
+		} catch (Exception ignore) {}
+	}
+
+	// 偵測含「戶籍地址」文案的 iframe 並切入；找不到就回 defaultContent
+	private void switchIntoFrameIfNeededForAddress() {
+		try {
+			driver.switchTo().defaultContent();
+			List<WebElement> iframes = driver.findElements(By.tagName("iframe"));
+			for (int i = 0; i < iframes.size(); i++) {
+				try {
+					driver.switchTo().defaultContent();
+					driver.switchTo().frame(i);
+					List<WebElement> addrHeaders = driver.findElements(
+						By.xpath("//*[self::th or self::label or self::div][contains(normalize-space(.), '戶籍地址')]"));
+					if (!addrHeaders.isEmpty()) {
+						logger.debug("[iframe] Switched into iframe index=" + i + " for C01 address.");
+						return;
+					}
+				} catch (Exception ignore) {}
+			}
+		} catch (Exception ignore) {
+		} finally {
+			// 若沒有命中任何 iframe，保留目前 context（defaultContent）
+		}
+	}
+
+	// 在給定 scope 底下（或整頁）嘗試 select visibleText
+	private void selectIfPresentIn(WebElement scope, By by, String visibleText) {
+		try {
+			if (visibleText == null || visibleText.isBlank()) return;
+			WebElement el = (scope != null) ? scope.findElement(by) : findElementIsDisplayed(by, false, 800);
+			if (el != null) {
+				try { new Select(el).selectByVisibleText(visibleText); } catch (Exception ignore) {}
+			}
+		} catch (Exception ignore) {}
+	}
+
+	// 嘗試在某範圍內找到第一個可點擊元素
+	private WebElement getFirstClickable(WebElement scope, By... locators) {
+		for (By b : locators) {
+			try {
+				WebElement el = (scope != null) ? scope.findElement(b) : findElementIsDisplayed(b, false, 800);
+				if (el != null && el.isDisplayed() && el.isEnabled()) return el;
+			} catch (Exception ignore) {}
+		}
+		return null;
+	}
+
+	// ★★ 新版：填 C01 地址變更欄位（以實際 HTML id 為主＋備援）
 	private boolean fillC01_AddressChange() {
-		// 先確保切到 C01（tab_1）
+		// 1) 切到 C01（tab_1）並確保內容可見
 		if (!ensureTabActiveByCode("C01")) return false;
 
-		// --- 戶籍地址 ---
-		By domicileAddrInput = By.xpath(
-			"(//div[contains(@class,'tab_content') and contains(@class,'tab_1')]//th[normalize-space()='戶籍地址']/following::input)[1]"
-		);
-		WebElement addr = findElementIsDisplayed(domicileAddrInput, true, 2000);
-		if (addr == null) addr = findElementIsDisplayed(By.id("domicileAddress"), true, 800);
+		// 2) （若需要）切入可能承載地址欄位的 iframe
+		switchIntoFrameIfNeededForAddress();
+		waitGlobalMasksGone(10);
 
-		if (addr == null) {
-			logger.error("[C01] 找不到『戶籍地址』欄位（請更新定位器）");
+		// 3) 郵遞區號：#clientspc（優先選 110 台北市信義區；選不到就第一個有效）
+		final By ZIP = By.id("clientspc");
+		String zipSelected = null;
+		if (findElement(ZIP, false, 800) != null) {
+			zipSelected = selectByTextFromSelectOrBootstrap(ZIP, "110 台北市信義區");
+			if (zipSelected == null || zipSelected.isBlank()) {
+				zipSelected = selectFirstOptionFromSelectOrBootstrap(ZIP);
+			}
+			waitGlobalMasksGone(6);
+		}
+
+		// 4) 地址欄位：#clientAddress（備援：根據文案/placeholder）
+		final By ADDR = By.id("clientAddress");
+		WebElement addrEl = getFirstClickable(
+			null,
+			ADDR,
+			By.xpath("//input[@name='clientAddress' or contains(@placeholder,'戶籍地址')]"),
+			By.xpath("//label[contains(normalize-space(),'戶籍地址')]/following::*[self::input or self::textarea][1]")
+		);
+		if (addrEl == null) {
+			logger.error("[C01] 找不到『戶籍地址』欄位（#clientAddress 或備援定位器），請檢查 DOM。");
+			driver.switchTo().defaultContent();
 			return false;
 		}
-		clearAndType(addr, "新北市新莊區幸福路1號"); // 測試值
 
-		// --- 公司電話 ---
-		By companyTelInput = By.xpath(
-			"(//div[contains(@class,'tab_content') and contains(@class,'tab_1')]//th[normalize-space()='公司電話']/following::input)[1]"
-		);
-		WebElement tel = findElementIsDisplayed(companyTelInput, true, 2000);
-		if (tel == null) tel = findElementIsDisplayed(By.id("companyTel"), true, 800);
+		// 若為 readonly，先解除（測試自動化限定）
+		try { ((JavascriptExecutor)driver).executeScript("arguments[0].removeAttribute('readonly');", addrEl); } catch (Exception ignore) {}
+		try { ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView({block:'center'});", addrEl); } catch (Exception ignore) {}
 
-		if (tel == null) {
-			logger.error("[C01] 找不到『公司電話』欄位（請更新定位器）");
+		final String NEW_ADDRESS = "松壽路3號";
+		try { addrEl.clear(); } catch (Exception ignore) {}
+		input(addrEl, NEW_ADDRESS);
+
+		// 5) 住家電話：clientHomePhoneCde + clientHomePhone
+		WebElement homeCde = findElementIsDisplayed(By.id("clientHomePhoneCde"), false, 800);
+		WebElement homeNum = findElementIsDisplayed(By.id("clientHomePhone"),    false, 800);
+		if (homeCde != null) { try { homeCde.clear(); } catch (Exception ignore) {} input(homeCde, "02"); }
+		if (homeNum != null) { try { homeNum.clear(); } catch (Exception ignore) {} input(homeNum, "77218888"); }
+
+		// 6) 公司電話：clientOfficePhoneCde + clientOfficePhone + clientOfficePhone2(分機)
+		WebElement offCde = findElementIsDisplayed(By.id("clientOfficePhoneCde"), false, 800);
+		WebElement offNum = findElementIsDisplayed(By.id("clientOfficePhone"),    false, 800);
+		WebElement offExt = findElementIsDisplayed(By.id("clientOfficePhone2"),   false, 800);
+		if (offCde != null) { try { offCde.clear(); } catch (Exception ignore) {} input(offCde, "02"); }
+		if (offNum != null) { try { offNum.clear(); } catch (Exception ignore) {} input(offNum, "23945678"); }
+		if (offExt != null) { try { offExt.clear(); } catch (Exception ignore) {} input(offExt, "1234"); }
+
+		// 7) 校驗地址確實帶值
+		String addrVal = "";
+		try { addrVal = addrEl.getAttribute("value"); } catch (Exception ignore) {}
+		if (addrVal == null || !normalizeText(addrVal).contains(normalizeText(NEW_ADDRESS))) {
+			logger.error("[C01] 地址輸入後回讀驗證失敗，實際值=" + addrVal);
+			driver.switchTo().defaultContent();
 			return false;
 		}
-		clearAndType(tel, "02-12345678"); // 測試值
 
-		logger.info("[C01] 已填寫：戶籍地址 + 公司電話");
+		driver.switchTo().defaultContent();
+		logger.info("[C01] 地址變更欄位填寫完成（郵遞區號/地址/住家電話/公司電話），zip=" + zipSelected);
 		return true;
 	}
 
@@ -2144,6 +2222,7 @@ public class CSROneCallPass extends AbstractBasePage {
 			return false;
 		}
 		click(reviewBtn, true);
+		waitGlobalMasksGone(8);
 		waitForStable();
 
 		// 寬鬆驗證 Step3：「任一已知錨點」存在即可
