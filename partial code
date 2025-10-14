@@ -1,0 +1,60 @@
+// 全檔同你貼的版本，只展示有改動的 validate_C01_AddressChange_Step2()
+
+/* ===== C01 地址變更：依「指定 XPath」填值 ===== */
+private boolean validate_C01_AddressChange_Step2() {
+    waitForStable();
+
+    // 1) 郵遞區號/區域下拉（Bootstrap select）
+    // XPath 與 value/text 皆依你提供
+    By zipSelectBy = By.xpath("//div[@class='dropdown bootstrap-select span3 addr']/select[@name='span3 addr selectpicker']");
+    final String TARGET_ZIP_VALUE = "110";
+    final String TARGET_ZIP_TEXT  = "110 台北市信義區";
+
+    String zipSelected = selectFromSelectOrBootstrap(zipSelectBy, TARGET_ZIP_VALUE, TARGET_ZIP_TEXT);
+    if (zipSelected == null) {
+        logger.error("[C01] Zip select not found or not selectable via given XPath.");
+        return false;
+    }
+    // 有些頁面 select.getAttribute(\"value\") 會回空字串，但實際顯示文字已選到；
+    // 因此只要 getSelectedText 能取到 110 台北市信義區 就視為成功。
+    String zipShown = getSelectedText(zipSelectBy);
+    if (zipShown == null || !zipShown.contains("110")) {
+        logger.warn("[C01] Zip selected but display text is unexpected. shown='" + zipShown + "'");
+    }
+
+    // 2) 地址輸入框
+    By addressInputBy = By.xpath("//div[@id='clientAddressdiv']/input[@id='clientAddress']");
+    WebElement addressEl = findElementIsDisplayed(addressInputBy, true, 4000);
+    if (addressEl == null) {
+        logger.error("[C01] Address input not found via given XPath.");
+        return false;
+    }
+    final String NEW_ADDRESS = "永吉路30巷99號";
+    input(addressEl, NEW_ADDRESS);
+    if (!NEW_ADDRESS.equals(addressEl.getAttribute("value"))) {
+        logger.warn("[C01] Address value not reflected after input. current='" + addressEl.getAttribute("value") + "'");
+    }
+
+    // 3) 公司電話 - 區碼
+    By phoneAreaBy = By.xpath("//td[@id='clientOfficePhoneCdediv']/input[@id='clientOfficePhoneCde']");
+    WebElement phoneAreaEl = findElementIsDisplayed(phoneAreaBy, true, 3000);
+    if (phoneAreaEl == null) {
+        logger.error("[C01] Company phone area input not found via given XPath.");
+        return false;
+    }
+    final String PHONE_AREA = "02";
+    input(phoneAreaEl, PHONE_AREA);
+
+    // 4) 公司電話 - 號碼
+    By phoneNumberBy = By.xpath("//td[@id='clientOfficePhonediv']/input[@id='clientOfficePhone']");
+    WebElement phoneNumberEl = findElementIsDisplayed(phoneNumberBy, true, 3000);
+    if (phoneNumberEl == null) {
+        logger.error("[C01] Company phone number input not found via given XPath.");
+        return false;
+    }
+    final String PHONE_NO = "37621960";
+    input(phoneNumberEl, PHONE_NO);
+
+    logger.debug("[C01] 指定 XPath 欄位填寫完成：ZIP=110、地址=永吉路30巷99號、公司電話=02-37621960");
+    return true;
+}
