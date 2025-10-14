@@ -111,7 +111,7 @@ public class CSROneCallPass extends AbstractBasePage {
 	private List<String> allowedPolicyChangeCodes = new ArrayList<>(); // 最終可辦理的代碼（Cxx/Axx）
 	// 快照「原本使用者就勾選」的代碼，供策略B保底使用
 	private List<String> originallyCheckedPolicyChangeCodes = new ArrayList<>();
-	// ★ 在 Step1 勾/反勾時即時維護的集合，Step2 也能用
+	// ★ 新增：在 Step1 勾/反勾時即時維護的集合，Step2 也能用
 	private final Set<String> selectedCodes = new LinkedHashSet<>();
 
 	// 同義字 → 代碼 對應（紅字訊息用）
@@ -122,7 +122,7 @@ public class CSROneCallPass extends AbstractBasePage {
 		ERROR_SYNONYM_TO_CODE.put("紅利回饋金匯款帳戶變更", "C54");
 	}
     
-    // 保單變更代碼到 Step2 Tab 索引的映射 (保留，但此版不使用；不切 tab)
+    // 保單變更代碼到 Step2 Tab 索引的映射 (根據 HTML)
     private static final Map<String, Integer> POLICY_CODE_TO_TAB_INDEX = new HashMap<>();
     static {
         POLICY_CODE_TO_TAB_INDEX.put("C01", 1); // 地址變更 (tab_1)
@@ -134,7 +134,7 @@ public class CSROneCallPass extends AbstractBasePage {
         POLICY_CODE_TO_TAB_INDEX.put("A16", 7); // 附約保障異動 (tab_7)
         POLICY_CODE_TO_TAB_INDEX.put("A23", 8); // 復效 (tab_8)
         POLICY_CODE_TO_TAB_INDEX.put("C35", 9); // 保單補發 (tab_9)
-        // C05, C06, C37, C54 可能共用 Tab 或無獨立 Tab
+        // C05, C06, C37, C54 似乎共用 Tab 或沒有獨立 Tab，如果遇到則不切換 Tab。
     }
 
 	public CSROneCallPass() {
@@ -340,13 +340,13 @@ public class CSROneCallPass extends AbstractBasePage {
 			// 若驗證或回跳有任何一個失敗，都視為整體失敗
 			if (!termOk || !backOk) return false;
 
-			/* ====== 保單變更：保留原本 checkbox 流程；Step2 只驗證預設 active 的「地址變更」tab，絕不切 tab ====== */
-			if (!runPolicyChange_AllSelect_FilterAndEnterStep2()) return false; // ← 原本的勾/反勾邏輯完全保留
+			/* ====== 保單變更 → 全選 → 解析紅字反勾 → 再進 Step2 → 針對項目驗證 ====== */
+			if (!runPolicyChange_AllSelect_FilterAndEnterStep2()) return false;
+            
+            // 進入 Policy Change Step2 之後，先跑一次共用區塊（保底）
+            if (!handleCommonStep2Sections()) return false; 
 
-			// 不呼叫任何「通用區塊處理」或切換 tab 的邏輯
-			// if (!handleCommonStep2Sections()) return false; // ← 依你的要求，這段不再呼叫
-
-			// Step2：只針對目前 active 的地址變更區塊進行驗證（不切 tab）
+			// 逐一切到對應 tab、處理共用區塊、再做各自驗證
 			if (!dispatchPolicyChangeStep2Validation()) return false;
 
 			return true;
@@ -357,7 +357,6 @@ public class CSROneCallPass extends AbstractBasePage {
 
 	/* =========================================================
 	  保單變更：全選 → 紅字剔除 → 進 Step2 → 分派驗證（含策略B）
-	  （★ 依你要求：這段「checkbox 勾/反勾流程」原封不動保留）
 	  ========================================================= */
 	private boolean runPolicyChange_AllSelect_FilterAndEnterStep2() {
 		// 回到 Step1 時再保險地把保單打勾
@@ -507,51 +506,54 @@ public class CSROneCallPass extends AbstractBasePage {
 		}
 	}
     
-    // （保留但不再呼叫）處理 Step 2 共同區塊的範例
+    // 處理 Step 2 中所有 Tab 共同的區塊 (補費/付款/收件人)
 	private boolean handleCommonStep2Sections() {
-		logger.info("Handling common Step 2 sections (Payment/Recipient Info)...");
+		logger.info("[Common-Section] Handling common Step 2 sections (Payment/Recipient Info)...");
 		
 		// A. 選擇補費方式 (若有)
 		try {
-			By feeRadioLocator = By.xpath("//div[contains(text(),'選擇補費方式')]/following-sibling::div//input[@type='radio']");
-			WebElement firstFeeRadio = findElementIsDisplayed(feeRadioLocator, true, 3000);
+			By feeRadioLocator = By.xpath("//div[contains(text(),'選擇補費方式')]/following-sibling::div//input[@type='radio']/ancestor::label[1]");
+			WebElement firstFeeRadio = findElementIsDisplayed(feeRadioLocator, true, 2500);
 			if (firstFeeRadio != null) {
 				click(firstFeeRadio, true);
-				logger.debug("Selected the first available Payment Fee Radio.");
+				logger.debug("[Common-Section] Selected the first available Payment Fee Radio.");
 			}
 		} catch (Exception ignore) {}
 		
 		// B. 付款方式
-		WebElement radio = findElementIsDisplayed(useProvidedRadio, true, 3000);
+		WebElement radio = findElementIsDisplayed(useProvidedRadio, true, 2000);
 		if (radio != null) {
 			click(radio, true);
+			logger.debug("[Common-Section] Clicked Provided Account radio.");
 		} else {
-			logger.warn("Common section: Cannot find 'Use Provided Account' radio.");
+			logger.warn("[Common-Section] Cannot find 'Use Provided Account' radio.");
 		}
 
-		if (findElement(providedAccountSelect, false, 500) != null) {
+		if (findElement(providedAccountSelect, false, 800) != null) {
 			String val = selectFirstOptionFromSelectOrBootstrap(providedAccountSelect);
 			if (val == null) {
-				logger.error("Common section: Failed to select provided account.");
+				logger.error("[Common-Section] Failed to select provided account.");
 			}
 			// 更新 selectedProvidedAcctText 供後續驗證使用
 			selectedProvidedAcctText = getSelectedText(providedAccountSelect);
+			logger.debug("[Common-Section] Provided account text = " + selectedProvidedAcctText);
 		}
 
 		// C. 收件人資訊
-		WebElement chargeAddrRadio = findElementIsDisplayed(chargeAddressRadio, true, 3000);
+		WebElement chargeAddrRadio = findElementIsDisplayed(chargeAddressRadio, true, 2000);
 		if (chargeAddrRadio != null) {
 			click(chargeAddrRadio, true);
-			WebElement chargeAddrInput = findElementIsDisplayed(chargeAddressInput, false, 3000);
+			WebElement chargeAddrInput = findElementIsDisplayed(chargeAddressInput, false, 2500);
 			if (chargeAddrInput != null) {
 				chargeAddressFull = chargeAddrInput.getAttribute("value");
 				recipientNameText = getSelectedText(recipientNameSelect);
 				mailTypeText   = getSelectedText(mailTypeSelect);
+				logger.debug("[Common-Section] Recipient=" + recipientNameText + ", MailType=" + mailTypeText + ", Address=" + chargeAddressFull);
 			} else {
-				logger.warn("Common section: Cannot find charge address input.");
+				logger.warn("[Common-Section] Cannot find charge address input.");
 			}
 		} else {
-			logger.warn("Common section: Cannot find 'Charge Address' radio.");
+			logger.warn("[Common-Section] Cannot find 'Charge Address' radio.");
 		}
 
 		// 文件/提醒 → 若有就全勾 (通用)
@@ -565,47 +567,87 @@ public class CSROneCallPass extends AbstractBasePage {
 		return true;
 	}
     
-	/* =========================
-	   Step2 驗證（依你的要求：不切 tab，只驗證目前 active 的地址變更）
-	   ========================= */
-	private boolean dispatchPolicyChangeStep2Validation() {
-		logger.info("[Step2] 不切換任何 tab，僅在目前 active tab 驗證『地址變更』。");
-
-		// 嘗試抓到目前 active 的 tab content（若畫面無 tabs，也不影響後續）
-		WebElement activeContent = findElement(By.xpath("//div[contains(@class,'tab_content') and contains(@class,'active')]"), false, 1500);
-
-		// 判斷這個 active content 是否為「地址變更」區塊（以欄位特徵推斷）
-		boolean isAddressSection = false;
-		if (activeContent != null) {
-			isAddressSection =
-				   isPresentWithin(activeContent, By.id("clientspc"))            // 郵遞區號 select
-				|| isPresentWithin(activeContent, By.id("clientAddress"))        // 地址 input
-				|| isPresentWithin(activeContent, By.xpath(".//label[contains(normalize-space(),'郵遞區號')]"))
-				|| isPresentWithin(activeContent, By.xpath(".//label[contains(normalize-space(),'要保人戶籍地址')]"));
+	private boolean activateTab(String code) {
+		Integer tabIndex = POLICY_CODE_TO_TAB_INDEX.get(code);
+		if (tabIndex == null) {
+			logger.debug("[Tab] Code " + code + " has no specific tab index. Skipping activation.");
+			return true; 
 		}
-
-		// 預期 Step2 預設就是地址變更；若偵測不到 active content，或偵測到但不像地址變更，也先做地址變更欄位驗證（不點 tab）
-		if (activeContent == null || !isAddressSection) {
-			logger.warn("[Step2] 目前 active tab 無法明確辨識為『地址變更』，仍依預設在不切 tab 狀態下進行地址變更欄位驗證。");
+		
+		// 根據 rel 屬性定位 Tab 標籤並點擊 (例如 rel="tab_1")
+		By tabLocator = By.xpath("//div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_" + tabIndex + "']");
+		WebElement tabElement = findElementIsDisplayed(tabLocator, true, 3000);
+		
+		if (tabElement == null) {
+			logger.warn("[Tab] Cannot find tab element for code " + code + " (rel=tab_" + tabIndex + ")");
+			return false;
 		}
-
-		// 實作 C01 驗證（不會切 tab）
-		boolean ok = validate_C01_AddressChange_Step2();
-
-		logger.info("[Step2] 地址變更驗證結束（不切換 tab）。結果=" + ok);
+		
+		// 檢查是否已經是 active 狀態
+		if (!tabElement.getAttribute("class").contains("active")) {
+			logger.info("[Tab] Activating tab for code: " + code);
+			try {
+				click(tabElement, true);
+				waitForStable();
+			} catch (Exception e) {
+				// 使用 JS 點擊作為後備
+				((JavascriptExecutor) driver).executeScript("arguments[0].click();", tabElement);
+				waitForStable();
+			}
+		}
+		
+		// 驗證 Tab 內容是否顯示
+		By contentLocator = By.xpath("//div[@class='tab_content tab_" + tabIndex + "' and contains(@class,'active')]");
+		WebElement content = findElement(contentLocator, false, 2000);
+		boolean ok = content != null && content.isDisplayed();
+		if (!ok) logger.warn("[Tab] Content not active for code " + code + " (tab_" + tabIndex + ")");
 		return ok;
 	}
 
-	// 小工具：檢查某個定位器是否存在於指定 scope（不擾動到其他 tab）
-	private boolean isPresentWithin(WebElement scope, By inner) {
-		try {
-			return scope.findElements(inner).size() > 0;
-		} catch (Exception e) {
-			return false;
+	private boolean dispatchPolicyChangeStep2Validation() {
+		// ★ 防呆保底：確保 allowed 不會是空
+		if (allowedPolicyChangeCodes == null || allowedPolicyChangeCodes.isEmpty()) {
+			if (!selectedCodes.isEmpty()) {
+				allowedPolicyChangeCodes = new ArrayList<>(selectedCodes);
+				logger.warn("[PolicyChange] allowed 為空，退回 selectedCodes: " + allowedPolicyChangeCodes);
+			} else {
+				allowedPolicyChangeCodes = Arrays.asList("C01");
+				logger.warn("[PolicyChange] allowed/selected 皆空，硬塞 C01 作為保底。");
+			}
 		}
+
+		boolean allOk = true;
+		for (String code : allowedPolicyChangeCodes) {
+			// 1. 激活對應的 Tab
+			if (!activateTab(code)) {
+				logger.error("[Step2] Failed to activate tab for code: " + code);
+				allOk = false;
+				continue;
+			}
+
+			// 2. 每次切換到代碼專屬 tab 後，先處理一次共用區塊（確保 radio/select 都被點）
+			handleCommonStep2Sections();
+
+			// 3. 執行特定 Tab 的驗證邏輯
+			boolean ok = true;
+			switch (code) {
+				case "C01":
+					ok = validate_C01_AddressChange_Step2();
+					break;
+                case "C02":
+                    ok = validate_C02_BillingChannelChange_Step2(); 
+                    break;
+				// TODO: 後續逐步擴充其他 Cxx...
+				default:
+					logger.debug("[PolicyChange] 暫無驗證實作或跳過: " + code + "（略過但不判 fail）");
+					ok = true;
+			}
+			allOk &= ok;
+		}
+		return allOk;
 	}
 
-	/* ===== C01 地址變更：實現填寫地址邏輯（含標籤定位後援） ===== */
+	/* ===== C01 地址變更：填寫地址 + 戶籍/公司電話 ===== */
 	private boolean validate_C01_AddressChange_Step2() {
 		waitForStable();
 		
@@ -618,7 +660,7 @@ public class CSROneCallPass extends AbstractBasePage {
 			zipCodeSelect = By.xpath("//label[contains(normalize-space(),'郵遞區號')]/following::select[1]");
 		}
 		if (findElement(addressInput, false, 800) == null) {
-			addressInput = By.xpath("//label[contains(normalize-space(),'要保人戶籍地址')]/following::input[1]");
+			addressInput = By.xpath("//label[contains(normalize-space(),'要保人戶籍地址') or contains(normalize-space(),'戶籍地址')]/following::input[1]");
 		}
 
 		// 1) 選擇郵遞區號
@@ -640,20 +682,72 @@ public class CSROneCallPass extends AbstractBasePage {
 		}
 		input(addressEl, NEW_ADDRESS);
 		
-		// 3) 驗證
+		// 3) 盡力填「戶籍電話」「公司電話」（若欄位存在）
+		fillC01Phones("02-7721-8888", "02-2394-5678");
+
+		// 4) 驗證地址有帶上
 		if (!NEW_ADDRESS.equals(addressEl.getAttribute("value"))) {
 			 logger.error("[C01] Address input verification failed.");
 			 return false;
 		}
 
-		logger.debug("[C01] 地址變更 Step2 填寫完成（未切換任何 tab）。");
+		logger.debug("[C01] 地址變更 Step2 填寫完成。");
 		return true;
 	}
+
+	/** 盡力尋找『戶籍電話 / 公司電話』欄位並填入 */
+	private void fillC01Phones(String homePhone, String companyPhone) {
+		try {
+			// 常見 id 先試（專案常見命名）
+			List<By> homeCandidates = Arrays.asList(
+				By.id("clientHomeTel"), By.id("homeTel"), By.id("clientTel"), By.id("clientTel1"),
+				By.xpath("//label[contains(normalize-space(),'戶籍') and contains(normalize-space(),'電話')]/following::input[1]"),
+				By.xpath("//label[contains(normalize-space(),'住家') and contains(normalize-space(),'電話')]/following::input[1]")
+			);
+			List<By> compCandidates = Arrays.asList(
+				By.id("clientCompanyTel"), By.id("companyTel"), By.id("clientOfficeTel"),
+				By.xpath("//label[contains(normalize-space(),'公司') and contains(normalize-space(),'電話')]/following::input[1]"),
+				By.xpath("//label[contains(normalize-space(),'辦公') and contains(normalize-space(),'電話')]/following::input[1]")
+			);
+
+			WebElement homeEl = null, compEl = null;
+
+			for (By by : homeCandidates) {
+				homeEl = findElementIsDisplayed(by, false, 800);
+				if (homeEl != null) break;
+			}
+			for (By by : compCandidates) {
+				compEl = findElementIsDisplayed(by, false, 800);
+				if (compEl != null) break;
+			}
+
+			if (homeEl != null) {
+				try { ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView({block:'center'});", homeEl); } catch (Exception ignore) {}
+				input(homeEl, homePhone);
+				logger.debug("[C01] 已填入戶籍/住家電話: " + homePhone);
+			} else {
+				logger.debug("[C01] 找不到『戶籍/住家電話』欄位，略過。");
+			}
+
+			if (compEl != null) {
+				try { ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView({block:'center'});", compEl); } catch (Exception ignore) {}
+				input(compEl, companyPhone);
+				logger.debug("[C01] 已填入公司/辦公電話: " + companyPhone);
+			} else {
+				logger.debug("[C01] 找不到『公司/辦公電話』欄位，略過。");
+			}
+		} catch (Exception e) {
+			logger.warn("[C01] 填寫電話欄位時發生例外: " + e.getMessage());
+		}
+	}
     
-    // C02 收費管道變更（保留，但目前不呼叫）
+    // C02 收費管道變更（範例）
 	private boolean validate_C02_BillingChannelChange_Step2() {
 		By billingChannelSelect = By.id("billingChannel" + POLICY_NO);
-        String selected = selectByTextFromSelectOrBootstrap(billingChannelSelect, "自行繳費");
+        // 假設需要選擇 "自行繳費"
+		String selected = selectByTextFromSelectOrBootstrap(billingChannelSelect, "自行繳費");
+        // 或：String selected = selectFirstOptionFromSelectOrBootstrap(billingChannelSelect);
+        
 		if (selected == null) {
 			logger.error("[C02] Failed to validate billing channel.");
 			return false;
