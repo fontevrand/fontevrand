@@ -6,3 +6,278 @@
 打 02
 //td[@id='clientOfficePhonediv']/input[@id='clientOfficePhone']
 打 37621960
+
+<tbody><tr>
+				<th colspan="3" width="100%" class="text-left">保單變更</th>
+				
+			</tr>
+			
+				
+					
+					
+						<tr>
+						<td class="pc_info nborder-right">
+						<ul><li>
+							<div class="checkbox checkbox-inline checkbox-main" data-toggle="tooltip" data-placement="right" data-original-title="要保人聯絡地址、電話以及電子信箱等聯絡資訊變更。" data-bs-original-title="" title="">
+								<input name="ewChangeOptions" id="C01" type="checkbox" desc="地址變更" value="01"><label for="C01">01.地址變更</label>
+							</div>
+						</li></ul>
+						</td>
+					
+					
+					
+					
+					
+				
+			
+				
+					
+					
+						
+							<td class="pc_info nborder-right">
+							<ul><li>
+								<div class="checkbox checkbox-inline checkbox-main" data-toggle="tooltip" data-placement="right" data-original-title="保單續期保費繳費方式變更" data-bs-original-title="" title="">
+									<input name="ewChangeOptions" id="C02" type="checkbox" desc="收費管道變更" value="02"><label for="C02">02.收費管道變更</label>
+								</div>
+							</li></ul>
+							</td>
+						
+						
+					
+					
+				
+			
+				
+					
+					
+					
+						<td class="pc_info">
+							<ul><li>
+							<div class="checkbox checkbox-inline checkbox-main" data-toggle="tooltip" data-placement="right" data-original-title="要、被保險人簽名樣式變更" data-bs-original-title="" title="">
+								<input name="ewChangeOptions" id="C03" type="checkbox" desc="簽章方式變更" value="03"><label for="C03">03.簽章方式變更</label>
+							</div>
+							</li></ul>
+						</td>
+						</tr> 
+					
+				
+			
+				
+					
+					
+						<tr>
+						<td class="pc_info nborder-right">
+						<ul><li>
+							<div class="checkbox checkbox-inline checkbox-main" data-toggle="tooltip" data-placement="right" data-original-title="變更保險費繳交頻率，有月繳、季繳、半年繳、年繳等繳別。" data-bs-original-title="" title="">
+								<input name="ewChangeOptions" id="A04" type="checkbox" desc="繳別變更" value="04"><label for="A04">04.繳別變更</label>
+							</div>
+						</li></ul>
+						</td>
+					
+					
+					
+					
+					
+				
+			
+				
+					
+					
+						
+							<td class="pc_info nborder-right">
+							<ul><li>
+								<div class="checkbox checkbox-inline checkbox-main" data-toggle="tooltip" data-placement="right" data-original-title="變更分紅保單保單紅利或利率變動型壽險增額回饋分享金的領取方式。" data-bs-original-title="" title="">
+									<input name="ewChangeOptions" id="C05" type="checkbox" desc="紅利/回饋金選擇權變更" value="05"><label for="C05">05.紅利/回饋金選擇權變更</label>
+								</div>
+							</li></ul>
+							</td>
+						
+						
+					
+					
+				
+			
+				
+					
+					
+					
+						<td class="pc_info">
+							<ul><li>
+							<div class="checkbox checkbox-inline checkbox-main" data-toggle="tooltip" data-placement="right" data-original-title="自動墊繳是指由保單之價值準備金墊繳逾期保險費，以維持保單效力。" data-bs-original-title="" title="">
+								<input name="ewChangeOptions" id="C06" type="checkbox" desc="墊繳狀況變更" value="06"><label for="C06">06.墊繳狀況變更</label>
+							</div>
+							</li></ul>
+						</td>
+						</tr> 
+					
+				
+			
+				
+					
+					
+						<tr>
+						<td class="pc_info nborder-right">
+						<ul><li>
+							<div class="checkbox checkbox-inline checkbox-main" data-toggle="tooltip" data-placement="right" data-original-title="要、被保險人等保單關係人姓名、身分證字號及出生年月日變更" data-bs-original-title="" title="">
+								<input name="ewChangeOptions" id="A10" type="checkbox" desc="基本資料變更" value="10"><label for="A10">10.基本資料變更</label>
+							</div>
+						</li></ul>
+						</td>
+					
+					
+					
+					
+					
+				
+			
+				
+					
+					
+						
+							<td class="pc_info nborder-right">
+							<ul><li>
+								<div class="checkbox checkbox-inline checkbox-main" data-toggle="tooltip" data-placement="right" data-original-title="" data-bs-original-title="" title="">
+									<input name="ewChangeOptions" id="A11" type="checkbox" desc="職業等級變更" value="11"><label for="A11">11.職業等級變更</label>
+								</div>
+							</li></ul>
+							</td>
+						
+						
+					
+					
+				
+			
+				
+					
+					
+					
+						<td class="pc_info">
+							<ul><li>
+							<div class="checkbox checkbox-inline checkbox-main" data-toggle="tooltip" data-placement="right" data-original-title="" data-bs-original-title="" title="">
+								<input name="ewChangeOptions" id="A15" type="checkbox" desc="主約保障異動" value="15"><label for="A15">15.主約保障異動</label>
+							</div>
+							</li></ul>
+						</td>
+						</tr> 
+					
+				
+			
+				
+					
+					
+						<tr>
+						<td class="pc_info nborder-right">
+						<ul><li>
+							<div class="checkbox checkbox-inline checkbox-main" data-toggle="tooltip" data-placement="right" data-original-title="" data-bs-original-title="" title="">
+								<input name="ewChangeOptions" id="A16" type="checkbox" desc="附約保障異動" value="16"><label for="A16">16.附約保障異動</label>
+							</div>
+						</li></ul>
+						</td>
+					
+					
+					
+					
+					
+				
+			
+				
+					
+					
+						
+							<td class="pc_info nborder-right">
+							<ul><li>
+								<div class="checkbox checkbox-inline checkbox-main" data-toggle="tooltip" data-placement="right" data-original-title="" data-bs-original-title="" title="">
+									<input name="ewChangeOptions" id="A23" type="checkbox" desc="復效" value="23"><label for="A23">23.復效</label>
+								</div>
+							</li></ul>
+							</td>
+						
+						
+					
+					
+				
+			
+				
+					
+					
+					
+						<td class="pc_info">
+							<ul><li>
+							<div class="checkbox checkbox-inline checkbox-main" data-toggle="tooltip" data-placement="right" data-original-title="以保單價值準備金扣除相關費用後的餘額為躉繳保費，購買保額不變，但保險期間減少之保險。" data-bs-original-title="" title="">
+								<input name="ewChangeOptions" id="A26" type="checkbox" desc="繳清保險" value="26"><label for="A26">26.繳清保險</label>
+							</div>
+							</li></ul>
+						</td>
+						</tr> 
+					
+				
+			
+				
+					
+					
+						<tr>
+						<td class="pc_info nborder-right">
+						<ul><li>
+							<div class="checkbox checkbox-inline checkbox-main" data-toggle="tooltip" data-placement="right" data-original-title="" data-bs-original-title="" title="">
+								<input name="ewChangeOptions" id="A32" type="checkbox" desc="保費異動" value="32"><label for="A32">32.保費異動</label>
+							</div>
+						</li></ul>
+						</td>
+					
+					
+					
+					
+					
+				
+			
+				
+					
+					
+						
+							<td class="pc_info nborder-right">
+							<ul><li>
+								<div class="checkbox checkbox-inline checkbox-main" data-toggle="tooltip" data-placement="right" data-original-title="申請保險單重新印製" data-bs-original-title="" title="">
+									<input name="ewChangeOptions" id="C35" type="checkbox" desc="保單補發" value="35"><label for="C35">35.保單補發</label>
+								</div>
+							</li></ul>
+							</td>
+						
+						
+					
+					
+				
+			
+				
+					
+					
+					
+						<td class="pc_info">
+							<ul><li>
+							<div class="checkbox checkbox-inline checkbox-main" data-toggle="tooltip" data-placement="right" data-original-title="" data-bs-original-title="" title="">
+								<input name="ewChangeOptions" id="C37" type="checkbox" desc="結清紅利/回饋金" value="37"><label for="C37">37.結清紅利/回饋金</label>
+							</div>
+							</li></ul>
+						</td>
+						</tr> 
+					
+				
+			
+				
+					
+					
+					
+						<tr><td colspan="3" class="pc_info">
+						<ul><li>
+							<div class="checkbox checkbox-inline checkbox-main" data-toggle="tooltip" data-placement="right" data-original-title="" data-bs-original-title="" title="">
+								<input name="ewChangeOptions" id="C54" type="checkbox" desc="紅利/回饋金給付方式異動" value="54"><label for="C54">54.紅利/回饋金給付方式異動</label>
+							</div>
+						</li></ul>
+						</td>
+						</tr> 
+					
+					
+					
+					
+				
+			
+		</tbody>
