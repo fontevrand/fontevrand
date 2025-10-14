@@ -4,7 +4,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
-import java.util.LinkedHashMap; // ★ NEW: 補上
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.HashMap;
@@ -29,7 +29,6 @@ import submodule.com.autotest.commonpage.AbstractBasePage;
 public class CSROneCallPass extends AbstractBasePage {
 
 	// ===== 常數 =====
-	// CHANGE: 改為可注入，並保留預設無參數建構子
 	private final String POLICY_NO;
 
 	// Step1
@@ -98,7 +97,7 @@ public class CSROneCallPass extends AbstractBasePage {
 	private String step1Handle;
 
 	// NEW: 動態 rowId（例如 r80241059 -> 80241059）
-	private String detectedRowId; // 來源以 Step2 的第一列 r{rowId} 偵測
+	private String detectedRowId;
 
 	/* =========================
 	  NEW: 保單變更（Policy Change）相關
@@ -111,7 +110,6 @@ public class CSROneCallPass extends AbstractBasePage {
 	// 同義字 → 代碼 對應（紅字訊息用）
 	private static final Map<String,String> ERROR_SYNONYM_TO_CODE = new HashMap<>();
 	static {
-		// 例：紅字說「匯款帳戶變更」但實際 checkbox 顯示「給付方式異動」
 		ERROR_SYNONYM_TO_CODE.put("紅利/回饋金匯款帳戶變更", "C54");
 		ERROR_SYNONYM_TO_CODE.put("紅利／回饋金匯款帳戶變更", "C54");
 		ERROR_SYNONYM_TO_CODE.put("紅利回饋金匯款帳戶變更", "C54");
@@ -133,10 +131,9 @@ public class CSROneCallPass extends AbstractBasePage {
     }
 
 	// ====== C01：你提供的 XPath→值（依序輸入） ======
-	// ★ FIX: 取消「雙大括號初始化」匿名子類，改為一般方法建構，避免 Eclipse 的 type mismatch
-	private final Map<String, String> C01_CUSTOM_INPUTS = buildC01CustomInputs();
-	private static Map<String, String> buildC01CustomInputs() {
-		Map<String, String> m = new LinkedHashMap<>();
+	private final Map<String, String> C01_CUSTOM_INPUTS = createC01Inputs();
+	private static Map<String,String> createC01Inputs() {
+		LinkedHashMap<String,String> m = new LinkedHashMap<>();
 		// 1) 郵遞區號/區域下拉
 		m.put("//div[@class='dropdown bootstrap-select span3 addr']/select[@name='span3 addr selectpicker']", "110"); // 110 台北市信義區
 		// 2) 地址
@@ -148,9 +145,7 @@ public class CSROneCallPass extends AbstractBasePage {
 		return m;
 	}
 
-	public CSROneCallPass() {
-		this("80241059");
-	}
+	public CSROneCallPass() { this("80241059"); }
 
 	public CSROneCallPass(String policyNo) {
 		this.POLICY_NO = policyNo;
@@ -356,13 +351,13 @@ public class CSROneCallPass extends AbstractBasePage {
 			// 若驗證或回跳有任何一個失敗，都視為整體失敗
 			if (!termOk || !backOk) return false;
 
-			/* ====== NEW：保單變更 → 只保留 C01 → 進 Step2 → 直接用 XPath 值填入 ====== */
+			/* ====== NEW：保單變更 → 全選 → 依紅字反勾 → 進 Step2 ====== */
 			if (!runPolicyChange_AllSelect_FilterAndEnterStep2()) return false;
             
             // Step2 共用區塊（付款/收件人等）
             if (!handleCommonStep2Sections()) return false; 
 
-			// 只處理 C01：切 tab → 用你提供的 XPath→值 填寫 → 預覽 → 回 Step1
+			// 只處理 C01：切 tab → 自訂 XPath 填寫 → 預覽 → 回 Step1
 			if (!dispatchPolicyChangeStep2Validation()) return false;
 
 			return true;
@@ -372,7 +367,7 @@ public class CSROneCallPass extends AbstractBasePage {
 	}
 
 	/* =========================================================
-	  NEW ====== 保單變更：全選 → 只留 C01 → 進 Step2
+	  NEW ====== 保單變更：全選（穩定） → 依紅字反勾 → 進 Step2
 	  ========================================================= */
 	private boolean runPolicyChange_AllSelect_FilterAndEnterStep2() {
 		// 回到 Step1 時再保險地把保單打勾
@@ -389,40 +384,93 @@ public class CSROneCallPass extends AbstractBasePage {
 			waitForStable();
 		}
 
-		// 全選所有 Cxx/Axx
-		selectAllPolicyChangeCheckboxes(/*alsoClearFirst=*/true);
+		// (A) 全選所有 Cxx/Axx —— 使用「穩定全選」避免點擊造成 toggle 抖動
+		selectAllPolicyChangeCheckboxesStable();
 
-		// 你的需求：只留下 C01，其餘全部反勾
-		List<String> allCodes = getCheckedPolicyChangeCodes();
-		for (String code : allCodes) {
-			if (!"C01".equals(code)) deselectPolicyChangeByCode(code);
-		}
-
-		// 按下一步
+		// (B) 按下一步
 		WebElement next = findElementIsDisplayed(By.xpath(stepOneNextButtonLocator), true, 4000);
 		if (next == null) return false;
 		click(next, true);
 		waitForStable();
 
-		// 確認沒有紅字；若有紅字再補救一次
-		for (int round = 1; round <= 2; round++) {
+		// (C) 若有紅字：解析需要「反勾」的代碼；最多跑三輪
+		for (int round = 1; round <= 3; round++) {
 			String errText = tryGetText(policyChangeErrMeg);
 			if (errText == null || normalizeText(errText).isEmpty()) {
 				allowedPolicyChangeCodes = getCheckedPolicyChangeCodes();
 				return true;
 			}
-			// 仍出錯：再確保只留 C01
-			List<String> still = getCheckedPolicyChangeCodes();
-			for (String code : still) if (!"C01".equals(code)) deselectPolicyChangeByCode(code);
-			WebElement next2 = findElementIsDisplayed(By.xpath(stepOneNextButtonLocator), true, 4000);
-			if (next2 == null) return false;
-			click(next2, true);
+			Set<String> shouldUncheck = parsePolicyChangeErrorToCodes(errText);
+			if (shouldUncheck.isEmpty()) break;
+
+			for (String code : shouldUncheck) setPolicyChangeChecked(code, false);
+			waitForStable();
+
+			// 再按下一步
+			click(next, true);
 			waitForStable();
 		}
 		allowedPolicyChangeCodes = getCheckedPolicyChangeCodes();
-		return true;
+		return !allowedPolicyChangeCodes.isEmpty();
 	}
-    
+
+	/** 用 JS 一次把所有 Cxx/Axx checkbox 設為「勾選」，並同步 label 樣式；避免 click 造成 toggle */
+	private void selectAllPolicyChangeCheckboxesStable() {
+		try {
+			List<WebElement> inputs = findElements(
+				By.xpath("//input[@type='checkbox' and string-length(@id)=3 and (starts-with(@id,'C') or starts-with(@id,'A'))]"),
+				4000
+			);
+			if (inputs == null || inputs.isEmpty()) return;
+
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+
+			for (WebElement in : inputs) {
+				try {
+					if (!in.isDisplayed() || !in.isEnabled()) continue;
+					if (in.isSelected()) continue;
+
+					js.executeScript(
+						"var el=arguments[0];"
+					  + "el.checked=true;"
+					  + "el.dispatchEvent(new Event('input',{bubbles:true}));"
+					  + "el.dispatchEvent(new Event('change',{bubbles:true}));");
+					// 同步 label 樣式
+					String id = in.getAttribute("id");
+					if (id != null && !id.isEmpty()) {
+						try {
+							WebElement lb = driver.findElement(By.xpath("//label[@for='" + id + "']"));
+							js.executeScript(
+								"var lb=arguments[0];"
+							  + "lb.classList.add('active');"
+							  + "lb.classList.add('checked');"
+							  + "lb.setAttribute('aria-checked','true');", lb);
+						} catch (Exception ignore) {}
+					}
+				} catch (Exception ignore) {}
+			}
+
+			// 輕量驗證：不夠就補一次
+			List<String> checked = getCheckedPolicyChangeCodes();
+			if (checked.size() < inputs.size() * 0.8) {
+				for (WebElement in : inputs) {
+					try {
+						if (!in.isDisplayed() || !in.isEnabled()) continue;
+						if (in.isSelected()) continue;
+						js.executeScript(
+							"var el=arguments[0];"
+						  + "el.checked=true;"
+						  + "el.dispatchEvent(new Event('input',{bubbles:true}));"
+						  + "el.dispatchEvent(new Event('change',{bubbles:true}));", in);
+					} catch (Exception ignore) {}
+				}
+			}
+			try { Thread.sleep(200); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+		} catch (Exception e) {
+			logger.warn("selectAllPolicyChangeCheckboxesStable error: " + e.getMessage());
+		}
+	}
+
     // NEW: 處理 Step 2 中所有 Tab 共同的區塊 (補費/付款/收件人)
 	private boolean handleCommonStep2Sections() {
 		logger.info("Handling common Step 2 sections (Payment/Recipient Info)...");
@@ -686,65 +734,7 @@ public class CSROneCallPass extends AbstractBasePage {
 	  勾/反勾：保單變更 Cxx/Axx
 	  ========================= */
 
-	// 全選 + 驗證 + 自動補勾
-	private void selectAllPolicyChangeCheckboxes(boolean alsoClearFirst) {
-		try {
-			List<WebElement> labels = findElements(By.xpath("//label[string-length(@for)=3 and (starts-with(@for,'C') or starts-with(@for,'A'))]"), 4000);
-			if (labels == null || labels.isEmpty()) return;
-			
-			if (alsoClearFirst) {
-				for (WebElement lb : labels) {
-					String code = lb.getAttribute("for");
-					if (code != null) setPolicyChangeChecked(code, false);
-				}
-			}
-			for (WebElement lb : labels) {
-				String code = lb.getAttribute("for");
-				if (code != null) setPolicyChangeChecked(code, true);
-			}
-			List<String> checkedCodes = getCheckedPolicyChangeCodes();
-			int attempt = 0;
-			while (checkedCodes.size() < (labels.size() * 0.8) && attempt < 2) {
-				for (WebElement lb : labels) {
-					String code = lb.getAttribute("for");
-					if (code == null || checkedCodes.contains(code)) continue;
-					setPolicyChangeChecked(code, true); 
-				}
-				try { Thread.sleep(500); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
-				checkedCodes = getCheckedPolicyChangeCodes();
-				attempt++;
-			}
-		} catch (Exception e) {
-			logger.error("selectAllPolicyChangeCheckboxes error: " + e.getMessage());
-		}
-	}
-
-	private void deselectPolicyChangeByCode(String code) {
-		setPolicyChangeChecked(code, false);
-		// 加強：確保真的反勾並清掉 label 狀態
-		try {
-			WebElement input = findElement(By.id(code), false, 400);
-			if (input != null && input.isSelected()) {
-				((JavascriptExecutor) driver).executeScript(
-					"arguments[0].checked = false;" +
-					"arguments[0].dispatchEvent(new Event('change', {bubbles:true}));" +
-					"arguments[0].dispatchEvent(new Event('click', {bubbles:true}));",
-					input
-				);
-			}
-			WebElement label = findElement(By.xpath("//label[@for='" + code + "']"), false, 300);
-			if (label != null) {
-				((JavascriptExecutor) driver).executeScript(
-					"arguments[0].classList.remove('active');" +
-					"arguments[0].classList.remove('checked');" +
-					"arguments[0].setAttribute('aria-checked','false');",
-					label
-				);
-			}
-		} catch (Exception ignore) {}
-	}
-
-	// CHANGE: 超穩定勾/反勾：優先點 label → 點 input → 最後 JS 強制 + 事件，並驗證狀態
+	// （反勾/個別補勾）超穩定勾/反勾：優先點 label → 點 input → 最後 JS 強制 + 事件，並驗證狀態
 	private void setPolicyChangeChecked(String code, boolean checked) {
 		if (code == null || !code.matches("^[CA]\\d{2}$")) return;
 
@@ -784,7 +774,7 @@ public class CSROneCallPass extends AbstractBasePage {
 				WebElement input = findElement(inputBy, false, 400);
 				WebElement label = findElement(labelBy, false, 400);
 
-				// 1) 優先點 label（最穩）
+				// 1) 優先點 label
 				if (label != null) {
 					try { js.executeScript("arguments[0].scrollIntoView({block:'center'});", label); } catch (Exception ignore) {}
 					try { label.click(); } catch (Exception e) { js.executeScript("arguments[0].click();", label); }
@@ -802,18 +792,28 @@ public class CSROneCallPass extends AbstractBasePage {
 					if (input != null) {
 						js.executeScript(
 							"arguments[0].checked = arguments[1];" +
+							"arguments[0].dispatchEvent(new Event('input', {bubbles:true}));" +
 							"arguments[0].dispatchEvent(new Event('change', {bubbles:true}));" +
 							"arguments[0].dispatchEvent(new Event('click', {bubbles:true}));",
 							input, checked
 						);
 					}
-					if (!checked && label != null) {
-						js.executeScript(
-							"arguments[0].classList.remove('active');" +
-							"arguments[0].classList.remove('checked');" +
-							"arguments[0].setAttribute('aria-checked','false');",
-							label
-						);
+					if (label != null) {
+						if (checked) {
+							js.executeScript(
+								"arguments[0].classList.add('active');" +
+								"arguments[0].classList.add('checked');" +
+								"arguments[0].setAttribute('aria-checked','true');",
+								label
+							);
+						} else {
+							js.executeScript(
+								"arguments[0].classList.remove('active');" +
+								"arguments[0].classList.remove('checked');" +
+								"arguments[0].setAttribute('aria-checked','false');",
+								label
+							);
+						}
 					}
 				}
 
@@ -1409,54 +1409,19 @@ public class CSROneCallPass extends AbstractBasePage {
 		return false;
 	}
 
-	// ★ NEW: 補上缺少的方法，解掉「The method clickSecondCancelIfPresent() is undefined」
-	/** 優先嘗試：點『取消申請』的第二顆（常見在底部） */
+	/** 補齊：若畫面上有兩顆「取消申請」，優先點第二顆（常見於 Step2 頁尾） */
 	private boolean clickSecondCancelIfPresent() {
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-
-		// 嚴格匹配：class 完全等於 "btn btn-default"
-		By strictSecond = By.xpath("(//a[@class='btn btn-default' and normalize-space(text())='取消申請'])[2]");
 		try {
-			WebElement btn = findElementIsDisplayed(strictSecond, true, 1000);
-			if (btn != null) {
-				try { js.executeScript("arguments[0].scrollIntoView({block:'center'});", btn); } catch (Exception ignore) {}
-				try { click(btn, true); } catch (Exception e) { js.executeScript("arguments[0].click();", btn); }
-				return true;
+			List<WebElement> btns = driver.findElements(By.xpath("//a[@class='btn btn-default' and normalize-space()='取消申請']"));
+			if (btns != null && btns.size() >= 2) {
+				WebElement second = btns.get(1);
+				if (second.isDisplayed()) {
+					try { ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", second); } catch (Exception ignore) {}
+					try { second.click(); } catch (Exception e) { ((JavascriptExecutor) driver).executeScript("arguments[0].click();", second); }
+					return true;
+				}
 			}
 		} catch (Exception ignore) {}
-
-		// 寬鬆匹配：class token 包含 btn 與 btn-default
-		By looseSecond = By.xpath("(//a[contains(concat(' ',normalize-space(@class),' '),' btn ') and contains(concat(' ',normalize-space(@class),' '),' btn-default ') and normalize-space(text())='取消申請'])[2]");
-		try {
-			WebElement btn = findElementIsDisplayed(looseSecond, true, 800);
-			if (btn != null) {
-				try { js.executeScript("arguments[0].scrollIntoView({block:'center'});", btn); } catch (Exception ignore) {}
-				try { click(btn, true); } catch (Exception e) { js.executeScript("arguments[0].click();", btn); }
-				return true;
-			}
-		} catch (Exception ignore) {}
-
-		// 收集全部「取消申請」，若 >=2 就點第 2 個
-		try {
-			List<WebElement> all = findElements(By.xpath("//a[@class='btn btn-default' and normalize-space(text())='取消申請']"), 800);
-			if (all != null && all.size() >= 2) {
-				WebElement btn = all.get(1);
-				try { js.executeScript("arguments[0].scrollIntoView({block:'center'});", btn); } catch (Exception ignore) {}
-				try { click(btn, true); } catch (Exception e) { js.executeScript("arguments[0].click();", btn); }
-				return true;
-			}
-		} catch (Exception ignore) {}
-
-		// 亦支援 <button> 節點
-		try {
-			WebElement btn = findElementIsDisplayed(By.xpath("(//button[contains(@class,'btn') and contains(@class,'btn-default') and normalize-space(text())='取消申請'])[2]"), true, 800);
-			if (btn != null) {
-				try { js.executeScript("arguments[0].scrollIntoView({block:'center'});", btn); } catch (Exception ignore) {}
-				try { click(btn, true); } catch (Exception e) { js.executeScript("arguments[0].click();", btn); }
-				return true;
-			}
-		} catch (Exception ignore) {}
-
 		return false;
 	}
 
