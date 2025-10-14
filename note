@@ -1,0 +1,8 @@
+//div[@class='dropdown bootstrap-select span3 addr']/select[@name='span3 addr selectpicker']
+選 <option value="110">110 台北市信義區</option>
+//div[@id='clientAddressdiv']/input[@id='clientAddress']
+打 永吉路30巷99號
+//td[@id='clientOfficePhoneCdediv']/input[@id='clientOfficePhoneCde']
+打 02
+//td[@id='clientOfficePhonediv']/input[@id='clientOfficePhone']
+打 37621960
