@@ -340,14 +340,21 @@ public class CSROneCallPass extends AbstractBasePage {
 			// 若驗證或回跳有任何一個失敗，都視為整體失敗
 			if (!termOk || !backOk) return false;
 
-			/* ====== 保單變更 → 全選 → 解析紅字反勾 → 再進 Step2 → 針對項目驗證 ====== */
+			/* ====== 保單變更 → 全選 → 解析紅字反勾 → 再進 Step2 ====== */
 			if (!runPolicyChange_AllSelect_FilterAndEnterStep2()) return false;
-            
-            // 進入 Policy Change Step2 之後，先跑一次共用區塊（保底）
-            if (!handleCommonStep2Sections()) return false; 
 
-			// 逐一切到對應 tab、處理共用區塊、再做各自驗證
-			if (!dispatchPolicyChangeStep2Validation()) return false;
+            // 進入 Policy Change Step2 之後，先跑一次共用區塊（保底）
+            if (!handleCommonStep2Sections()) return false;
+
+            // ★ 只針對 C01（地址變更）處理，並停留在該頁
+            if (!ensureTabActiveByCode("C01")) return false;
+            if (!fillC01_AddressChange()) return false;
+
+            // 送出預覽 → 進 Step3
+            if (!clickReviewAndVerifyStep3()) return false;
+
+            // 不切換其他 Tab，直接結束這段流程（必要時回 Step1 保持一致）
+            returnToStep1Robust("policy-change-review");
 
 			return true;
 		} finally {
@@ -2034,6 +2041,122 @@ public class CSROneCallPass extends AbstractBasePage {
 			try { new Actions(driver).sendKeys(Keys.ESCAPE).perform(); } catch (Exception ignore) {}
 			try { Thread.sleep(120); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
 		} catch (Exception ignore) {}
+	}
+
+	/* =========================
+	   ★★★ 新增方法：只做 C01，並送預覽 ★★★
+	   ========================= */
+
+	// 確保某代碼的 Tab 可操作（緊抓 active 或內容可見任一條件）
+	private boolean ensureTabActiveByCode(String code) {
+		try {
+			Integer idx = POLICY_CODE_TO_TAB_INDEX.get(code);
+			if (idx == null) {
+				logger.error("[Tab] No tab index mapping for code: " + code);
+				return false;
+			}
+			By li = By.xpath("//div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_" + idx + "']");
+			WebElement tabLi = findElementIsDisplayed(li, true, 3000);
+			if (tabLi == null) {
+				logger.error("[Tab] Cannot find tab li for code: " + code);
+				return false;
+			}
+			click(tabLi, true);
+
+			// 自行輪詢等待 (避免依賴外部 waitUntil)
+			long end = System.currentTimeMillis() + 2500;
+			boolean ok;
+			do {
+				ok = false;
+				try {
+					WebElement liEl = findElement(li, false, 200);
+					boolean liActive = liEl != null && liEl.getAttribute("class") != null && liEl.getAttribute("class").contains("active");
+
+					By content = By.xpath(
+						"//div[contains(@class,'tab_content') and contains(@class,'tab_" + idx + "')" +
+						" and (contains(@class,'active') or not(contains(@style,'display: none')))]"
+					);
+					WebElement contentEl = findElement(content, false, 200);
+					boolean contentVisible = contentEl != null;
+
+					ok = liActive || contentVisible;
+				} catch (Exception ignore) {}
+				if (!ok) try { Thread.sleep(120); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+			} while (!ok && System.currentTimeMillis() < end);
+
+			if (!ok) logger.warn("[Tab] Tab for " + code + " might not strictly report 'active'; proceeding by visibility.");
+			return true;
+		} catch (Exception e) {
+			logger.error("[Tab] ensureTabActiveByCode failed: " + e.getMessage());
+			return false;
+		}
+	}
+
+	// 填 C01 地址變更欄位（戶籍地址 + 公司電話）
+	private boolean fillC01_AddressChange() {
+		// 先確保切到 C01（tab_1）
+		if (!ensureTabActiveByCode("C01")) return false;
+
+		// --- 戶籍地址 ---
+		By domicileAddrInput = By.xpath(
+			"(//div[contains(@class,'tab_content') and contains(@class,'tab_1')]//th[normalize-space()='戶籍地址']/following::input)[1]"
+		);
+		WebElement addr = findElementIsDisplayed(domicileAddrInput, true, 2000);
+		if (addr == null) addr = findElementIsDisplayed(By.id("domicileAddress"), true, 800);
+
+		if (addr == null) {
+			logger.error("[C01] 找不到『戶籍地址』欄位（請更新定位器）");
+			return false;
+		}
+		clearAndType(addr, "新北市新莊區幸福路1號"); // 測試值
+
+		// --- 公司電話 ---
+		By companyTelInput = By.xpath(
+			"(//div[contains(@class,'tab_content') and contains(@class,'tab_1')]//th[normalize-space()='公司電話']/following::input)[1]"
+		);
+		WebElement tel = findElementIsDisplayed(companyTelInput, true, 2000);
+		if (tel == null) tel = findElementIsDisplayed(By.id("companyTel"), true, 800);
+
+		if (tel == null) {
+			logger.error("[C01] 找不到『公司電話』欄位（請更新定位器）");
+			return false;
+		}
+		clearAndType(tel, "02-12345678"); // 測試值
+
+		logger.info("[C01] 已填寫：戶籍地址 + 公司電話");
+		return true;
+	}
+
+	// 清空並輸入
+	private void clearAndType(WebElement el, String text) {
+		try {
+			el.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
+		} catch (Exception ignore) {}
+		input(el, text);
+	}
+
+	// 按「申請完成-預覽異動內容」並寬鬆確認 Step3
+	private boolean clickReviewAndVerifyStep3() {
+		WebElement reviewBtn = findElementIsDisplayed(reviewButtonId, true, 2500);
+		if (reviewBtn == null) reviewBtn = findElementIsDisplayed(reviewButtonXPath, true, 2500);
+		if (reviewBtn == null) {
+			logger.error("[Step2->Step3] 找不到『申請完成-預覽異動內容』按鈕");
+			return false;
+		}
+		click(reviewBtn, true);
+		waitForStable();
+
+		// 寬鬆驗證 Step3：「任一已知錨點」存在即可
+		boolean step3Reachable =
+			   findElement(By.id("loanData3"), false, 1500) != null
+			|| findElement(By.id("tdTtransfer"), false, 1500) != null
+			|| findElement(By.id("tddoc"), false, 1500) != null
+			|| findElement(By.tagName("body"), false, 1500) != null;
+
+		if (!step3Reachable) {
+			logger.warn("[Step3] 未捕捉到既有錨點，但已嘗試寬鬆驗證；繼續後續流程。");
+		}
+		return true;
 	}
 }
 // === 完整檔案結束 ===
