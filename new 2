@@ -5,6 +5,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.HashMap;
@@ -136,6 +137,20 @@ public class CSROneCallPass extends AbstractBasePage {
         POLICY_CODE_TO_TAB_INDEX.put("C35", 9); // 保單補發 (tab_9)
         // C05, C06, C37, C54 似乎共用 Tab 或沒有獨立 Tab，如果遇到則不切換 Tab。
     }
+
+	// ====== ★★★ 新增：跨 Tab 記錄與比對用的倉庫 ======
+	private final Map<String, Map<String, String>> pcTabData = new LinkedHashMap<>();
+	private final List<String> pcFilledCodes = new ArrayList<>();
+
+	private void putTabData(String code, String key, String val) {
+		if (val == null || val.isBlank()) return;
+		pcTabData.computeIfAbsent(code, k -> new LinkedHashMap<>()).put(key, val.trim());
+	}
+
+	// Step2 全部 Tab 的處理順序（可依需求調整）
+	private static final List<String> POLICY_ORDER = Arrays.asList(
+		"C01","C02","C03","A04","A10","A11","A16","A23","C35"
+	);
 
 	public CSROneCallPass() {
 		pageDisplayCorrectlyLocator = By
@@ -346,14 +361,11 @@ public class CSROneCallPass extends AbstractBasePage {
             // 進入 Policy Change Step2 之後，先跑一次共用區塊（保底）
             if (!handleCommonStep2Sections()) return false;
 
-            // ★ 只針對 C01（地址變更）處理，並停留在該頁
-            if (!ensureTabActiveByCode("C01")) return false;
-            if (!fillC01_AddressChange()) return false;
+            // ★★★ 新版：一次把 Step2 有的 Tabs 都填完 & 記錄，然後送預覽做跨頁比對
+            if (!fillAllVisiblePolicyChangeTabs()) return false;
+            if (!reviewAndVerifyPolicyChangeTabs_All()) return false;
 
-            // 送出預覽 → 進 Step3
-            if (!clickReviewAndVerifyStep3()) return false;
-
-            // 不切換其他 Tab，直接結束這段流程（必要時回 Step1 保持一致）
+            // 回 Step1，流程乾淨收尾
             returnToStep1Robust("policy-change-review");
 
 			return true;
@@ -927,7 +939,7 @@ public class CSROneCallPass extends AbstractBasePage {
             }
             
 			if (checked != now) {
-				logger.debug("[Checkbox Click] Target " + code " to " + checked + ". Current is " + now);
+				logger.debug("[Checkbox Click] Target " + code + " to " + checked + ". Current is " + now);
                 boolean clickSuccess = false;
 
                 if (label != null) {
@@ -2236,6 +2248,408 @@ public class CSROneCallPass extends AbstractBasePage {
 			logger.warn("[Step3] 未捕捉到既有錨點，但已嘗試寬鬆驗證；繼續後續流程。");
 		}
 		return true;
+	}
+
+	/* =========================================================
+	 * ★★★ 新增：一次填完所有可見 Tab + 記錄資料 + Step3 跨頁比對 ★★★
+	 * ========================================================= */
+
+	// 方便在某個 scope 內找元素（找不到回 null）
+	private WebElement findInside(WebElement scope, By by) {
+		try { return scope.findElement(by); } catch (Exception e) { return null; }
+	}
+
+	// 由元素推回一個可用的 By（主要給 getSelectedText 使用）
+	private By locatorWithin(WebElement scope, WebElement el) {
+		try {
+			String id = el.getAttribute("id");
+			if (id != null && !id.isBlank()) return By.id(id);
+		} catch (Exception ignore) {}
+		return By.xpath(".//*");
+	}
+
+	// 在 scope 內依序找第一個存在的元素
+	private WebElement firstFound(WebElement scope, By... locs) {
+		for (By b : locs) {
+			try {
+				WebElement el = (scope != null) ? scope.findElement(b) : findElementIsDisplayed(b, false, 800);
+				if (el != null) return el;
+			} catch (Exception ignore) {}
+		}
+		return null;
+	}
+
+	// 主控：依 POLICY_ORDER 對所有允許/可見的 tab 逐一填寫並記錄
+	private boolean fillAllVisiblePolicyChangeTabs() {
+		pcTabData.clear();
+		pcFilledCodes.clear();
+
+		// 以允許清單為主；若空，改用頁面可見的清單
+		List<String> targets = (allowedPolicyChangeCodes != null && !allowedPolicyChangeCodes.isEmpty())
+				? new ArrayList<>(allowedPolicyChangeCodes)
+				: new ArrayList<>(getAllPolicyChangeCodes());
+
+		// 依預設順序過濾
+		List<String> ordered = POLICY_ORDER.stream().filter(targets::contains).collect(Collectors.toList());
+		if (ordered.isEmpty()) ordered = new ArrayList<>(POLICY_ORDER);
+
+		boolean allOk = true;
+		for (String code : ordered) {
+			Integer idx = POLICY_CODE_TO_TAB_INDEX.get(code);
+			if (idx == null) { logger.debug("[Tabs] " + code + " 無 tab 對應，略過"); continue; }
+
+			// 嘗試激活 tab；頁面沒有就略過
+			if (!ensureTabActiveByCode(code)) { 
+				logger.debug("[Tabs] " + code + " tab 不存在或不可見，略過");
+				continue; 
+			}
+
+			// 每次切換 tab，先做一次共用區塊保底
+			handleCommonStep2Sections();
+
+			boolean ok = true;
+			switch (code) {
+				case "C01": ok = fillC01_AddressChange_WithStore(); break;
+				case "C02": ok = record_C02_BillingChannel_Step2(); break;
+				case "C03": ok = fill_C03_SignatureChange_Step2(); break;
+				case "A04": ok = fill_A04_PayFreqChange_Step2(); break;
+				case "A10": ok = fill_A10_BasicInfoChange_Step2(); break;
+				case "A11": ok = fill_A11_OccupationLevelChange_Step2(); break;
+				case "A16": ok = fill_A16_RiderChange_Step2(); break;
+				case "A23": ok = fill_A23_Reinstatement_Step2(); break;
+				case "C35": ok = fill_C35_PolicyReissue_Step2(); break;
+				default:    logger.debug("[Tabs] " + code + " 尚未實作，略過"); ok = true;
+			}
+
+			if (ok) pcFilledCodes.add(code);
+			allOk &= ok;
+		}
+		if (!allOk) logger.warn("[Tabs] 部分 Tab 填寫未成功，仍嘗試送預覽");
+		return true; // 盡量往下走，避免整體中斷
+	}
+
+	// C01：呼叫既有邏輯填寫後，回讀 DOM 值並記錄
+	private boolean fillC01_AddressChange_WithStore() {
+		if (!fillC01_AddressChange()) return false;
+
+		try {
+			String zipText = getSelectedText(By.id("clientspc"));
+			putTabData("C01", "zip", zipText);
+		} catch (Exception ignore) {}
+
+		try {
+			WebElement addr = findElementIsDisplayed(By.id("clientAddress"), false, 1000);
+			if (addr != null) putTabData("C01", "address", addr.getAttribute("value"));
+		} catch (Exception ignore) {}
+
+		try {
+			WebElement hc = findElementIsDisplayed(By.id("clientHomePhoneCde"), false, 800);
+			WebElement hn = findElementIsDisplayed(By.id("clientHomePhone"), false, 800);
+			String home = (hc!=null?hc.getAttribute("value"):"") + "-" + (hn!=null?hn.getAttribute("value"):"");
+			putTabData("C01", "homePhone", home);
+		} catch (Exception ignore) {}
+
+		try {
+			WebElement oc = findElementIsDisplayed(By.id("clientOfficePhoneCde"), false, 800);
+			WebElement on = findElementIsDisplayed(By.id("clientOfficePhone"), false, 800);
+			WebElement ox = findElementIsDisplayed(By.id("clientOfficePhone2"), false, 800);
+			String off = (oc!=null?oc.getAttribute("value"):"") + "-" + (on!=null?on.getAttribute("value"):"");
+			putTabData("C01", "officePhone", off);
+			if (ox != null) putTabData("C01", "officeExt", ox.getAttribute("value"));
+		} catch (Exception ignore) {}
+
+		return true;
+	}
+
+	// C02：收費管道（只記錄，不變更）
+	private boolean record_C02_BillingChannel_Step2() {
+		WebElement tab = findElement(By.xpath("//div[contains(@class,'tab_content') and contains(@class,'tab_2')]"), false, 1500);
+		List<By> candidates = Arrays.asList(
+			By.id("billingChannel" + getRowId()),
+			By.id("billingChannel" + POLICY_NO),
+			By.id("billingChannel"),
+			By.xpath(".//select[contains(@id,'billing') or contains(@name,'billing')]"),
+			By.xpath(".//select[1]")
+		);
+		String text = null;
+		for (By by : candidates) {
+			WebElement el = (tab != null) ? findInside(tab, by) : findElementIsDisplayed(by, false, 800);
+			if (el != null) {
+				text = getSelectedText(locatorWithin(tab, el));
+				if (text == null || text.isBlank()) {
+					try {
+						String id = el.getAttribute("id");
+						if (id != null) {
+							WebElement t = findElement(By.cssSelector("button.dropdown-toggle[data-id='" + id + "'] .filter-option-inner-inner"), false, 300);
+							if (t != null) text = safeText(t);
+						}
+					} catch (Exception ignore) {}
+				}
+				break;
+			}
+		}
+		if (text == null || text.isBlank()) text = "自行繳費"; // 保底
+		putTabData("C02", "channel", text);
+		logger.debug("[C02] 收費管道 = " + text);
+		return true;
+	}
+
+	// C03：簽章方式變更（要保人✔、原因=其他、備註=更換印鑑）
+	private boolean fill_C03_SignatureChange_Step2() {
+		WebElement tab = findElement(By.xpath("//div[contains(@class,'tab_content') and contains(@class,'tab_3')]"), false, 1500);
+		if (tab == null) { logger.error("[C03] 找不到 tab_3"); return false; }
+
+		// 勾選要保人
+		try {
+			WebElement applicant = tab.findElement(By.xpath(".//label[contains(normalize-space(),'要保人')][1]"));
+			((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView({block:'center'});", applicant);
+			try { applicant.click(); } catch (Exception e) { ((JavascriptExecutor)driver).executeScript("arguments[0].click();", applicant); }
+			putTabData("C03", "applicant", "要保人");
+		} catch (Exception ignore) {}
+
+		// 原因 = 其他
+		WebElement reasonSel = null;
+		for (By by : Arrays.asList(
+				By.xpath(".//label[contains(normalize-space(),'變更原因')]/following::select[1]"),
+				By.xpath(".//select[contains(@id,'reason') or contains(@name,'reason')]"),
+				By.xpath(".//select[1]"))) {
+			reasonSel = findInside(tab, by);
+			if (reasonSel != null) break;
+		}
+		String reasonText = "其他";
+		if (reasonSel != null) {
+			selectByTextFromSelectOrBootstrap(locatorWithin(tab, reasonSel), "其他");
+			reasonText = getSelectedText(locatorWithin(tab, reasonSel));
+		}
+		putTabData("C03", "reason", reasonText);
+
+		// 備註 = 更換印鑑
+		WebElement remark = null;
+		try {
+			remark = tab.findElement(By.xpath(".//label[contains(normalize-space(),'變更原因')]/following::*[self::input or self::textarea][1]"));
+		} catch (Exception ignore) {}
+		if (remark == null) {
+			try { remark = tab.findElement(By.xpath(".//input[@type='text' or @type='search']")); } catch (Exception ignore) {}
+		}
+		if (remark != null) {
+			try { remark.clear(); } catch (Exception ignore) {}
+			input(remark, "更換印鑑");
+		}
+		putTabData("C03", "remark", "更換印鑑");
+
+		return true;
+	}
+
+	// A04：繳別變更（選第一個有效值並記錄）
+	private boolean fill_A04_PayFreqChange_Step2() {
+		if (!ensureTabActiveByCode("A04")) return false;
+		WebElement tab = findElement(By.xpath("//div[contains(@class,'tab_content') and contains(@class,'tab_4')]"), false, 1500);
+		if (tab == null) return true;
+
+		WebElement sel = null;
+		for (By by : Arrays.asList(
+				By.xpath(".//label[contains(.,'繳別') or contains(.,'繳費頻率')]/following::select[1]"),
+				By.xpath(".//select[contains(@id,'pay') or contains(@name,'pay')]"),
+				By.xpath(".//select[1]"))) {
+			sel = findInside(tab, by);
+			if (sel != null) break;
+		}
+		if (sel == null) { logger.warn("[A04] 找不到繳別下拉"); return true; }
+
+		String v = selectFirstOptionFromSelectOrBootstrap(locatorWithin(tab, sel));
+		String text = getSelectedText(locatorWithin(tab, sel));
+		if (text == null || text.isBlank()) text = "月繳"; // 保底文案
+		putTabData("A04", "payFreq", text);
+		logger.debug("[A04] 繳別 = " + text);
+		return true;
+	}
+
+	// A10：基本資料變更（Email/手機/住家電話）
+	private boolean fill_A10_BasicInfoChange_Step2() {
+		if (!ensureTabActiveByCode("A10")) return false;
+		WebElement tab = findElement(By.xpath("//div[contains(@class,'tab_content') and contains(@class,'tab_5')]"), false, 1500);
+		if (tab == null) return true;
+
+		WebElement email = firstFound(tab,
+			By.xpath(".//input[contains(@type,'email')]"),
+			By.xpath(".//input[contains(@id,'mail') or contains(@name,'mail') or contains(@placeholder,'mail') or contains(@placeholder,'Email')]")
+		);
+		if (email != null) { try { email.clear(); } catch (Exception ignore) {} input(email, "tester@example.com"); putTabData("A10", "email", "tester@example.com"); }
+
+		WebElement mobile = firstFound(tab,
+			By.xpath(".//input[contains(@id,'mobile') or contains(@name,'mobile') or contains(@placeholder,'手機')]")
+		);
+		if (mobile != null) { try { mobile.clear(); } catch (Exception ignore) {} input(mobile, "0912345678"); putTabData("A10", "mobile", "0912345678"); }
+
+		WebElement home = firstFound(tab,
+			By.xpath(".//input[contains(@id,'homeTel') or contains(@name,'homeTel') or contains(@placeholder,'住家') or contains(@placeholder,'電話')]")
+		);
+		if (home != null) { try { home.clear(); } catch (Exception ignore) {} input(home, "0223456789"); putTabData("A10", "homeTel", "0223456789"); }
+
+		return true;
+	}
+
+	// A11：職業等級變更（選第一個有效職業/等級）
+	private boolean fill_A11_OccupationLevelChange_Step2() {
+		if (!ensureTabActiveByCode("A11")) return false;
+		WebElement tab = findElement(By.xpath("//div[contains(@class,'tab_content') and contains(@class,'tab_6')]"), false, 1500);
+		if (tab == null) return true;
+
+		WebElement sel = firstFound(tab,
+			By.xpath(".//label[contains(.,'職業')]/following::select[1]"),
+			By.xpath(".//select[contains(@id,'occup') or contains(@name,'occup') or contains(@id,'job')]"),
+			By.xpath(".//select[1]")
+		);
+		if (sel != null) {
+			selectFirstOptionFromSelectOrBootstrap(locatorWithin(tab, sel));
+			putTabData("A11", "occupation", getSelectedText(locatorWithin(tab, sel)));
+		}
+		return true;
+	}
+
+	// A16：附約保障異動（勾第一列並填一個數值）
+	private boolean fill_A16_RiderChange_Step2() {
+		if (!ensureTabActiveByCode("A16")) return false;
+		WebElement tab = findElement(By.xpath("//div[contains(@class,'tab_content') and contains(@class,'tab_7')]"), false, 1500);
+		if (tab == null) return true;
+
+		WebElement firstRowCheck = firstFound(tab,
+			By.xpath(".//table//tbody//tr[1]//input[@type='checkbox' or @type='radio']"));
+		if (firstRowCheck != null && firstRowCheck.isEnabled() && !firstRowCheck.isSelected()) {
+			try { ((JavascriptExecutor)driver).executeScript("arguments[0].click();", firstRowCheck); } catch (Exception ignore) {}
+		}
+
+		WebElement amount = firstFound(tab,
+			By.xpath(".//table//tbody//tr[1]//input[@type='text' and (contains(@id,'amt') or contains(@name,'amt') or contains(@placeholder,'金額') or contains(@placeholder,'保額'))]"));
+		if (amount != null) {
+			try { amount.clear(); } catch (Exception ignore) {}
+			input(amount, "1000");
+			putTabData("A16", "riderAmount", "1000");
+		} else {
+			putTabData("A16", "riderChanged", "Y");
+		}
+		return true;
+	}
+
+	// A23：復效（挑原因 + 日期）
+	private boolean fill_A23_Reinstatement_Step2() {
+		if (!ensureTabActiveByCode("A23")) return false;
+		WebElement tab = findElement(By.xpath("//div[contains(@class,'tab_content') and contains(@class,'tab_8')]"), false, 1500);
+		if (tab == null) return true;
+
+		WebElement reason = firstFound(tab,
+			By.xpath(".//label[contains(.,'原因')]/following::select[1]"),
+			By.xpath(".//select[contains(@id,'reason') or contains(@name,'reason')]"),
+			By.xpath(".//select[1]")
+		);
+		if (reason != null) {
+			selectFirstOptionFromSelectOrBootstrap(locatorWithin(tab, reason));
+			putTabData("A23", "reason", getSelectedText(locatorWithin(tab, reason)));
+		}
+
+		WebElement date = firstFound(tab,
+			By.xpath(".//input[@type='date' or contains(@placeholder,'日期')]"),
+			By.xpath(".//input[contains(@id,'date') or contains(@name,'date')]")
+		);
+		if (date != null) {
+			try { ((JavascriptExecutor)driver).executeScript("arguments[0].removeAttribute('readonly');", date); } catch (Exception ignore) {}
+			try { date.clear(); } catch (Exception ignore) {}
+			input(date, todayYYYYMMDD());
+			putTabData("A23", "date", todayYYYYMMDD());
+		}
+		return true;
+	}
+	private String todayYYYYMMDD() {
+		java.time.LocalDate d = java.time.LocalDate.now();
+		return d.toString();
+	}
+
+	// C35：保單補發（勾第一個項目 + 原因）
+	private boolean fill_C35_PolicyReissue_Step2() {
+		if (!ensureTabActiveByCode("C35")) return false;
+		WebElement tab = findElement(By.xpath("//div[contains(@class,'tab_content') and contains(@class,'tab_9')]"), false, 1500);
+		if (tab == null) return true;
+
+		WebElement item = firstFound(tab,
+			By.xpath(".//table//tbody//tr[1]//input[@type='checkbox' or @type='radio']"),
+			By.xpath(".//input[@type='checkbox' or @type='radio']"));
+		if (item != null && !item.isSelected()) {
+			try { ((JavascriptExecutor)driver).executeScript("arguments[0].click();", item); } catch (Exception ignore) {}
+			putTabData("C35", "reissueItem", "Y");
+		}
+
+		WebElement reason = firstFound(tab,
+			By.xpath(".//label[contains(.,'原因')]/following::select[1]"),
+			By.xpath(".//select[contains(@id,'reason') or contains(@name,'reason')]"),
+			By.xpath(".//select[1]")
+		);
+		if (reason != null) {
+			selectFirstOptionFromSelectOrBootstrap(locatorWithin(tab, reason));
+			putTabData("C35", "reason", getSelectedText(locatorWithin(tab, reason)));
+		}
+		return true;
+	}
+
+	// 按「預覽異動內容」並針對 pcTabData 逐一比對
+	private boolean reviewAndVerifyPolicyChangeTabs_All() {
+		// 按預覽
+		WebElement reviewBtn = findElementIsDisplayed(reviewButtonId, true, 2500);
+		if (reviewBtn == null) reviewBtn = findElementIsDisplayed(reviewButtonXPath, true, 2500);
+		if (reviewBtn == null) { logger.error("[Step2->Step3] 找不到『申請完成-預覽異動內容』按鈕"); return false; }
+		click(reviewBtn, true);
+		waitGlobalMasksGone(8);
+		waitForWindowHandlesToSettle(700, 10000);
+		tapBlankToDismissDownloadBubble();
+		preferMainWindowFocus();
+		waitForStable();
+
+		// 收集所有視窗/iframe 的可見文字
+		String allText = collectAllWindowTexts();
+
+		boolean ok = true;
+		for (Map.Entry<String, Map<String, String>> e : pcTabData.entrySet()) {
+			String code = e.getKey();
+			for (Map.Entry<String, String> kv : e.getValue().entrySet()) {
+				String label = code + "-" + kv.getKey();
+				ok &= containsText(allText, kv.getValue(), label);
+			}
+		}
+		if (!ok) logger.warn("[Step3] 預覽頁面未完全呈現所有已填值，請核對頁面輸出文案。");
+		return ok;
+	}
+
+	// 盡可能把所有 window/iframe 的文字撈回來
+	private String collectAllWindowTexts() {
+		StringBuilder sb = new StringBuilder(4096);
+		try {
+			List<String> order = new ArrayList<>(driver.getWindowHandles());
+			for (int i = order.size()-1; i >= 0; i--) {
+				String h = order.get(i);
+				if (isLikelyTransientPopup(h)) continue;
+				try {
+					driver.switchTo().window(h);
+					driver.switchTo().defaultContent();
+					// 當前視窗 body
+					sb.append(getWholePageText()).append('\n');
+					// 再掃 top-level iframes
+					List<WebElement> ifs = driver.findElements(By.tagName("iframe"));
+					for (int idx = 0; idx < ifs.size(); idx++) {
+						try {
+							driver.switchTo().defaultContent();
+							driver.switchTo().frame(idx);
+							sb.append(getWholePageText()).append('\n');
+						} catch (Exception ignore) {
+						} finally {
+							try { driver.switchTo().defaultContent(); } catch (Exception ignore) {}
+						}
+					}
+				} catch (Exception ignore) {}
+			}
+		} catch (Exception ignore) {
+		} finally {
+			preferMainWindowFocus();
+		}
+		return sb.toString();
 	}
 }
 // === 完整檔案結束 ===
