@@ -290,3 +290,14 @@
 附約異動填寫內容有誤。
 
 <skipped message="Run 欄位為 false，略過此測試"/>
+
+// 讀取CSV中的測試案例資料
+		@Given("loading test case {int}")
+		public void loadingTestCase(int row) {
+			String testDataFileName = CommUtil.csvFilePath;
+			boolean loadingResult = CommUtil.loadTestDataFile(row, testDataFileName);
+			assumeTrue("讀取測試資料失敗", loadingResult);
+		    assumeTrue("Run 欄位為 false，略過此測試", CommUtil.shouldRunTest(CommUtil.testDataMap));
+		    logger.info("從檔案讀取測試資料完成，本次讀取 row=" + row);
+		    CommUtil.currentRowIndex = row;
+		}
