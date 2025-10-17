@@ -290,3 +290,11 @@
 附約異動填寫內容有誤。
 
 The method equalsIgnoreCaseTrim(String, String) is undefined for the type CSROneCallPass
+
+// 忽略大小寫與多餘空白（含全形空白）的字串比較
+private boolean equalsIgnoreCaseTrim(String a, String b) {
+    String x = normalizeText(a); // 會做 trim、壓縮空白、處理全形空白
+    String y = normalizeText(b);
+    return x.equalsIgnoreCase(y);
+}
+
