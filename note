@@ -298,3 +298,4 @@ private boolean equalsIgnoreCaseTrim(String a, String b) {
     return x.equalsIgnoreCase(y);
 }
 
+normalizeText
