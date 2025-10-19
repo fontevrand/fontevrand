@@ -130,19 +130,25 @@ public class CSROneCallPass extends AbstractBasePage {
 	private final Map<String,String> selectedForCompare = new HashMap<>();
 	private final Random rnd = new Random();
 
-    // 保單變更代碼到 Step2 Tab 索引的映射 (根據 HTML)
+    // 保單變更代碼到 Step2 Tab 索引的映射 (依你提供的新 HTML)
+    // tab_1: 地址變更
+    // tab_2: 簽章方式變更
+    // tab_3: 繳別變更
+    // tab_4: 基本資料變更
+    // tab_5: 職業等級變更
+    // tab_6: 復效
+    // tab_7: 保單補發
     private static final Map<String, Integer> POLICY_CODE_TO_TAB_INDEX = new HashMap<>();
     static {
         POLICY_CODE_TO_TAB_INDEX.put("C01", 1); // 地址變更 (tab_1)
-        POLICY_CODE_TO_TAB_INDEX.put("C02", 2); // 收費管道變更 (tab_2)  ← 你指定要跳過
-        POLICY_CODE_TO_TAB_INDEX.put("C03", 3); // 簽章方式變更 (tab_3)
-        POLICY_CODE_TO_TAB_INDEX.put("A04", 4); // 繳別變更 (tab_4)
-        POLICY_CODE_TO_TAB_INDEX.put("A10", 5); // 基本資料變更 (tab_5)
-        POLICY_CODE_TO_TAB_INDEX.put("A11", 6); // 職業等級變更 (tab_6)
-        POLICY_CODE_TO_TAB_INDEX.put("A16", 7); // 附約保障異動 (tab_7) ← 你指定要跳過
-        POLICY_CODE_TO_TAB_INDEX.put("A23", 8); // 復效 (tab_8)
-        POLICY_CODE_TO_TAB_INDEX.put("C35", 9); // 保單補發 (tab_9)
-        // C05, C06, C37, C54 似乎共用 Tab 或沒有獨立 Tab，如果遇到則不切換 Tab。
+        // C02（收費管道變更）目前頁面無對應 Tab（且本流程預設跳過）
+        POLICY_CODE_TO_TAB_INDEX.put("C03", 2); // 簽章方式變更 (tab_2)
+        POLICY_CODE_TO_TAB_INDEX.put("A04", 3); // 繳別變更 (tab_3)
+        POLICY_CODE_TO_TAB_INDEX.put("A10", 4); // 基本資料變更 (tab_4)
+        POLICY_CODE_TO_TAB_INDEX.put("A11", 5); // 職業等級變更 (tab_5)
+        POLICY_CODE_TO_TAB_INDEX.put("A23", 6); // 復效 (tab_6)
+        POLICY_CODE_TO_TAB_INDEX.put("C35", 7); // 保單補發 (tab_7)
+        // C05, C06, C37, C54 似乎共用區塊或無獨立 Tab，遇到則不切換 Tab。
     }
 
 	public CSROneCallPass() {
@@ -711,32 +717,55 @@ public class CSROneCallPass extends AbstractBasePage {
 		} catch (Exception ignore) {}
 	}
 
-	/* ===== C03 簽章方式變更：勾要保人 + 變更原因=其他 + 備註「更換印鑑」 ===== */
+	/* ===== C03 簽章方式變更：勾要保人 + 變更原因=其他 + 備註「更換印鑑」 =====
+	   （依新 HTML：tab_2，欄位 id 帶有 o80241059 / changeReasono80241059 / changeReasonNoteo80241059） */
 	private boolean validate_C03_SignatureChange_Step2() {
 		try {
 			WebElement tabRoot = getActiveTabRoot("C03");
 			if (tabRoot == null) return false;
 
-			// 勾選「要保人」
-			WebElement insuredCb = firstCheckboxByText(tabRoot, "要保人");
-			if (insuredCb != null && !insuredCb.isSelected()) {
-				try { insuredCb.click(); } catch (Exception e) { ((JavascriptExecutor)driver).executeScript("arguments[0].click();", insuredCb); }
+			// 優先以新 DOM 的 id 直接定位：要保人勾選框（o+保單號）
+			By ownerCkBy = By.id("o" + POLICY_NO);
+			WebElement ownerCk = findInScope(tabRoot, ownerCkBy);
+			if (ownerCk == null) ownerCk = findElementIsDisplayed(ownerCkBy, true, 600);
+			if (ownerCk == null) {
+				// 回退：以文字尋找
+				ownerCk = firstCheckboxByText(tabRoot, "要保人");
+			}
+			if (ownerCk != null && !ownerCk.isSelected()) {
+				try { ownerCk.click(); } catch (Exception e) { ((JavascriptExecutor)driver).executeScript("arguments[0].click();", ownerCk); }
+			}
+			selectedForCompare.put("C03.角色", "要保人");
+
+			// 變更原因：優先找 changeReasono{policyNo}，選「其他」
+			String reasonTargetText = "其他";
+			By reasonSelBy = By.id("changeReasono" + POLICY_NO);
+			WebElement reasonSel = findInScope(tabRoot, reasonSelBy);
+			if (reasonSel == null) {
+				// 回退：以附近關鍵字或第一個 select
+				reasonSel = locateSelectByNearbyText(tabRoot, "變更原因");
+				if (reasonSel == null) reasonSel = firstSelectIn(tabRoot);
+			}
+			if (reasonSel != null) {
+				String chosen = selectByTextFromSelectOrBootstrap(fromElement(reasonSel), reasonTargetText);
+				if (chosen == null) {
+					// 選不到「其他」就選任意不同於預設
+					chosen = selectAnyDifferentOption(fromElement(reasonSel), Arrays.asList("其他"));
+				}
+				if (chosen != null) selectedForCompare.put("C03.變更原因", getSelectedText(fromElement(reasonSel)));
 			}
 
-			// 變更原因：選「其他」
-			By reasonSel = By.xpath(".//label[contains(normalize-space(),'變更原因')]/following::select[1]");
-			WebElement sel = findInScope(tabRoot, reasonSel);
-			if (sel == null) sel = firstSelectIn(tabRoot);
-			if (sel != null) {
-				selectByTextFromSelectOrBootstrap(fromElement(sel), "其他");
-				selectedForCompare.put("C03.變更原因", "其他");
+			// 若選「其他」，會顯示備註 input：changeReasonNoteo{policyNo}
+			try { Thread.sleep(150); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+			By noteInputBy = By.id("changeReasonNoteo" + POLICY_NO);
+			WebElement noteInput = findInScope(tabRoot, noteInputBy);
+			if (noteInput == null || !noteInput.isDisplayed()) {
+				// 回退：抓 reasonSel 之後的第一個 input
+				noteInput = findNearFollowingInput(reasonSel);
+				if (noteInput == null) noteInput = firstInputIn(tabRoot);
 			}
-
-			// 備註（旁邊 input）
-			WebElement remarkInput = findNearFollowingInput(sel);
-			if (remarkInput == null) remarkInput = firstInputIn(tabRoot);
-			if (remarkInput != null) {
-				clearAndType(remarkInput, "更換印鑑");
+			if (noteInput != null && noteInput.isDisplayed() && noteInput.isEnabled()) {
+				clearAndType(noteInput, "更換印鑑");
 				selectedForCompare.put("C03.備註", "更換印鑑");
 			}
 			return true;
@@ -774,7 +803,7 @@ public class CSROneCallPass extends AbstractBasePage {
 			WebElement tabRoot = getActiveTabRoot("A10");
 			if (tabRoot == null) return false;
 
-			// 勾「要保人」
+			// 勾「要保人」（展開細節）
 			WebElement insuredCb = firstCheckboxByText(tabRoot, "要保人");
 			if (insuredCb != null && !insuredCb.isSelected()) {
 				try { insuredCb.click(); } catch (Exception e) { ((JavascriptExecutor)driver).executeScript("arguments[0].click();", insuredCb); }
