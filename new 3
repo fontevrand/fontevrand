@@ -1118,14 +1118,14 @@ public class CSROneCallPass extends AbstractBasePage {
 			if (alsoClearFirst) {
 				for (WebElement lb : labels) {
 					String code = lb.getAttribute("for");
-					if (code == null) continue;
+					if (code == null) continue; // ← 修正點（原本少了右括號）
 					setPolicyChangeChecked(code, false);
 				}
 			}
 
 			for (WebElement lb : labels) {
 				String code = lb.getAttribute("for");
-				if (code == null continue;);
+				if (code == null) continue; // ← 修正點（原本少了右括號）
 				// Step1 你指定要略過的代碼，不主動勾選
 				if (STEP1_SKIP_CODES.contains(code)) { setPolicyChangeChecked(code, false); continue; }
 				setPolicyChangeChecked(code, true);
@@ -1896,7 +1896,7 @@ public class CSROneCallPass extends AbstractBasePage {
 		String a = normalizeNumber(s2);
 		String b = normalizeNumber(s3);
 		boolean same = a.equals(b);
-		if (!same) logger.debug("[數字不一致] " + label + " | S2='" + s2 + "'(" + a + ") vs S3='" + s3 + "'(" + b + ")");
+		if (!same) logger.debug("[數字不一致] " + label + " | S2='" + s2 "'(" + a + ") vs S3='" + s3 + "'(" + b + ")");
 		return same;
 	}
 
