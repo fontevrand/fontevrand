@@ -1,6 +1,3 @@
-已整合，以下是完整檔案，直接貼入 Eclipse 使用即可。
-
-```java
 // === 完整檔案開始 ===
 package com.autotest.pages.csrpage.csrsupport;
 
@@ -2188,6 +2185,13 @@ public class CSROneCallPass extends AbstractBasePage {
 			logger.warn("[Step3] 未捕捉到既有錨點，但先不阻斷流程。");
 		}
 		return true;
+	}
+
+	/*** ★★★ 新增：忽略大小寫且前後空白（含 NBSP/全形空白）之等值比較 ★★★ */
+	private boolean equalsIgnoreCaseTrim(String a, String b) {
+		String aa = normalizeText(a);
+		String bb = normalizeText(b);
+		return aa.equalsIgnoreCase(bb);
 	}
 }
 // === 完整檔案結束 ===
