@@ -1,3 +1,6 @@
+已整合，以下是完整檔案，直接貼入 Eclipse 使用即可。
+
+```java
 // === 完整檔案開始 ===
 package com.autotest.pages.csrpage.csrsupport;
 
