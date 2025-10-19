@@ -2,20 +2,20 @@
 					<div class="tab_wrapper first_tab _side">
 						<ul class="tab_list">
 						<li class="active" rel="tab_1">地址變更</li>
-						<li rel="tab_2">收費管道變更</li>
-						<li rel="tab_3">簽章方式變更</li>
-						<li rel="tab_4">繳別變更</li>
+						
+						<li rel="tab_2">簽章方式變更</li>
+						<li rel="tab_3">繳別變更</li>
 						
 						
 						
-						<li rel="tab_5">基本資料變更</li>
-						<li rel="tab_6">職業等級變更</li>
-						
-						<li rel="tab_7">附約保障異動</li>
-						<li rel="tab_8">復效</li>
+						<li rel="tab_4">基本資料變更</li>
+						<li rel="tab_5">職業等級變更</li>
 						
 						
-						<li rel="tab_9">保單補發</li>
+						<li rel="tab_6">復效</li>
+						
+						
+						<li rel="tab_7">保單補發</li>
 						
 						
 						
@@ -23,7 +23,7 @@
 						
 						
 						<div class="content_wrapper">
-							<div title="tab_1" class="accordian_header tab_1 active">地址變更<span class="arrow"></span></div><div class="tab_content first tab_1 active" style="display: block;">
+							<div title="tab_1" class="accordian_header tab_1 active">地址變更<span class="arrow"></span></div><div class="tab_content active first tab_1" style="display: block;">
 								<table width="100%" cellspacing="1" cellpadding="4" border="0" class="table table-bordered search-table">
 									<colgroup>
 										<col style="width:3%;">
@@ -826,42 +826,10 @@
 						
 						
 						
-						<div class="content_wrapper">
-							<div title="tab_2" class="accordian_header tab_2 undefined">收費管道變更<span class="arrow"></span></div><div class="tab_content tab_2" style="display: none;">
-								<table id="billingChanneltb" width="100%" cellspacing="1" cellpadding="4" border="0" class="table table-bordered search-table">
-									<colgroup>
-										<col style="width:3%;">
-										<col style="width:15%;">
-										<col style="width:17%;">
-										<col style="width:15%;">
-										<col style="width:50%;">
-									</colgroup>
-									<tbody><tr>
-										<td class="pc_info nborder-right nborder-bottom">&nbsp;</td>
-										<td class="pc_info nborder-right nborder-bottom">保單號碼</td>
-										<td colspan="3" class="pc_info nborder-bottom">收費管道</td>
-									</tr>
-									
-									<tr>
-										<td class="pc_info nborder-right">&nbsp;</td>
-										<td class="pc_info nborder-right">80241059</td>
-										<td colspan="3" class="pc_info">
-											<div class="select-option">
-												<div class="dropdown bootstrap-select form-control"><select id="billingChannel80241059" class="selectpicker form-control">
-													<option value="H" selected="">自行繳費</option>
-												</select><button type="button" tabindex="-1" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-2" aria-haspopup="listbox" aria-expanded="false" title="自行繳費" data-id="billingChannel80241059"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">自行繳費</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-2" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
-											</div>
-										</td>
-									</tr>
-									
-								</tbody></table>
-							</div>
-						</div>
-						
 						
 						
 						<div class="content_wrapper">
-							<div title="tab_3" class="accordian_header tab_3 undefined">簽章方式變更<span class="arrow"></span></div><div class="tab_content tab_3" style="display: none;">
+							<div title="tab_2" class="accordian_header tab_2 undefined">簽章方式變更<span class="arrow"></span></div><div class="tab_content tab_2">
 								<table id="singNature" width="100%" cellspacing="1" cellpadding="4" border="0" class="table table-bordered search-table">
 									<colgroup>
 										<col style="width:3%;">
@@ -898,7 +866,7 @@
 													  <option value="S">印鑑遺失</option>
 													  <option value="A">年齡因素</option>
 													  <option value="O">其他</option>
-													</select><button type="button" tabindex="-1" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-3" aria-haspopup="listbox" aria-expanded="false" title="印鑑遺失" data-id="changeReasono80241059"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">印鑑遺失</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-3" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
+													</select><button type="button" tabindex="-1" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-2" aria-haspopup="listbox" aria-expanded="false" title="印鑑遺失" data-id="changeReasono80241059"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">印鑑遺失</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-2" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
 												</div><br>
 												
 												<div class="select-option">
@@ -906,7 +874,7 @@
 													  <option value="S">印鑑遺失</option>
 													  <option value="A">年齡因素</option>
 													  <option value="O">其他</option>
-													</select><button type="button" tabindex="-1" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-4" aria-haspopup="listbox" aria-expanded="false" title="印鑑遺失" data-id="changeReasonl80241059"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">印鑑遺失</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-4" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
+													</select><button type="button" tabindex="-1" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-3" aria-haspopup="listbox" aria-expanded="false" title="印鑑遺失" data-id="changeReasonl80241059"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">印鑑遺失</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-3" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
 												</div><br>
 												
 												<div class="select-option">
@@ -914,7 +882,7 @@
 													  <option value="S">印鑑遺失</option>
 													  <option value="A">年齡因素</option>
 													  <option value="O">其他</option>
-													</select><button type="button" tabindex="-1" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-5" aria-haspopup="listbox" aria-expanded="false" title="印鑑遺失" data-id="changeReasona80241059"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">印鑑遺失</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-5" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
+													</select><button type="button" tabindex="-1" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-4" aria-haspopup="listbox" aria-expanded="false" title="印鑑遺失" data-id="changeReasona80241059"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">印鑑遺失</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-4" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
 												</div>
 											</td>
 											<td class="pc_info">
@@ -948,7 +916,7 @@
 						
 						
 						<div class="content_wrapper">
-							<div title="tab_4" class="accordian_header tab_4 undefined">繳別變更<span class="arrow"></span></div><div class="tab_content tab_4" style="display: none;">
+							<div title="tab_3" class="accordian_header tab_3 undefined">繳別變更<span class="arrow"></span></div><div class="tab_content tab_3">
 								<table id="paymentFreq" width="100%" cellspacing="1" cellpadding="4" border="0" class="table table-bordered search-table">
 									<colgroup>
 										<col style="width:3%;">
@@ -974,7 +942,7 @@
 													<option value="02">半年繳</option> 
 													<option value="04">季繳</option>  
 													<option value="12">月繳</option>
-												</select><button type="button" tabindex="-1" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-6" aria-haspopup="listbox" aria-expanded="false" title="年繳" data-id="paymentTypeA80241059"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">年繳</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-6" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
+												</select><button type="button" tabindex="-1" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-5" aria-haspopup="listbox" aria-expanded="false" title="年繳" data-id="paymentTypeA80241059"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">年繳</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-5" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
 												<input type="hidden" id="paymentTypeB80241059" value="01">
 											</div>
 										</td>
@@ -993,7 +961,7 @@
 						
 						
 						<div class="content_wrapper">
-							<div title="tab_5" class="accordian_header tab_5 undefined">基本資料變更<span class="arrow"></span></div><div class="tab_content tab_5" style="display: none;">
+							<div title="tab_4" class="accordian_header tab_4 undefined">基本資料變更<span class="arrow"></span></div><div class="tab_content tab_4">
 								<table id="profile" width="100%" cellspacing="1" cellpadding="4" border="0" class="tablev table-bordered">
 									<colgroup>
 										<col style="width:30%;">
@@ -1040,7 +1008,7 @@
 													<div id="ownerCountryBirthdiv" class="select-option">
 														<div class="dropdown bootstrap-select"><select id="ownerCountryBirth" title="" class="selectpicker" style="padding:9px">
 															<option value=""></option>
-														</select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-7" aria-haspopup="listbox" aria-expanded="false" title="Nothing selected" data-id="ownerCountryBirth"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-7" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
+														</select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-6" aria-haspopup="listbox" aria-expanded="false" title="Nothing selected" data-id="ownerCountryBirth"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-6" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
 													</div>
 				   		 							<input type="hidden" id="ownerCountryBirthTmp">
 												</td>
@@ -1051,7 +1019,7 @@
 													<div id="ownerNationdiv" class="select-option">
 														<div class="dropdown bootstrap-select"><select id="ownerNation" title="" class="selectpicker" style="padding:9px">
 															<option value=""></option>
-														</select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-8" aria-haspopup="listbox" aria-expanded="false" title="Nothing selected" data-id="ownerNation"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-8" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
+														</select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-7" aria-haspopup="listbox" aria-expanded="false" title="Nothing selected" data-id="ownerNation"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-7" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
 													</div>
 				   		 							<input type="hidden" id="ownerNationTmp">
 												</td>
@@ -1064,7 +1032,7 @@
 														  <option value=""></option>
 														  <option value="Y">Y</option>
 														  <option value="N">N</option>
-														</select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-9" aria-haspopup="listbox" aria-expanded="false" title="Nothing selected" data-id="ownerUsaTaxind"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-9" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
+														</select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-8" aria-haspopup="listbox" aria-expanded="false" title="Nothing selected" data-id="ownerUsaTaxind"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-8" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
 													</div>
 				   		 							<input type="hidden" id="ownerUsaTaxindTmp">
 												</td>
@@ -1077,7 +1045,7 @@
 														  <option value=""></option>
 														  <option value="Y">Y</option>
 														  <option value="N">N</option>
-														</select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-10" aria-haspopup="listbox" aria-expanded="false" title="Nothing selected" data-id="ownerStockhdind"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-10" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
+														</select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-9" aria-haspopup="listbox" aria-expanded="false" title="Nothing selected" data-id="ownerStockhdind"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-9" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
 													</div>
 				   		 							<input type="hidden" id="ownerStockhdindTmp">
 												</td>
@@ -1091,7 +1059,7 @@
 														  <option value="1">金融機構</option>
 														  <option value="2">專業管理信託</option>
 														  <option value="3">其他</option>
-														</select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-11" aria-haspopup="listbox" aria-expanded="false" title="Nothing selected" data-id="ownerEntityType"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-11" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
+														</select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-10" aria-haspopup="listbox" aria-expanded="false" title="Nothing selected" data-id="ownerEntityType"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-10" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
 													</div>
 				   		 							<input type="hidden" id="ownerEntityTypeTmp">
 												</td>
@@ -1156,7 +1124,7 @@
 													<div class="select-option">
 														<div class="dropdown bootstrap-select"><select id="insuredCountryBirth80241059" title="" class="selectpicker" style="padding:9px">
 															<option value=""></option>
-														</select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-12" aria-haspopup="listbox" aria-expanded="false" title="Nothing selected" data-id="insuredCountryBirth80241059"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-12" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
+														</select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-11" aria-haspopup="listbox" aria-expanded="false" title="Nothing selected" data-id="insuredCountryBirth80241059"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-11" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
 													</div>
 												</td>
 											</tr>
@@ -1166,7 +1134,7 @@
 													<div class="select-option">
 														<div class="dropdown bootstrap-select"><select id="insuredNation80241059" title="" class="selectpicker" style="padding:9px">
 															<option value=""></option>
-														</select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-13" aria-haspopup="listbox" aria-expanded="false" title="Nothing selected" data-id="insuredNation80241059"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-13" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
+														</select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-12" aria-haspopup="listbox" aria-expanded="false" title="Nothing selected" data-id="insuredNation80241059"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-12" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
 													</div>
 												</td>
 											</tr>
@@ -1178,7 +1146,7 @@
 														  <option value=""></option>
 														  <option value="Y">Y</option>
 														  <option value="N">N</option>
-														</select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-14" aria-haspopup="listbox" aria-expanded="false" title="Nothing selected" data-id="insuredUsaTaxind80241059"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-14" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
+														</select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-13" aria-haspopup="listbox" aria-expanded="false" title="Nothing selected" data-id="insuredUsaTaxind80241059"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-13" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
 													</div>
 												</td>
 											</tr>
@@ -1190,7 +1158,7 @@
 														  <option value=""></option>
 														  <option value="Y">Y</option>
 														  <option value="N">N</option>
-														</select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-15" aria-haspopup="listbox" aria-expanded="false" title="Nothing selected" data-id="insuredStockhdind80241059"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-15" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
+														</select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-14" aria-haspopup="listbox" aria-expanded="false" title="Nothing selected" data-id="insuredStockhdind80241059"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-14" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
 													</div>
 												</td>
 											</tr>
@@ -1203,7 +1171,7 @@
 														  <option value="1">金融機構</option>
 														  <option value="2">專業管理信託</option>
 														  <option value="3">其他</option>
-														</select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-16" aria-haspopup="listbox" aria-expanded="false" title="Nothing selected" data-id="insuredEntityType80241059"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-16" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
+														</select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-15" aria-haspopup="listbox" aria-expanded="false" title="Nothing selected" data-id="insuredEntityType80241059"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-15" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
 													</div>
 												</td>
 											</tr>
@@ -1224,7 +1192,7 @@
 						
 						
 						<div class="content_wrapper">
-							<div title="tab_6" class="accordian_header tab_6 undefined">職業等級變更<span class="arrow"></span></div><div class="tab_content tab_6" style="display: none;">
+							<div title="tab_5" class="accordian_header tab_5 undefined">職業等級變更<span class="arrow"></span></div><div class="tab_content tab_5">
 								<table id="Occupation" width="100%" cellspacing="1" cellpadding="4" border="0" class="tablev table-bordered">
 									<colgroup>
 										<col style="width:30%;">
@@ -1271,7 +1239,7 @@
 													<div id="occupationCdediv" class="select-option">
 														<div class="dropdown bootstrap-select OccupationCde"><select id="ownerOccupationCde" title="" class="selectpicker OccupationCde" style="padding:9px">
 															<option value=""></option>
-														</select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-17" aria-haspopup="listbox" aria-expanded="false" title="Nothing selected" data-id="ownerOccupationCde"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-17" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
+														</select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-16" aria-haspopup="listbox" aria-expanded="false" title="Nothing selected" data-id="ownerOccupationCde"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-16" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
 													</div>
 												</td>
 											</tr>
@@ -1337,7 +1305,7 @@
 													<div id="insuredOccupationCdediv80241059" class="select-option">
 														<div class="dropdown bootstrap-select OccupationCde"><select id="insuredOccupationCde80241059" title="" class="selectpicker OccupationCde" style="padding:9px">
 															<option value=""></option>
-														</select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-18" aria-haspopup="listbox" aria-expanded="false" title="Nothing selected" data-id="insuredOccupationCde80241059"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-18" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
+														</select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-17" aria-haspopup="listbox" aria-expanded="false" title="Nothing selected" data-id="insuredOccupationCde80241059"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-17" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
 													</div>
 												</td>
 											</tr>
@@ -1357,34 +1325,10 @@
 						
 						<!--16 附約保障異動 -->
 						
-						<div class="content_wrapper">
-							<div title="tab_7" class="accordian_header tab_7 undefined">附約保障異動<span class="arrow"></span></div><div class="tab_content tab_7" style="display: none;">
-								<table width="100%" cellspacing="1" cellpadding="4" border="0" class="tablev table-bordered">
-									<colgroup>
-										<col style="width:30%;">
-										<col style="width:70%;">
-									</colgroup>
-									
-										<tbody><tr>
-											<td colspan="3" class="text-left">
-												
-												<label>保單號碼 : 80241059</label>
-												<div class="bootstrap-table"><div class="fixed-table-toolbar"><div class="bs-bars pull-left"><div id="toolRider80241059" class="btn-group">
-													<button id="add_rider80241059" type="button" class="btn btn-default" style="width:100%">
-														<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
-													</button>
-												</div></div></div><div class="fixed-table-container" style="padding-bottom: 0px;"><div class="fixed-table-header" style="display: none;"><table></table></div><div class="fixed-table-body"><div class="fixed-table-loading" style="top: 1px;">正在努力地載入資料，請稍候……</div><table id="tb_rider80241059" cn="80241059" class="tb_rider table table-hover table-striped"><thead class="bheader" style=""><tr><th style="text-align: center; vertical-align: middle; width: 3%; background-color:#FFFFFF;" data-field="Option"><div class="th-inner ">選項</div><div class="fht-cell"></div></th><th style="text-align: center; vertical-align: middle; width: 8%; background-color:#FFFFFF;" data-field="lifeName"><div class="th-inner ">被保險人</div><div class="fht-cell"></div></th><th style="text-align: center; vertical-align: left; width: 20%; background-color:#FFFFFF;" data-field="shortDesc"><div class="th-inner ">附約險種代號</div><div class="fht-cell"></div></th><th style="text-align: center; vertical-align: middle; width: 30%; background-color:#FFFFFF;" data-field="description"><div class="th-inner ">險種名稱</div><div class="fht-cell"></div></th><th style="text-align: center; vertical-align: middle; width: 10%; background-color:#FFFFFF;" data-field="attached"><div class="th-inner ">附約異動</div><div class="fht-cell"></div></th><th style="text-align: center; vertical-align: middle; width: 10%; background-color:#FFFFFF;" data-field="unit"><div class="th-inner ">保額／計劃／單位</div><div class="fht-cell"></div></th><th style="text-align: left; vertical-align: middle; width: 37%; background-color:#FFFFFF;" data-field="reducedReason"><div class="th-inner ">附約保額降低及刪除原因</div><div class="fht-cell"></div></th></tr></thead><tbody><tr class="no-records-found"><td colspan="7">沒有找到符合的結果</td></tr></tbody></table></div><div class="fixed-table-footer" style="display: none;"><table><tbody><tr></tr></tbody></table></div></div><div class="fixed-table-pagination" style="display: none;"></div></div><div class="clearfix"></div>
-											</td>
-										</tr>
-									
-								</tbody></table>
-							</div>
-						</div>
-						
 						<!--23 復效 -->
 						
 						<div class="content_wrapper">
-							<div title="tab_8" class="accordian_header tab_8 undefined">復效<span class="arrow"></span></div><div class="tab_content tab_8" style="display: none;">
+							<div title="tab_6" class="accordian_header tab_6 undefined">復效<span class="arrow"></span></div><div class="tab_content tab_6">
 								<table id="reinstatement" width="100%" cellspacing="1" cellpadding="4" border="0" class="table table-bordered search-table">
 									<colgroup>
 										<col style="width:3%;">
@@ -1408,7 +1352,7 @@
 													
 														<div class="dropdown bootstrap-select disabled form-control"><select id="payingPremiumsType80241059" title="" class="selectpicker form-control" disabled="disabled">
 															<option value=""></option>
-														</select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder disabled btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-19" aria-haspopup="listbox" aria-expanded="false" title="Nothing selected" data-id="payingPremiumsType80241059" aria-disabled="true"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-19" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
+														</select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder disabled btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-18" aria-haspopup="listbox" aria-expanded="false" title="Nothing selected" data-id="payingPremiumsType80241059" aria-disabled="true"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-18" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
 													
 													
 												
@@ -1427,7 +1371,7 @@
 						<!--35 保單補發 -->
 						
 						<div class="content_wrapper">
-							<div title="tab_9" class="accordian_header tab_9 undefined">保單補發<span class="arrow"></span></div><div class="tab_content last tab_9" style="display: none;">
+							<div title="tab_7" class="accordian_header tab_7 undefined">保單補發<span class="arrow"></span></div><div class="tab_content last tab_7">
 								<table id="reissuePolicy" width="100%" cellspacing="1" cellpadding="4" border="0" class="table table-bordered search-table">
 									<colgroup>
 									<!-- 
@@ -1460,7 +1404,7 @@
 													<option value="P">紙本保險單</option>
 													<option value="E">電子保險單</option>
 													
-												</select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-20" aria-haspopup="listbox" aria-expanded="false" title="Nothing selected" data-id="contractType80241059"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-20" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
+												</select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-19" aria-haspopup="listbox" aria-expanded="false" title="Nothing selected" data-id="contractType80241059"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-19" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
 											</div>
 										</td>
 										<td class="pc_info">
