@@ -1,3 +1,5 @@
+if (!same) logger.debug("[數字不一致] " + label + " | S2='" + s2 "'(" + a + ") vs S3='" + s3 + "'(" + b + ")");
+
 //div[@class='dropdown bootstrap-select span3 addr']/select[@name='span3 addr selectpicker']
 選 <option value="110">110 台北市信義區</option>
 //div[@id='clientAddressdiv']/input[@id='clientAddress']
