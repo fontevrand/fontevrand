@@ -1,644 +1,644 @@
 When eservice navigate from webpage "服務支援" to "一電通"                                     # stepdef.CommonStepDef.navigateToWebpage(java.lang.String,java.lang.String)
-[2025/10/19]23:10:14 INFO commonstepdef.CucumberStepDef.afterStep(136) - After step
-[2025/10/19]23:10:14 DEBUG stepdef.CucumberStepDef.afterStep(71) - After step
-[2025/10/19]23:10:14 DEBUG stepdef.CucumberStepDef.beforeStep(65) - Before step
-[2025/10/19]23:10:14 INFO commonstepdef.CucumberStepDef.beforeStep(130) - Before step
-[2025/10/19]23:10:15 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //th[text()='選擇異動保單']/ancestor::table[@class='table table-bordered search-table'], clickable = false
-[2025/10/19]23:10:15 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 38 毫秒
-[2025/10/19]23:10:15 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //table[@width='100%' and @class='table table-bordered search-table' and @id='tran_list'], clickable = false
-[2025/10/19]23:10:15 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 28 毫秒
-[2025/10/19]23:10:15 DEBUG pages.CommonPage.verifyTableTitle(139) - xpath = //table[@width='100%' and contains(@class,'search-table')] //tr[2]/th[not(contains(@class,'pc_hide'))]
-[2025/10/19]23:10:15 DEBUG pages.CommonPage.verifyTableTitle(147) - Found text: 選項
-[2025/10/19]23:10:15 DEBUG pages.CommonPage.verifyTableTitle(139) - xpath = //table[@width='100%' and contains(@class,'search-table')] //tr[2]/th[not(contains(@class,'pc_hide'))]
-[2025/10/19]23:10:15 DEBUG pages.CommonPage.verifyTableTitle(147) - Found text: 保單號碼
-[2025/10/19]23:10:15 DEBUG pages.CommonPage.verifyTableTitle(139) - xpath = //table[@width='100%' and contains(@class,'search-table')] //tr[2]/th[not(contains(@class,'pc_hide'))]
-[2025/10/19]23:10:15 DEBUG pages.CommonPage.verifyTableTitle(147) - Found text: 契約始期下次繳費日
-[2025/10/19]23:10:15 DEBUG pages.CommonPage.verifyTableTitle(139) - xpath = //table[@width='100%' and contains(@class,'search-table')] //tr[2]/th[not(contains(@class,'pc_hide'))]
-[2025/10/19]23:10:15 DEBUG pages.CommonPage.verifyTableTitle(147) - Found text: 要保人被保險人
-[2025/10/19]23:10:15 DEBUG pages.CommonPage.verifyTableTitle(139) - xpath = //table[@width='100%' and contains(@class,'search-table')] //tr[2]/th[not(contains(@class,'pc_hide'))]
-[2025/10/19]23:10:15 DEBUG pages.CommonPage.verifyTableTitle(147) - Found text: 主約險種
-[2025/10/19]23:10:15 DEBUG pages.CommonPage.verifyTableTitle(139) - xpath = //table[@width='100%' and contains(@class,'search-table')] //tr[2]/th[not(contains(@class,'pc_hide'))]
-[2025/10/19]23:10:15 DEBUG pages.CommonPage.verifyTableTitle(147) - Found text: 幣別
-[2025/10/19]23:10:15 DEBUG pages.CommonPage.verifyTableTitle(139) - xpath = //table[@width='100%' and contains(@class,'search-table')] //tr[2]/th[not(contains(@class,'pc_hide'))]
-[2025/10/19]23:10:15 DEBUG pages.CommonPage.verifyTableTitle(147) - Found text: 繳別
-[2025/10/19]23:10:15 DEBUG pages.CommonPage.verifyTableTitle(139) - xpath = //table[@width='100%' and contains(@class,'search-table')] //tr[2]/th[not(contains(@class,'pc_hide'))]
-[2025/10/19]23:10:15 DEBUG pages.CommonPage.verifyTableTitle(147) - Found text: 每期保費
-[2025/10/19]23:10:15 DEBUG pages.CommonPage.verifyTableTitle(139) - xpath = //table[@width='100%' and contains(@class,'search-table')] //tr[2]/th[not(contains(@class,'pc_hide'))]
-[2025/10/19]23:10:15 DEBUG pages.CommonPage.verifyTableTitle(147) - Found text: 收費管道保單狀態
-[2025/10/19]23:10:15 DEBUG pages.CommonPage.verifyTableTitle(139) - xpath = //table[@width='100%' and contains(@class,'search-table')] //tr[2]/th[not(contains(@class,'pc_hide'))]
-[2025/10/19]23:10:15 DEBUG pages.CommonPage.verifyTableTitle(147) - Found text: 繳費年期停效日
-[2025/10/19]23:10:15 DEBUG pages.CommonPage.verifyTableTitle(139) - xpath = //table[@width='100%' and contains(@class,'search-table')] //tr[2]/th[not(contains(@class,'pc_hide'))]
-[2025/10/19]23:10:15 DEBUG pages.CommonPage.verifyTableTitle(147) - Found text: 服務銀行/單位
-[2025/10/19]23:10:15 DEBUG pages.CommonPage.verifyTableTitle(150) - 所有文本都存在
-[2025/10/19]23:10:15 INFO utils.CommUtil.fullPageScreenshot(1067) - originalWidth: 1382, originalHeight: 744
-[2025/10/19]23:10:15 INFO utils.CommUtil.fullPageScreenshot(1073) - visibleWidth: 1303, visibleHeight: 968
-[2025/10/19]23:10:15 INFO utils.CommUtil.fullPageScreenshot(1081) - final setSize to width: 1382, height:968, then take screenshot
-[2025/10/19]23:10:15 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
-[2025/10/19]23:10:17 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
-[2025/10/19]23:10:17 DEBUG utils.CommUtil.saveScreenshot(533) - scenario 的狀態為:io.cucumber.java.Scenario@4b033eac
+[2025/10/19]23:41:44 INFO commonstepdef.CucumberStepDef.afterStep(136) - After step
+[2025/10/19]23:41:44 DEBUG stepdef.CucumberStepDef.afterStep(71) - After step
+[2025/10/19]23:41:44 DEBUG stepdef.CucumberStepDef.beforeStep(65) - Before step
+[2025/10/19]23:41:44 INFO commonstepdef.CucumberStepDef.beforeStep(130) - Before step
+[2025/10/19]23:41:45 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //th[text()='選擇異動保單']/ancestor::table[@class='table table-bordered search-table'], clickable = false
+[2025/10/19]23:41:45 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 41 毫秒
+[2025/10/19]23:41:45 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //table[@width='100%' and @class='table table-bordered search-table' and @id='tran_list'], clickable = false
+[2025/10/19]23:41:45 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 28 毫秒
+[2025/10/19]23:41:45 DEBUG pages.CommonPage.verifyTableTitle(139) - xpath = //table[@width='100%' and contains(@class,'search-table')] //tr[2]/th[not(contains(@class,'pc_hide'))]
+[2025/10/19]23:41:45 DEBUG pages.CommonPage.verifyTableTitle(147) - Found text: 選項
+[2025/10/19]23:41:45 DEBUG pages.CommonPage.verifyTableTitle(139) - xpath = //table[@width='100%' and contains(@class,'search-table')] //tr[2]/th[not(contains(@class,'pc_hide'))]
+[2025/10/19]23:41:45 DEBUG pages.CommonPage.verifyTableTitle(147) - Found text: 保單號碼
+[2025/10/19]23:41:45 DEBUG pages.CommonPage.verifyTableTitle(139) - xpath = //table[@width='100%' and contains(@class,'search-table')] //tr[2]/th[not(contains(@class,'pc_hide'))]
+[2025/10/19]23:41:45 DEBUG pages.CommonPage.verifyTableTitle(147) - Found text: 契約始期下次繳費日
+[2025/10/19]23:41:45 DEBUG pages.CommonPage.verifyTableTitle(139) - xpath = //table[@width='100%' and contains(@class,'search-table')] //tr[2]/th[not(contains(@class,'pc_hide'))]
+[2025/10/19]23:41:45 DEBUG pages.CommonPage.verifyTableTitle(147) - Found text: 要保人被保險人
+[2025/10/19]23:41:45 DEBUG pages.CommonPage.verifyTableTitle(139) - xpath = //table[@width='100%' and contains(@class,'search-table')] //tr[2]/th[not(contains(@class,'pc_hide'))]
+[2025/10/19]23:41:45 DEBUG pages.CommonPage.verifyTableTitle(147) - Found text: 主約險種
+[2025/10/19]23:41:45 DEBUG pages.CommonPage.verifyTableTitle(139) - xpath = //table[@width='100%' and contains(@class,'search-table')] //tr[2]/th[not(contains(@class,'pc_hide'))]
+[2025/10/19]23:41:45 DEBUG pages.CommonPage.verifyTableTitle(147) - Found text: 幣別
+[2025/10/19]23:41:45 DEBUG pages.CommonPage.verifyTableTitle(139) - xpath = //table[@width='100%' and contains(@class,'search-table')] //tr[2]/th[not(contains(@class,'pc_hide'))]
+[2025/10/19]23:41:45 DEBUG pages.CommonPage.verifyTableTitle(147) - Found text: 繳別
+[2025/10/19]23:41:45 DEBUG pages.CommonPage.verifyTableTitle(139) - xpath = //table[@width='100%' and contains(@class,'search-table')] //tr[2]/th[not(contains(@class,'pc_hide'))]
+[2025/10/19]23:41:45 DEBUG pages.CommonPage.verifyTableTitle(147) - Found text: 每期保費
+[2025/10/19]23:41:45 DEBUG pages.CommonPage.verifyTableTitle(139) - xpath = //table[@width='100%' and contains(@class,'search-table')] //tr[2]/th[not(contains(@class,'pc_hide'))]
+[2025/10/19]23:41:45 DEBUG pages.CommonPage.verifyTableTitle(147) - Found text: 收費管道保單狀態
+[2025/10/19]23:41:45 DEBUG pages.CommonPage.verifyTableTitle(139) - xpath = //table[@width='100%' and contains(@class,'search-table')] //tr[2]/th[not(contains(@class,'pc_hide'))]
+[2025/10/19]23:41:45 DEBUG pages.CommonPage.verifyTableTitle(147) - Found text: 繳費年期停效日
+[2025/10/19]23:41:45 DEBUG pages.CommonPage.verifyTableTitle(139) - xpath = //table[@width='100%' and contains(@class,'search-table')] //tr[2]/th[not(contains(@class,'pc_hide'))]
+[2025/10/19]23:41:45 DEBUG pages.CommonPage.verifyTableTitle(147) - Found text: 服務銀行/單位
+[2025/10/19]23:41:45 DEBUG pages.CommonPage.verifyTableTitle(150) - 所有文本都存在
+[2025/10/19]23:41:45 INFO utils.CommUtil.fullPageScreenshot(1067) - originalWidth: 1382, originalHeight: 744
+[2025/10/19]23:41:45 INFO utils.CommUtil.fullPageScreenshot(1073) - visibleWidth: 1303, visibleHeight: 968
+[2025/10/19]23:41:45 INFO utils.CommUtil.fullPageScreenshot(1081) - final setSize to width: 1382, height:968, then take screenshot
+[2025/10/19]23:41:45 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
+[2025/10/19]23:41:47 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
+[2025/10/19]23:41:47 DEBUG utils.CommUtil.saveScreenshot(533) - scenario 的狀態為:io.cucumber.java.Scenario@69c532af
 
     Embedding verifyTableTitle [image/png 69684 bytes]
 
-[2025/10/19]23:10:18 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //td[@class='pc_info']//div[@class='checkbox checkbox-inline checkbox-main']//label[@for='checkbox80241059'], clickable = true
-[2025/10/19]23:10:18 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 53 毫秒
-[2025/10/19]23:10:19 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:1000
-[2025/10/19]23:10:20 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:800
-[2025/10/19]23:10:20 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:500
-[2025/10/19]23:10:20 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
-[2025/10/19]23:10:20 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //td[@class='pc_info']//div[@class='checkbox checkbox-inline checkbox-main']//label[@for='checkbox80241059']]
-[2025/10/19]23:10:20 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
-[2025/10/19]23:10:20 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
-[2025/10/19]23:10:22 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
-[2025/10/19]23:10:22 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //td[@class='pc_info']//div[@class='checkbox checkbox-inline checkbox-main']//label[@for='checkbox80241059']]
-[2025/10/19]23:10:23 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
-[2025/10/19]23:10:23 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2120 毫秒
-[2025/10/19]23:10:23 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:500
-[2025/10/19]23:10:24 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:500
-[2025/10/19]23:10:25 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:500
-[2025/10/19]23:10:25 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //td[@class='pc_info']//div[@class='checkbox checkbox-inline checkbox-main']//label[@for='checkbox80241059'], clickable = true
-[2025/10/19]23:10:25 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 41 毫秒
-[2025/10/19]23:10:26 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:1000
-[2025/10/19]23:10:27 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:800
-[2025/10/19]23:10:27 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:500
-[2025/10/19]23:10:27 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //td[@class='pc_info']//label[@for='ewOption1'], clickable = true
-[2025/10/19]23:10:27 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 48 毫秒
-[2025/10/19]23:10:27 DEBUG utils.WebElementActionUtil.click(147) - => 點擊元素開始
-[2025/10/19]23:10:28 DEBUG utils.WebElementActionUtil.click(149) - <= 點擊元素成功
-[2025/10/19]23:10:28 DEBUG utils.WebElementActionUtil.click(150) - 花費的時間為 78 毫秒
-[2025/10/19]23:10:28 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //div[@class='btn_box_d']/a[@id='next'], clickable = true
-[2025/10/19]23:10:28 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 52 毫秒
-[2025/10/19]23:10:28 DEBUG utils.WebElementActionUtil.click(147) - => 點擊元素開始
-[2025/10/19]23:10:28 DEBUG utils.WebElementActionUtil.click(149) - <= 點擊元素成功
-[2025/10/19]23:10:28 DEBUG utils.WebElementActionUtil.click(150) - 花費的時間為 101 毫秒
-[2025/10/19]23:10:32 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.xpath: //div[@id='divInputChg']//table[@width='100%' and @class='table table-bordered search-table' and @id='loanData2']/tbody/tr/th[not(contains(@class,'pc_hide'))], 是否有找到? true
-[2025/10/19]23:10:32 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.cssSelector: #divInputChg table.search-table tbody tr[id^='r'], 是否有找到? true
-[2025/10/19]23:10:32 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.xpath: (//div[@id='divInputChg']//table[@width='100%' and @class='table table-bordered search-table']/tbody/tr[@id='r80241059'])[1]/td[not(contains(@class,'pc_hide'))], 是否有找到? true
-[2025/10/19]23:10:32 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.xpath: (//div[@id='divInputChg']//table[@width='100%' and @class='table table-bordered search-table' and @id='loanData2']/tbody/tr[@id='r80241059'])[1]/td, 是否有找到? true
-[2025/10/19]23:10:33 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: lt80241059, clickable = true
-[2025/10/19]23:10:33 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 47 毫秒
-[2025/10/19]23:10:33 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: lt80241059, clickable = true
-[2025/10/19]23:10:33 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 42 毫秒
-[2025/10/19]23:10:33 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: lr80241059, clickable = true
-[2025/10/19]23:10:33 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 45 毫秒
-[2025/10/19]23:10:33 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: lr80241059, clickable = true
-[2025/10/19]23:10:33 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 41 毫秒
-[2025/10/19]23:10:33 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: cl80241059, clickable = true
-[2025/10/19]23:10:33 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 46 毫秒
-[2025/10/19]23:10:33 DEBUG utils.CommUtil.sleep(505) - => 暫停1秒 開始
-[2025/10/19]23:10:34 DEBUG utils.CommUtil.sleep(509) - <= 暫停1秒 結束
-[2025/10/19]23:10:35 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> id: cl80241059]
-[2025/10/19]23:10:35 DEBUG utils.CommUtil.sleep(505) - => 暫停1秒 開始
-[2025/10/19]23:10:36 DEBUG utils.CommUtil.sleep(509) - <= 暫停1秒 結束
-[2025/10/19]23:10:36 DEBUG utils.WebElementActionUtil.input(446) - 輸入成功 , element = 
-[2025/10/19]23:10:36 DEBUG utils.CommUtil.containsPassword(908) - 字符串不包含 '密碼' 或 'password'
-[2025/10/19]23:10:36 DEBUG utils.WebElementActionUtil.input(448) - str=40000
-[2025/10/19]23:10:36 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //div[@class='radio radio-inline radio-main form-group']//label[@for='TOaccount'], clickable = true
-[2025/10/19]23:10:36 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 49 毫秒
-[2025/10/19]23:10:36 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
-[2025/10/19]23:10:36 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //div[@class='radio radio-inline radio-main form-group']//label[@for='TOaccount']]
-[2025/10/19]23:10:36 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
-[2025/10/19]23:10:36 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
-[2025/10/19]23:10:38 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
-[2025/10/19]23:10:38 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //div[@class='radio radio-inline radio-main form-group']//label[@for='TOaccount']]
-[2025/10/19]23:10:38 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
-[2025/10/19]23:10:38 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2098 毫秒
-[2025/10/19]23:10:39 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: TOaccountlist, clickable = true
-[2025/10/19]23:10:39 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 55 毫秒
-[2025/10/19]23:10:39 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: TOaccountlist, clickable = true
-[2025/10/19]23:10:39 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 38 毫秒
-[2025/10/19]23:10:39 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //label[@for='cAddress'], clickable = true
-[2025/10/19]23:10:39 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 46 毫秒
-[2025/10/19]23:10:39 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
-[2025/10/19]23:10:39 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //label[@for='cAddress']]
-[2025/10/19]23:10:39 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
-[2025/10/19]23:10:39 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
-[2025/10/19]23:10:41 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
-[2025/10/19]23:10:41 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //label[@for='cAddress']]
-[2025/10/19]23:10:41 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
-[2025/10/19]23:10:41 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2080 毫秒
-[2025/10/19]23:10:41 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: collectAddress, clickable = false
-[2025/10/19]23:10:41 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 40 毫秒
-[2025/10/19]23:10:41 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: clinetName, clickable = true
-[2025/10/19]23:10:41 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 49 毫秒
-[2025/10/19]23:10:41 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: mailType, clickable = true
-[2025/10/19]23:10:41 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 45 毫秒
-[2025/10/19]23:10:41 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.cssSelector: #tb_doc tbody input[type='checkbox'], 是否有找到? true
-[2025/10/19]23:10:41 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.cssSelector: #tb_note tbody input[type='checkbox'], 是否有找到? true
-[2025/10/19]23:10:41 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.cssSelector: #tb_doc tbody tr, 是否有找到? true
-[2025/10/19]23:10:41 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.cssSelector: #tb_note tbody tr, 是否有找到? true
-[2025/10/19]23:10:42 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //a[@id='review' and normalize-space(text())='申請完成-預覽異動內容'], clickable = true
-[2025/10/19]23:10:42 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 53 毫秒
-[2025/10/19]23:10:42 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
-[2025/10/19]23:10:42 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //a[@id='review' and normalize-space(text())='申請完成-預覽異動內容']]
-[2025/10/19]23:10:42 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
-[2025/10/19]23:10:42 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
-[2025/10/19]23:10:44 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
-[2025/10/19]23:10:44 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //a[@id='review' and normalize-space(text())='申請完成-預覽異動內容']]
-[2025/10/19]23:10:44 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
-[2025/10/19]23:10:44 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2261 毫秒
-[2025/10/19]23:10:45 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.tagName: body, clickable = false
-[2025/10/19]23:10:45 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 32 毫秒
-[2025/10/19]23:10:47 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.id: loanData3, clickable = false
-[2025/10/19]23:10:47 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 32 毫秒
-[2025/10/19]23:10:47 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.xpath: //table[@id='loanData3']//tr[contains(@class,'pls')]/td, 是否有找到? true
-[2025/10/19]23:10:47 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: tdTtransfer, clickable = true
-[2025/10/19]23:10:47 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 56 毫秒
-[2025/10/19]23:10:47 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.id: tdclinetName, clickable = false
-[2025/10/19]23:10:47 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 34 毫秒
-[2025/10/19]23:10:47 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.id: tdmailType, clickable = false
-[2025/10/19]23:10:47 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 26 毫秒
-[2025/10/19]23:10:47 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.id: tdsendForm, clickable = false
-[2025/10/19]23:10:47 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 26 毫秒
-[2025/10/19]23:10:47 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.id: tddoc, clickable = false
-[2025/10/19]23:10:47 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 28 毫秒
-[2025/10/19]23:10:47 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.id: tdnote, clickable = false
-[2025/10/19]23:10:47 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 26 毫秒
-[2025/10/19]23:10:48 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: (//a[@class='btn btn-default' and normalize-space(text())='取消申請'])[2], clickable = true
-[2025/10/19]23:10:48 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 48 毫秒
-[2025/10/19]23:10:49 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
-[2025/10/19]23:10:49 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: (//a[@class='btn btn-default' and normalize-space(text())='取消申請'])[2]]
-[2025/10/19]23:10:49 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
-[2025/10/19]23:10:49 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
-[2025/10/19]23:10:51 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
-[2025/10/19]23:10:51 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: (//a[@class='btn btn-default' and normalize-space(text())='取消申請'])[2]]
-[2025/10/19]23:10:52 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
-[2025/10/19]23:10:52 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 3835 毫秒
-[2025/10/19]23:10:53 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //table[@width='100%' and @class='table table-bordered search-table' and @id='tran_list'], clickable = false
-[2025/10/19]23:10:53 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 22 毫秒
-[2025/10/19]23:10:53 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //th[text()='選擇異動保單']/ancestor::table[@class='table table-bordered search-table'], clickable = false
-[2025/10/19]23:10:53 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 23 毫秒
-[2025/10/19]23:10:53 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //td[@class='pc_info']//div[@class='checkbox checkbox-inline checkbox-main']//label[@for='checkbox80241059'], clickable = true
-[2025/10/19]23:10:53 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 41 毫秒
-[2025/10/19]23:10:54 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:1000
-[2025/10/19]23:10:55 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:800
-[2025/10/19]23:10:56 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:500
-[2025/10/19]23:10:56 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
-[2025/10/19]23:10:56 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //td[@class='pc_info']//div[@class='checkbox checkbox-inline checkbox-main']//label[@for='checkbox80241059']]
-[2025/10/19]23:10:56 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
-[2025/10/19]23:10:56 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
-[2025/10/19]23:10:58 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
-[2025/10/19]23:10:58 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //td[@class='pc_info']//div[@class='checkbox checkbox-inline checkbox-main']//label[@for='checkbox80241059']]
-[2025/10/19]23:10:58 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
-[2025/10/19]23:10:58 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2074 毫秒
-[2025/10/19]23:10:59 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:500
-[2025/10/19]23:10:59 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:500
-[2025/10/19]23:11:00 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:500
-[2025/10/19]23:11:00 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //td[@class='pc_info']//label[@for='ewOption2'], clickable = true
-[2025/10/19]23:11:00 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 43 毫秒
-[2025/10/19]23:11:00 DEBUG utils.WebElementActionUtil.click(147) - => 點擊元素開始
-[2025/10/19]23:11:00 DEBUG utils.WebElementActionUtil.click(149) - <= 點擊元素成功
-[2025/10/19]23:11:00 DEBUG utils.WebElementActionUtil.click(150) - 花費的時間為 72 毫秒
-[2025/10/19]23:11:00 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //div[@class='btn_box_d']/a[@id='next'], clickable = true
-[2025/10/19]23:11:00 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 41 毫秒
-[2025/10/19]23:11:00 DEBUG utils.WebElementActionUtil.click(147) - => 點擊元素開始
-[2025/10/19]23:11:00 DEBUG utils.WebElementActionUtil.click(149) - <= 點擊元素成功
-[2025/10/19]23:11:00 DEBUG utils.WebElementActionUtil.click(150) - 花費的時間為 78 毫秒
-[2025/10/19]23:11:04 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.xpath: (//div[@id='divInputChg']//table[@width='100%' and @class='table table-bordered search-table']/tbody/tr)[1]/th[not(contains(@class,'pc_hide'))], 是否有找到? true
-[2025/10/19]23:11:04 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.cssSelector: #divInputChg table.search-table tbody tr[id^='r'], 是否有找到? true
-[2025/10/19]23:11:04 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.xpath: (//div[@id='divInputChg']//table[@width='100%' and @class='table table-bordered search-table']/tbody/tr[@id='r80241059'])[1]/td[not(contains(@class,'pc_hide'))], 是否有找到? true
-[2025/10/19]23:11:05 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.xpath: (//div[@id='divInputChg']//table[@id='terminate2']/tbody/tr)[1]/th[not(contains(@class,'pc_hide'))], 是否有找到? true
-[2025/10/19]23:11:05 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: (//table[@id='terminate2']//select)[1], clickable = true
-[2025/10/19]23:11:05 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 46 毫秒
-[2025/10/19]23:11:06 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: (//table[@id='terminate2']//select)[1], clickable = true
-[2025/10/19]23:11:06 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 40 毫秒
-[2025/10/19]23:11:06 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: (//table[@id='terminate2']//select)[1], clickable = true
-[2025/10/19]23:11:06 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 53 毫秒
-[2025/10/19]23:11:06 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //div[@class='radio radio-inline radio-main form-group']//label[@for='TOaccount'], clickable = true
-[2025/10/19]23:11:06 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 45 毫秒
-[2025/10/19]23:11:06 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
-[2025/10/19]23:11:06 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //div[@class='radio radio-inline radio-main form-group']//label[@for='TOaccount']]
-[2025/10/19]23:11:06 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
-[2025/10/19]23:11:06 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
-[2025/10/19]23:11:08 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
-[2025/10/19]23:11:08 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //div[@class='radio radio-inline radio-main form-group']//label[@for='TOaccount']]
-[2025/10/19]23:11:08 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
-[2025/10/19]23:11:08 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2098 毫秒
-[2025/10/19]23:11:08 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: TOaccountlist, clickable = true
-[2025/10/19]23:11:08 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 45 毫秒
-[2025/10/19]23:11:08 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: TOaccountlist, clickable = true
-[2025/10/19]23:11:08 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 40 毫秒
-[2025/10/19]23:11:08 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //label[@for='cAddress'], clickable = true
-[2025/10/19]23:11:08 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 38 毫秒
-[2025/10/19]23:11:08 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
-[2025/10/19]23:11:08 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //label[@for='cAddress']]
-[2025/10/19]23:11:08 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
-[2025/10/19]23:11:08 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
-[2025/10/19]23:11:10 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
-[2025/10/19]23:11:10 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //label[@for='cAddress']]
-[2025/10/19]23:11:11 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
-[2025/10/19]23:11:11 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2098 毫秒
-[2025/10/19]23:11:11 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: collectAddress, clickable = false
-[2025/10/19]23:11:11 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 33 毫秒
-[2025/10/19]23:11:11 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: clinetName, clickable = true
-[2025/10/19]23:11:11 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 42 毫秒
-[2025/10/19]23:11:11 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: mailType, clickable = true
-[2025/10/19]23:11:11 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 42 毫秒
-[2025/10/19]23:11:11 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.cssSelector: #tb_doc tbody input[type='checkbox'], 是否有找到? true
-[2025/10/19]23:11:11 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.cssSelector: #tb_note tbody input[type='checkbox'], 是否有找到? true
-[2025/10/19]23:11:11 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.cssSelector: #tb_doc tbody tr, 是否有找到? true
-[2025/10/19]23:11:11 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.cssSelector: #tb_note tbody tr, 是否有找到? true
-[2025/10/19]23:11:11 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //a[@id='review' and normalize-space(text())='申請完成-預覽異動內容'], clickable = true
-[2025/10/19]23:11:11 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 43 毫秒
-[2025/10/19]23:11:11 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
-[2025/10/19]23:11:11 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //a[@id='review' and normalize-space(text())='申請完成-預覽異動內容']]
-[2025/10/19]23:11:11 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
-[2025/10/19]23:11:11 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
-[2025/10/19]23:11:13 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
-[2025/10/19]23:11:13 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //a[@id='review' and normalize-space(text())='申請完成-預覽異動內容']]
-[2025/10/19]23:11:14 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
-[2025/10/19]23:11:14 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2265 毫秒
-[2025/10/19]23:11:15 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.tagName: body, clickable = false
-[2025/10/19]23:11:15 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 159 毫秒
-[2025/10/19]23:11:16 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: loanData3, 等待時間:200
-[2025/10/19]23:11:16 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: loanData3, 等待時間:200
-[2025/10/19]23:11:17 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: loanData3, 等待時間:200
-[2025/10/19]23:11:17 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.id: tdclinetName, clickable = false
-[2025/10/19]23:11:17 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 20 毫秒
-[2025/10/19]23:11:17 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: tdTtransfer, clickable = true
-[2025/10/19]23:11:17 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 37 毫秒
-[2025/10/19]23:11:17 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.id: tdclinetName, clickable = false
-[2025/10/19]23:11:17 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 20 毫秒
-[2025/10/19]23:11:18 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.id: tdmailType, clickable = false
-[2025/10/19]23:11:18 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 18 毫秒
-[2025/10/19]23:11:18 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.id: tdsendForm, clickable = false
-[2025/10/19]23:11:18 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 19 毫秒
-[2025/10/19]23:11:18 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.id: tddoc, clickable = false
-[2025/10/19]23:11:18 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 21 毫秒
-[2025/10/19]23:11:18 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.id: tdnote, clickable = false
-[2025/10/19]23:11:18 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 20 毫秒
-[2025/10/19]23:11:19 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: (//a[@class='btn btn-default' and normalize-space(text())='取消申請'])[2], clickable = true
-[2025/10/19]23:11:19 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 42 毫秒
-[2025/10/19]23:11:19 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
-[2025/10/19]23:11:19 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: (//a[@class='btn btn-default' and normalize-space(text())='取消申請'])[2]]
-[2025/10/19]23:11:19 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
-[2025/10/19]23:11:19 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
-[2025/10/19]23:11:21 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
-[2025/10/19]23:11:21 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: (//a[@class='btn btn-default' and normalize-space(text())='取消申請'])[2]]
-[2025/10/19]23:11:23 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
-[2025/10/19]23:11:23 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 4021 毫秒
-[2025/10/19]23:11:24 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //table[@width='100%' and @class='table table-bordered search-table' and @id='tran_list'], clickable = false
-[2025/10/19]23:11:24 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 23 毫秒
-[2025/10/19]23:11:24 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //th[text()='選擇異動保單']/ancestor::table[@class='table table-bordered search-table'], clickable = false
-[2025/10/19]23:11:24 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 24 毫秒
-[2025/10/19]23:11:24 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //td[@class='pc_info']//div[@class='checkbox checkbox-inline checkbox-main']//label[@for='checkbox80241059'], clickable = true
-[2025/10/19]23:11:24 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 41 毫秒
-[2025/10/19]23:11:25 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:1000
-[2025/10/19]23:11:26 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:800
-[2025/10/19]23:11:27 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:500
-[2025/10/19]23:11:27 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
-[2025/10/19]23:11:27 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //td[@class='pc_info']//div[@class='checkbox checkbox-inline checkbox-main']//label[@for='checkbox80241059']]
-[2025/10/19]23:11:27 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
-[2025/10/19]23:11:27 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
-[2025/10/19]23:11:29 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
-[2025/10/19]23:11:29 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //td[@class='pc_info']//div[@class='checkbox checkbox-inline checkbox-main']//label[@for='checkbox80241059']]
-[2025/10/19]23:11:29 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
-[2025/10/19]23:11:29 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2085 毫秒
-[2025/10/19]23:11:29 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:500
-[2025/10/19]23:11:30 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:500
-[2025/10/19]23:11:31 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:500
-[2025/10/19]23:11:31 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //td[@class='pc_info']//label[@for='ewOption3' or contains(normalize-space(),'保單變更')], clickable = true
-[2025/10/19]23:11:31 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 48 毫秒
-[2025/10/19]23:11:31 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
-[2025/10/19]23:11:31 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //td[@class='pc_info']//label[@for='ewOption3' or contains(normalize-space(),'保單變更')]]
-[2025/10/19]23:11:31 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
-[2025/10/19]23:11:31 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
-[2025/10/19]23:11:33 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
-[2025/10/19]23:11:33 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //td[@class='pc_info']//label[@for='ewOption3' or contains(normalize-space(),'保單變更')]]
-[2025/10/19]23:11:33 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
-[2025/10/19]23:11:33 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2088 毫秒
-[2025/10/19]23:11:33 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C01'], clickable = false
-[2025/10/19]23:11:33 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 34 毫秒
-[2025/10/19]23:11:33 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //table[@width='100%' and @class='table table-bordered search-table' and @id='tran_list'], clickable = false
-[2025/10/19]23:11:33 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 23 毫秒
-[2025/10/19]23:11:33 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.xpath: //input[@type='checkbox' and string-length(@id)=3 and (starts-with(@id,'C') or starts-with(@id,'A'))], 是否有找到? true
-[2025/10/19]23:11:33 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.xpath: //label[string-length(@for)=3 and (starts-with(@for,'C') or starts-with(@for,'A'))], 是否有找到? true
-[2025/10/19]23:11:34 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C01, 等待時間:300
-[2025/10/19]23:11:34 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C01'], clickable = false
-[2025/10/19]23:11:34 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 21 毫秒
-[2025/10/19]23:11:35 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C02, 等待時間:300
-[2025/10/19]23:11:35 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C02'], clickable = false
-[2025/10/19]23:11:35 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 35 毫秒
-[2025/10/19]23:11:35 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C03, 等待時間:300
-[2025/10/19]23:11:35 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C03'], clickable = false
-[2025/10/19]23:11:35 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 28 毫秒
-[2025/10/19]23:11:36 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A04, 等待時間:300
-[2025/10/19]23:11:36 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A04'], clickable = false
-[2025/10/19]23:11:36 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 27 毫秒
-[2025/10/19]23:11:37 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C05, 等待時間:300
-[2025/10/19]23:11:37 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C05'], clickable = false
-[2025/10/19]23:11:37 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 26 毫秒
-[2025/10/19]23:11:37 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C06, 等待時間:300
-[2025/10/19]23:11:37 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C06'], clickable = false
-[2025/10/19]23:11:37 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 27 毫秒
-[2025/10/19]23:11:38 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A10, 等待時間:300
-[2025/10/19]23:11:38 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A10'], clickable = false
-[2025/10/19]23:11:38 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 26 毫秒
-[2025/10/19]23:11:38 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A11, 等待時間:300
-[2025/10/19]23:11:38 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A11'], clickable = false
-[2025/10/19]23:11:38 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 26 毫秒
-[2025/10/19]23:11:39 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A15, 等待時間:300
-[2025/10/19]23:11:39 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A15'], clickable = false
-[2025/10/19]23:11:39 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 26 毫秒
-[2025/10/19]23:11:40 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A16, 等待時間:300
-[2025/10/19]23:11:40 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A16'], clickable = false
-[2025/10/19]23:11:40 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 35 毫秒
-[2025/10/19]23:11:40 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A23, 等待時間:300
-[2025/10/19]23:11:40 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A23'], clickable = false
-[2025/10/19]23:11:40 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 26 毫秒
-[2025/10/19]23:11:41 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A26, 等待時間:300
-[2025/10/19]23:11:41 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A26'], clickable = false
-[2025/10/19]23:11:41 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 26 毫秒
-[2025/10/19]23:11:41 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A32, 等待時間:300
-[2025/10/19]23:11:41 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A32'], clickable = false
-[2025/10/19]23:11:41 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 27 毫秒
-[2025/10/19]23:11:42 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C35, 等待時間:300
-[2025/10/19]23:11:42 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C35'], clickable = false
-[2025/10/19]23:11:42 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 27 毫秒
-[2025/10/19]23:11:43 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C37, 等待時間:300
-[2025/10/19]23:11:43 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C37'], clickable = false
-[2025/10/19]23:11:43 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 26 毫秒
-[2025/10/19]23:11:43 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C54, 等待時間:300
-[2025/10/19]23:11:43 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C54'], clickable = false
-[2025/10/19]23:11:43 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 26 毫秒
-[2025/10/19]23:11:44 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C01, 等待時間:300
-[2025/10/19]23:11:44 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C01'], clickable = false
-[2025/10/19]23:11:44 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 28 毫秒
-[2025/10/19]23:11:45 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C02, 等待時間:300
-[2025/10/19]23:11:45 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C02'], clickable = false
-[2025/10/19]23:11:45 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 37 毫秒
-[2025/10/19]23:11:45 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C03, 等待時間:300
-[2025/10/19]23:11:45 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C03'], clickable = false
-[2025/10/19]23:11:45 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 20 毫秒
-[2025/10/19]23:11:46 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A04, 等待時間:300
-[2025/10/19]23:11:46 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A04'], clickable = false
-[2025/10/19]23:11:46 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 22 毫秒
-[2025/10/19]23:11:47 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C05, 等待時間:300
-[2025/10/19]23:11:47 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C05'], clickable = false
-[2025/10/19]23:11:47 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 21 毫秒
-[2025/10/19]23:11:48 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C06, 等待時間:300
-[2025/10/19]23:11:48 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C06'], clickable = false
-[2025/10/19]23:11:48 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 23 毫秒
-[2025/10/19]23:11:49 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A10, 等待時間:300
-[2025/10/19]23:11:49 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A10'], clickable = false
-[2025/10/19]23:11:49 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 20 毫秒
-[2025/10/19]23:11:50 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A11, 等待時間:300
-[2025/10/19]23:11:50 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A11'], clickable = false
-[2025/10/19]23:11:50 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 21 毫秒
-[2025/10/19]23:11:50 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A15, 等待時間:300
-[2025/10/19]23:11:51 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A15'], clickable = false
-[2025/10/19]23:11:51 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 20 毫秒
-[2025/10/19]23:11:51 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A16, 等待時間:300
-[2025/10/19]23:11:51 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A16'], clickable = false
-[2025/10/19]23:11:51 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 19 毫秒
-[2025/10/19]23:11:52 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A23, 等待時間:300
-[2025/10/19]23:11:52 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A23'], clickable = false
-[2025/10/19]23:11:52 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 24 毫秒
-[2025/10/19]23:11:53 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A26, 等待時間:300
-[2025/10/19]23:11:53 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A26'], clickable = false
-[2025/10/19]23:11:53 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 20 毫秒
-[2025/10/19]23:11:54 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A32, 等待時間:300
-[2025/10/19]23:11:54 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A32'], clickable = false
-[2025/10/19]23:11:54 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 20 毫秒
-[2025/10/19]23:11:54 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C35, 等待時間:300
-[2025/10/19]23:11:54 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C35'], clickable = false
-[2025/10/19]23:11:54 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 19 毫秒
-[2025/10/19]23:11:55 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C37, 等待時間:300
-[2025/10/19]23:11:55 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C37'], clickable = false
-[2025/10/19]23:11:55 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 18 毫秒
-[2025/10/19]23:11:56 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C54, 等待時間:300
-[2025/10/19]23:11:56 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C54'], clickable = false
-[2025/10/19]23:11:56 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 19 毫秒
-[2025/10/19]23:11:56 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //table[@width='100%' and @class='table table-bordered search-table' and @id='tran_list'], clickable = false
-[2025/10/19]23:11:56 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 19 毫秒
-[2025/10/19]23:11:56 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.xpath: //input[@type='checkbox' and string-length(@id)=3 and (starts-with(@id,'C') or starts-with(@id,'A'))], 是否有找到? true
-[2025/10/19]23:11:57 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C02, 等待時間:300
-[2025/10/19]23:11:57 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C02'], clickable = false
-[2025/10/19]23:11:57 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 19 毫秒
-[2025/10/19]23:11:58 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A16, 等待時間:300
-[2025/10/19]23:11:58 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A16'], clickable = false
-[2025/10/19]23:11:58 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 20 毫秒
-[2025/10/19]23:11:58 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //div[@class='btn_box_d']/a[@id='next'], clickable = true
-[2025/10/19]23:11:58 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 44 毫秒
-[2025/10/19]23:11:58 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
-[2025/10/19]23:11:58 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //div[@class='btn_box_d']/a[@id='next']]
-[2025/10/19]23:11:58 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
-[2025/10/19]23:11:58 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
-[2025/10/19]23:12:00 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
-[2025/10/19]23:12:00 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //div[@class='btn_box_d']/a[@id='next']]
-[2025/10/19]23:12:00 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
-[2025/10/19]23:12:00 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2085 毫秒
-[2025/10/19]23:12:02 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.id: errormeg, clickable = false
-[2025/10/19]23:12:02 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 29 毫秒
-[2025/10/19]23:12:02 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.xpath: //label[string-length(@for)=3 and (starts-with(@for,'C') or starts-with(@for,'A'))], 是否有找到? true
-[2025/10/19]23:12:03 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C05, 等待時間:300
-[2025/10/19]23:12:03 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C05'], clickable = false
-[2025/10/19]23:12:03 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 19 毫秒
-[2025/10/19]23:12:04 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C06, 等待時間:300
-[2025/10/19]23:12:04 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C06'], clickable = false
-[2025/10/19]23:12:04 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 16 毫秒
-[2025/10/19]23:12:05 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A15, 等待時間:300
-[2025/10/19]23:12:05 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A15'], clickable = false
-[2025/10/19]23:12:05 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 37 毫秒
-[2025/10/19]23:12:06 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A26, 等待時間:300
-[2025/10/19]23:12:06 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A26'], clickable = false
-[2025/10/19]23:12:06 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 21 毫秒
-[2025/10/19]23:12:07 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A32, 等待時間:300
-[2025/10/19]23:12:07 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A32'], clickable = false
-[2025/10/19]23:12:07 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 19 毫秒
-[2025/10/19]23:12:08 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C37, 等待時間:300
-[2025/10/19]23:12:08 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C37'], clickable = false
-[2025/10/19]23:12:08 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 19 毫秒
-[2025/10/19]23:12:08 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C54, 等待時間:300
-[2025/10/19]23:12:08 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C54'], clickable = false
-[2025/10/19]23:12:08 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 20 毫秒
-[2025/10/19]23:12:09 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //table[@width='100%' and @class='table table-bordered search-table' and @id='tran_list'], clickable = false
-[2025/10/19]23:12:09 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 19 毫秒
-[2025/10/19]23:12:09 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.xpath: //input[@type='checkbox' and string-length(@id)=3 and (starts-with(@id,'C') or starts-with(@id,'A'))], 是否有找到? true
-[2025/10/19]23:12:09 DEBUG csrsupport.CSROneCallPass.runPolicyChange_AllSelect_FilterAndEnterStep2(484) - [PolicyChange] 準備進 Step2 的允許清單: [C01, C03, A04, A10, A11, A23, C35]
-[2025/10/19]23:12:09 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //div[@class='btn_box_d']/a[@id='next'], clickable = true
-[2025/10/19]23:12:09 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 37 毫秒
-[2025/10/19]23:12:09 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
-[2025/10/19]23:12:09 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //div[@class='btn_box_d']/a[@id='next']]
-[2025/10/19]23:12:09 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
-[2025/10/19]23:12:09 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
-[2025/10/19]23:12:11 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
-[2025/10/19]23:12:11 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //div[@class='btn_box_d']/a[@id='next']]
-[2025/10/19]23:12:11 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
-[2025/10/19]23:12:11 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2087 毫秒
-[2025/10/19]23:12:15 INFO csrsupport.CSROneCallPass.handleCommonStep2Sections(558) - [Common-Section] Handling common Step 2 sections (Payment/Recipient Info)...
-[2025/10/19]23:12:16 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(102) - 找不到元素，locator=By.xpath: //div[contains(text(),'選擇補費方式')]/following-sibling::div//input[@type='radio']/ancestor::label[1], 等待時間:800error msg: Expected condition failed: waiting for element to be clickable: By.xpath: //div[contains(text(),'選擇補費方式')]/following-sibling::div//input[@type='radio']/ancestor::label[1] (tried for 0 second(s) with 500 milliseconds interval)
+[2025/10/19]23:41:47 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //td[@class='pc_info']//div[@class='checkbox checkbox-inline checkbox-main']//label[@for='checkbox80241059'], clickable = true
+[2025/10/19]23:41:47 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 56 毫秒
+[2025/10/19]23:41:48 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:1000
+[2025/10/19]23:41:49 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:800
+[2025/10/19]23:41:50 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:500
+[2025/10/19]23:41:50 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
+[2025/10/19]23:41:50 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //td[@class='pc_info']//div[@class='checkbox checkbox-inline checkbox-main']//label[@for='checkbox80241059']]
+[2025/10/19]23:41:50 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
+[2025/10/19]23:41:50 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
+[2025/10/19]23:41:52 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
+[2025/10/19]23:41:52 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //td[@class='pc_info']//div[@class='checkbox checkbox-inline checkbox-main']//label[@for='checkbox80241059']]
+[2025/10/19]23:41:52 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
+[2025/10/19]23:41:52 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2118 毫秒
+[2025/10/19]23:41:53 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:500
+[2025/10/19]23:41:54 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:500
+[2025/10/19]23:41:54 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:500
+[2025/10/19]23:41:54 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //td[@class='pc_info']//div[@class='checkbox checkbox-inline checkbox-main']//label[@for='checkbox80241059'], clickable = true
+[2025/10/19]23:41:54 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 48 毫秒
+[2025/10/19]23:41:55 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:1000
+[2025/10/19]23:41:56 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:800
+[2025/10/19]23:41:57 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:500
+[2025/10/19]23:41:57 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //td[@class='pc_info']//label[@for='ewOption1'], clickable = true
+[2025/10/19]23:41:57 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 44 毫秒
+[2025/10/19]23:41:57 DEBUG utils.WebElementActionUtil.click(147) - => 點擊元素開始
+[2025/10/19]23:41:57 DEBUG utils.WebElementActionUtil.click(149) - <= 點擊元素成功
+[2025/10/19]23:41:57 DEBUG utils.WebElementActionUtil.click(150) - 花費的時間為 72 毫秒
+[2025/10/19]23:41:57 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //div[@class='btn_box_d']/a[@id='next'], clickable = true
+[2025/10/19]23:41:57 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 46 毫秒
+[2025/10/19]23:41:57 DEBUG utils.WebElementActionUtil.click(147) - => 點擊元素開始
+[2025/10/19]23:41:57 DEBUG utils.WebElementActionUtil.click(149) - <= 點擊元素成功
+[2025/10/19]23:41:57 DEBUG utils.WebElementActionUtil.click(150) - 花費的時間為 95 毫秒
+[2025/10/19]23:42:01 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.xpath: //div[@id='divInputChg']//table[@width='100%' and @class='table table-bordered search-table' and @id='loanData2']/tbody/tr/th[not(contains(@class,'pc_hide'))], 是否有找到? true
+[2025/10/19]23:42:01 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.cssSelector: #divInputChg table.search-table tbody tr[id^='r'], 是否有找到? true
+[2025/10/19]23:42:01 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.xpath: (//div[@id='divInputChg']//table[@width='100%' and @class='table table-bordered search-table']/tbody/tr[@id='r80241059'])[1]/td[not(contains(@class,'pc_hide'))], 是否有找到? true
+[2025/10/19]23:42:01 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.xpath: (//div[@id='divInputChg']//table[@width='100%' and @class='table table-bordered search-table' and @id='loanData2']/tbody/tr[@id='r80241059'])[1]/td, 是否有找到? true
+[2025/10/19]23:42:01 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: lt80241059, clickable = true
+[2025/10/19]23:42:01 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 55 毫秒
+[2025/10/19]23:42:02 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: lt80241059, clickable = true
+[2025/10/19]23:42:02 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 38 毫秒
+[2025/10/19]23:42:02 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: lr80241059, clickable = true
+[2025/10/19]23:42:02 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 47 毫秒
+[2025/10/19]23:42:02 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: lr80241059, clickable = true
+[2025/10/19]23:42:02 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 35 毫秒
+[2025/10/19]23:42:02 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: cl80241059, clickable = true
+[2025/10/19]23:42:02 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 44 毫秒
+[2025/10/19]23:42:02 DEBUG utils.CommUtil.sleep(505) - => 暫停1秒 開始
+[2025/10/19]23:42:03 DEBUG utils.CommUtil.sleep(509) - <= 暫停1秒 結束
+[2025/10/19]23:42:03 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> id: cl80241059]
+[2025/10/19]23:42:03 DEBUG utils.CommUtil.sleep(505) - => 暫停1秒 開始
+[2025/10/19]23:42:04 DEBUG utils.CommUtil.sleep(509) - <= 暫停1秒 結束
+[2025/10/19]23:42:04 DEBUG utils.WebElementActionUtil.input(446) - 輸入成功 , element = 
+[2025/10/19]23:42:04 DEBUG utils.CommUtil.containsPassword(908) - 字符串不包含 '密碼' 或 'password'
+[2025/10/19]23:42:04 DEBUG utils.WebElementActionUtil.input(448) - str=40000
+[2025/10/19]23:42:04 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //div[@class='radio radio-inline radio-main form-group']//label[@for='TOaccount'], clickable = true
+[2025/10/19]23:42:04 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 51 毫秒
+[2025/10/19]23:42:04 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
+[2025/10/19]23:42:04 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //div[@class='radio radio-inline radio-main form-group']//label[@for='TOaccount']]
+[2025/10/19]23:42:04 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
+[2025/10/19]23:42:04 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
+[2025/10/19]23:42:06 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
+[2025/10/19]23:42:06 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //div[@class='radio radio-inline radio-main form-group']//label[@for='TOaccount']]
+[2025/10/19]23:42:06 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
+[2025/10/19]23:42:06 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2101 毫秒
+[2025/10/19]23:42:06 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: TOaccountlist, clickable = true
+[2025/10/19]23:42:06 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 58 毫秒
+[2025/10/19]23:42:07 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: TOaccountlist, clickable = true
+[2025/10/19]23:42:07 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 41 毫秒
+[2025/10/19]23:42:07 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //label[@for='cAddress'], clickable = true
+[2025/10/19]23:42:07 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 43 毫秒
+[2025/10/19]23:42:07 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
+[2025/10/19]23:42:07 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //label[@for='cAddress']]
+[2025/10/19]23:42:07 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
+[2025/10/19]23:42:07 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
+[2025/10/19]23:42:09 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
+[2025/10/19]23:42:09 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //label[@for='cAddress']]
+[2025/10/19]23:42:09 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
+[2025/10/19]23:42:09 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2088 毫秒
+[2025/10/19]23:42:09 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: collectAddress, clickable = false
+[2025/10/19]23:42:09 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 39 毫秒
+[2025/10/19]23:42:09 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: clinetName, clickable = true
+[2025/10/19]23:42:09 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 45 毫秒
+[2025/10/19]23:42:09 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: mailType, clickable = true
+[2025/10/19]23:42:09 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 40 毫秒
+[2025/10/19]23:42:09 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.cssSelector: #tb_doc tbody input[type='checkbox'], 是否有找到? true
+[2025/10/19]23:42:09 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.cssSelector: #tb_note tbody input[type='checkbox'], 是否有找到? true
+[2025/10/19]23:42:09 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.cssSelector: #tb_doc tbody tr, 是否有找到? true
+[2025/10/19]23:42:09 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.cssSelector: #tb_note tbody tr, 是否有找到? true
+[2025/10/19]23:42:10 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //a[@id='review' and normalize-space(text())='申請完成-預覽異動內容'], clickable = true
+[2025/10/19]23:42:10 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 45 毫秒
+[2025/10/19]23:42:10 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
+[2025/10/19]23:42:10 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //a[@id='review' and normalize-space(text())='申請完成-預覽異動內容']]
+[2025/10/19]23:42:10 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
+[2025/10/19]23:42:10 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
+[2025/10/19]23:42:12 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
+[2025/10/19]23:42:12 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //a[@id='review' and normalize-space(text())='申請完成-預覽異動內容']]
+[2025/10/19]23:42:12 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
+[2025/10/19]23:42:12 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2255 毫秒
+[2025/10/19]23:42:13 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.tagName: body, clickable = false
+[2025/10/19]23:42:13 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 27 毫秒
+[2025/10/19]23:42:14 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.id: loanData3, clickable = false
+[2025/10/19]23:42:14 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 42 毫秒
+[2025/10/19]23:42:14 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.xpath: //table[@id='loanData3']//tr[contains(@class,'pls')]/td, 是否有找到? true
+[2025/10/19]23:42:14 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: tdTtransfer, clickable = true
+[2025/10/19]23:42:14 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 47 毫秒
+[2025/10/19]23:42:14 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.id: tdclinetName, clickable = false
+[2025/10/19]23:42:14 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 26 毫秒
+[2025/10/19]23:42:14 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.id: tdmailType, clickable = false
+[2025/10/19]23:42:14 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 36 毫秒
+[2025/10/19]23:42:14 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.id: tdsendForm, clickable = false
+[2025/10/19]23:42:14 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 26 毫秒
+[2025/10/19]23:42:14 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.id: tddoc, clickable = false
+[2025/10/19]23:42:14 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 26 毫秒
+[2025/10/19]23:42:15 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.id: tdnote, clickable = false
+[2025/10/19]23:42:15 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 25 毫秒
+[2025/10/19]23:42:16 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: (//a[@class='btn btn-default' and normalize-space(text())='取消申請'])[2], clickable = true
+[2025/10/19]23:42:16 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 43 毫秒
+[2025/10/19]23:42:16 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
+[2025/10/19]23:42:16 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: (//a[@class='btn btn-default' and normalize-space(text())='取消申請'])[2]]
+[2025/10/19]23:42:16 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
+[2025/10/19]23:42:16 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
+[2025/10/19]23:42:18 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
+[2025/10/19]23:42:18 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: (//a[@class='btn btn-default' and normalize-space(text())='取消申請'])[2]]
+[2025/10/19]23:42:20 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
+[2025/10/19]23:42:20 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 3817 毫秒
+[2025/10/19]23:42:20 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //table[@width='100%' and @class='table table-bordered search-table' and @id='tran_list'], clickable = false
+[2025/10/19]23:42:20 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 20 毫秒
+[2025/10/19]23:42:20 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //th[text()='選擇異動保單']/ancestor::table[@class='table table-bordered search-table'], clickable = false
+[2025/10/19]23:42:20 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 20 毫秒
+[2025/10/19]23:42:20 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //td[@class='pc_info']//div[@class='checkbox checkbox-inline checkbox-main']//label[@for='checkbox80241059'], clickable = true
+[2025/10/19]23:42:20 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 38 毫秒
+[2025/10/19]23:42:22 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:1000
+[2025/10/19]23:42:23 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:800
+[2025/10/19]23:42:23 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:500
+[2025/10/19]23:42:23 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
+[2025/10/19]23:42:23 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //td[@class='pc_info']//div[@class='checkbox checkbox-inline checkbox-main']//label[@for='checkbox80241059']]
+[2025/10/19]23:42:23 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
+[2025/10/19]23:42:23 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
+[2025/10/19]23:42:25 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
+[2025/10/19]23:42:25 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //td[@class='pc_info']//div[@class='checkbox checkbox-inline checkbox-main']//label[@for='checkbox80241059']]
+[2025/10/19]23:42:25 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
+[2025/10/19]23:42:25 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2082 毫秒
+[2025/10/19]23:42:26 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:500
+[2025/10/19]23:42:27 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:500
+[2025/10/19]23:42:27 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:500
+[2025/10/19]23:42:27 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //td[@class='pc_info']//label[@for='ewOption2'], clickable = true
+[2025/10/19]23:42:27 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 43 毫秒
+[2025/10/19]23:42:27 DEBUG utils.WebElementActionUtil.click(147) - => 點擊元素開始
+[2025/10/19]23:42:27 DEBUG utils.WebElementActionUtil.click(149) - <= 點擊元素成功
+[2025/10/19]23:42:27 DEBUG utils.WebElementActionUtil.click(150) - 花費的時間為 68 毫秒
+[2025/10/19]23:42:27 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //div[@class='btn_box_d']/a[@id='next'], clickable = true
+[2025/10/19]23:42:27 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 39 毫秒
+[2025/10/19]23:42:27 DEBUG utils.WebElementActionUtil.click(147) - => 點擊元素開始
+[2025/10/19]23:42:28 DEBUG utils.WebElementActionUtil.click(149) - <= 點擊元素成功
+[2025/10/19]23:42:28 DEBUG utils.WebElementActionUtil.click(150) - 花費的時間為 79 毫秒
+[2025/10/19]23:42:31 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.xpath: (//div[@id='divInputChg']//table[@width='100%' and @class='table table-bordered search-table']/tbody/tr)[1]/th[not(contains(@class,'pc_hide'))], 是否有找到? true
+[2025/10/19]23:42:31 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.cssSelector: #divInputChg table.search-table tbody tr[id^='r'], 是否有找到? true
+[2025/10/19]23:42:31 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.xpath: (//div[@id='divInputChg']//table[@width='100%' and @class='table table-bordered search-table']/tbody/tr[@id='r80241059'])[1]/td[not(contains(@class,'pc_hide'))], 是否有找到? true
+[2025/10/19]23:42:31 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.xpath: (//div[@id='divInputChg']//table[@id='terminate2']/tbody/tr)[1]/th[not(contains(@class,'pc_hide'))], 是否有找到? true
+[2025/10/19]23:42:31 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: (//table[@id='terminate2']//select)[1], clickable = true
+[2025/10/19]23:42:31 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 48 毫秒
+[2025/10/19]23:42:32 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: (//table[@id='terminate2']//select)[1], clickable = true
+[2025/10/19]23:42:32 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 43 毫秒
+[2025/10/19]23:42:32 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: (//table[@id='terminate2']//select)[1], clickable = true
+[2025/10/19]23:42:32 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 38 毫秒
+[2025/10/19]23:42:32 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //div[@class='radio radio-inline radio-main form-group']//label[@for='TOaccount'], clickable = true
+[2025/10/19]23:42:32 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 40 毫秒
+[2025/10/19]23:42:32 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
+[2025/10/19]23:42:32 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //div[@class='radio radio-inline radio-main form-group']//label[@for='TOaccount']]
+[2025/10/19]23:42:32 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
+[2025/10/19]23:42:32 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
+[2025/10/19]23:42:34 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
+[2025/10/19]23:42:34 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //div[@class='radio radio-inline radio-main form-group']//label[@for='TOaccount']]
+[2025/10/19]23:42:34 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
+[2025/10/19]23:42:34 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2102 毫秒
+[2025/10/19]23:42:34 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: TOaccountlist, clickable = true
+[2025/10/19]23:42:34 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 52 毫秒
+[2025/10/19]23:42:34 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: TOaccountlist, clickable = true
+[2025/10/19]23:42:34 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 36 毫秒
+[2025/10/19]23:42:34 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //label[@for='cAddress'], clickable = true
+[2025/10/19]23:42:34 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 38 毫秒
+[2025/10/19]23:42:34 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
+[2025/10/19]23:42:34 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //label[@for='cAddress']]
+[2025/10/19]23:42:34 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
+[2025/10/19]23:42:34 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
+[2025/10/19]23:42:36 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
+[2025/10/19]23:42:36 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //label[@for='cAddress']]
+[2025/10/19]23:42:36 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
+[2025/10/19]23:42:36 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2086 毫秒
+[2025/10/19]23:42:36 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: collectAddress, clickable = false
+[2025/10/19]23:42:36 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 33 毫秒
+[2025/10/19]23:42:36 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: clinetName, clickable = true
+[2025/10/19]23:42:36 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 40 毫秒
+[2025/10/19]23:42:36 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: mailType, clickable = true
+[2025/10/19]23:42:36 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 40 毫秒
+[2025/10/19]23:42:37 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.cssSelector: #tb_doc tbody input[type='checkbox'], 是否有找到? true
+[2025/10/19]23:42:37 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.cssSelector: #tb_note tbody input[type='checkbox'], 是否有找到? true
+[2025/10/19]23:42:37 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.cssSelector: #tb_doc tbody tr, 是否有找到? true
+[2025/10/19]23:42:37 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.cssSelector: #tb_note tbody tr, 是否有找到? true
+[2025/10/19]23:42:37 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //a[@id='review' and normalize-space(text())='申請完成-預覽異動內容'], clickable = true
+[2025/10/19]23:42:37 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 38 毫秒
+[2025/10/19]23:42:37 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
+[2025/10/19]23:42:37 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //a[@id='review' and normalize-space(text())='申請完成-預覽異動內容']]
+[2025/10/19]23:42:37 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
+[2025/10/19]23:42:37 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
+[2025/10/19]23:42:39 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
+[2025/10/19]23:42:39 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //a[@id='review' and normalize-space(text())='申請完成-預覽異動內容']]
+[2025/10/19]23:42:39 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
+[2025/10/19]23:42:39 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2245 毫秒
+[2025/10/19]23:42:41 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.tagName: body, clickable = false
+[2025/10/19]23:42:41 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 23 毫秒
+[2025/10/19]23:42:42 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: loanData3, 等待時間:200
+[2025/10/19]23:42:43 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: loanData3, 等待時間:200
+[2025/10/19]23:42:43 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: loanData3, 等待時間:200
+[2025/10/19]23:42:44 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.id: tdclinetName, clickable = false
+[2025/10/19]23:42:44 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 20 毫秒
+[2025/10/19]23:42:44 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: tdTtransfer, clickable = true
+[2025/10/19]23:42:44 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 37 毫秒
+[2025/10/19]23:42:44 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.id: tdclinetName, clickable = false
+[2025/10/19]23:42:44 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 17 毫秒
+[2025/10/19]23:42:44 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.id: tdmailType, clickable = false
+[2025/10/19]23:42:44 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 18 毫秒
+[2025/10/19]23:42:44 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.id: tdsendForm, clickable = false
+[2025/10/19]23:42:44 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 28 毫秒
+[2025/10/19]23:42:44 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.id: tddoc, clickable = false
+[2025/10/19]23:42:44 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 19 毫秒
+[2025/10/19]23:42:44 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.id: tdnote, clickable = false
+[2025/10/19]23:42:44 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 20 毫秒
+[2025/10/19]23:42:45 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: (//a[@class='btn btn-default' and normalize-space(text())='取消申請'])[2], clickable = true
+[2025/10/19]23:42:45 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 41 毫秒
+[2025/10/19]23:42:45 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
+[2025/10/19]23:42:45 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: (//a[@class='btn btn-default' and normalize-space(text())='取消申請'])[2]]
+[2025/10/19]23:42:45 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
+[2025/10/19]23:42:45 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
+[2025/10/19]23:42:47 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
+[2025/10/19]23:42:47 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: (//a[@class='btn btn-default' and normalize-space(text())='取消申請'])[2]]
+[2025/10/19]23:42:49 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
+[2025/10/19]23:42:49 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 3617 毫秒
+[2025/10/19]23:42:50 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //table[@width='100%' and @class='table table-bordered search-table' and @id='tran_list'], clickable = false
+[2025/10/19]23:42:50 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 21 毫秒
+[2025/10/19]23:42:50 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //th[text()='選擇異動保單']/ancestor::table[@class='table table-bordered search-table'], clickable = false
+[2025/10/19]23:42:50 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 21 毫秒
+[2025/10/19]23:42:50 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //td[@class='pc_info']//div[@class='checkbox checkbox-inline checkbox-main']//label[@for='checkbox80241059'], clickable = true
+[2025/10/19]23:42:50 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 36 毫秒
+[2025/10/19]23:42:51 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:1000
+[2025/10/19]23:42:52 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:800
+[2025/10/19]23:42:53 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:500
+[2025/10/19]23:42:53 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
+[2025/10/19]23:42:53 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //td[@class='pc_info']//div[@class='checkbox checkbox-inline checkbox-main']//label[@for='checkbox80241059']]
+[2025/10/19]23:42:53 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
+[2025/10/19]23:42:53 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
+[2025/10/19]23:42:55 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
+[2025/10/19]23:42:55 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //td[@class='pc_info']//div[@class='checkbox checkbox-inline checkbox-main']//label[@for='checkbox80241059']]
+[2025/10/19]23:42:55 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
+[2025/10/19]23:42:55 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2092 毫秒
+[2025/10/19]23:42:55 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:500
+[2025/10/19]23:42:56 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:500
+[2025/10/19]23:42:57 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: checkbox80241059, 等待時間:500
+[2025/10/19]23:42:57 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //td[@class='pc_info']//label[@for='ewOption3' or contains(normalize-space(),'保單變更')], clickable = true
+[2025/10/19]23:42:57 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 53 毫秒
+[2025/10/19]23:42:57 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
+[2025/10/19]23:42:57 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //td[@class='pc_info']//label[@for='ewOption3' or contains(normalize-space(),'保單變更')]]
+[2025/10/19]23:42:57 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
+[2025/10/19]23:42:57 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
+[2025/10/19]23:42:59 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
+[2025/10/19]23:42:59 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //td[@class='pc_info']//label[@for='ewOption3' or contains(normalize-space(),'保單變更')]]
+[2025/10/19]23:42:59 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
+[2025/10/19]23:42:59 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2392 毫秒
+[2025/10/19]23:43:00 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C01'], clickable = false
+[2025/10/19]23:43:00 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 341 毫秒
+[2025/10/19]23:43:00 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //table[@width='100%' and @class='table table-bordered search-table' and @id='tran_list'], clickable = false
+[2025/10/19]23:43:00 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 85 毫秒
+[2025/10/19]23:43:00 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.xpath: //input[@type='checkbox' and string-length(@id)=3 and (starts-with(@id,'C') or starts-with(@id,'A'))], 是否有找到? true
+[2025/10/19]23:43:00 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.xpath: //label[string-length(@for)=3 and (starts-with(@for,'C') or starts-with(@for,'A'))], 是否有找到? true
+[2025/10/19]23:43:01 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C01, 等待時間:300
+[2025/10/19]23:43:01 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C01'], clickable = false
+[2025/10/19]23:43:01 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 20 毫秒
+[2025/10/19]23:43:02 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C02, 等待時間:300
+[2025/10/19]23:43:02 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C02'], clickable = false
+[2025/10/19]23:43:02 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 24 毫秒
+[2025/10/19]23:43:02 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C03, 等待時間:300
+[2025/10/19]23:43:02 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C03'], clickable = false
+[2025/10/19]23:43:02 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 23 毫秒
+[2025/10/19]23:43:03 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A04, 等待時間:300
+[2025/10/19]23:43:03 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A04'], clickable = false
+[2025/10/19]23:43:03 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 28 毫秒
+[2025/10/19]23:43:03 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C05, 等待時間:300
+[2025/10/19]23:43:03 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C05'], clickable = false
+[2025/10/19]23:43:03 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 29 毫秒
+[2025/10/19]23:43:04 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C06, 等待時間:300
+[2025/10/19]23:43:04 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C06'], clickable = false
+[2025/10/19]23:43:04 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 29 毫秒
+[2025/10/19]23:43:05 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A10, 等待時間:300
+[2025/10/19]23:43:05 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A10'], clickable = false
+[2025/10/19]23:43:05 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 29 毫秒
+[2025/10/19]23:43:06 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A11, 等待時間:300
+[2025/10/19]23:43:06 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A11'], clickable = false
+[2025/10/19]23:43:06 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 25 毫秒
+[2025/10/19]23:43:06 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A15, 等待時間:300
+[2025/10/19]23:43:06 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A15'], clickable = false
+[2025/10/19]23:43:06 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 28 毫秒
+[2025/10/19]23:43:07 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A16, 等待時間:300
+[2025/10/19]23:43:07 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A16'], clickable = false
+[2025/10/19]23:43:07 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 25 毫秒
+[2025/10/19]23:43:07 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A23, 等待時間:300
+[2025/10/19]23:43:08 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A23'], clickable = false
+[2025/10/19]23:43:08 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 30 毫秒
+[2025/10/19]23:43:08 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A26, 等待時間:300
+[2025/10/19]23:43:08 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A26'], clickable = false
+[2025/10/19]23:43:08 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 25 毫秒
+[2025/10/19]23:43:09 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A32, 等待時間:300
+[2025/10/19]23:43:09 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A32'], clickable = false
+[2025/10/19]23:43:09 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 23 毫秒
+[2025/10/19]23:43:09 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C35, 等待時間:300
+[2025/10/19]23:43:09 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C35'], clickable = false
+[2025/10/19]23:43:09 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 27 毫秒
+[2025/10/19]23:43:10 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C37, 等待時間:300
+[2025/10/19]23:43:10 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C37'], clickable = false
+[2025/10/19]23:43:10 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 22 毫秒
+[2025/10/19]23:43:11 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C54, 等待時間:300
+[2025/10/19]23:43:11 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C54'], clickable = false
+[2025/10/19]23:43:11 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 25 毫秒
+[2025/10/19]23:43:11 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C01, 等待時間:300
+[2025/10/19]23:43:11 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C01'], clickable = false
+[2025/10/19]23:43:11 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 19 毫秒
+[2025/10/19]23:43:12 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C02, 等待時間:300
+[2025/10/19]23:43:12 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C02'], clickable = false
+[2025/10/19]23:43:12 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 20 毫秒
+[2025/10/19]23:43:13 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C03, 等待時間:300
+[2025/10/19]23:43:13 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C03'], clickable = false
+[2025/10/19]23:43:13 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 18 毫秒
+[2025/10/19]23:43:13 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A04, 等待時間:300
+[2025/10/19]23:43:13 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A04'], clickable = false
+[2025/10/19]23:43:13 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 18 毫秒
+[2025/10/19]23:43:14 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C05, 等待時間:300
+[2025/10/19]23:43:14 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C05'], clickable = false
+[2025/10/19]23:43:14 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 18 毫秒
+[2025/10/19]23:43:15 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C06, 等待時間:300
+[2025/10/19]23:43:15 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C06'], clickable = false
+[2025/10/19]23:43:15 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 18 毫秒
+[2025/10/19]23:43:16 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A10, 等待時間:300
+[2025/10/19]23:43:16 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A10'], clickable = false
+[2025/10/19]23:43:16 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 20 毫秒
+[2025/10/19]23:43:17 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A11, 等待時間:300
+[2025/10/19]23:43:17 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A11'], clickable = false
+[2025/10/19]23:43:17 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 18 毫秒
+[2025/10/19]23:43:17 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A15, 等待時間:300
+[2025/10/19]23:43:18 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A15'], clickable = false
+[2025/10/19]23:43:18 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 17 毫秒
+[2025/10/19]23:43:18 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A16, 等待時間:300
+[2025/10/19]23:43:18 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A16'], clickable = false
+[2025/10/19]23:43:18 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 18 毫秒
+[2025/10/19]23:43:19 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A23, 等待時間:300
+[2025/10/19]23:43:19 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A23'], clickable = false
+[2025/10/19]23:43:19 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 19 毫秒
+[2025/10/19]23:43:20 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A26, 等待時間:300
+[2025/10/19]23:43:20 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A26'], clickable = false
+[2025/10/19]23:43:20 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 20 毫秒
+[2025/10/19]23:43:21 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A32, 等待時間:300
+[2025/10/19]23:43:21 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A32'], clickable = false
+[2025/10/19]23:43:21 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 19 毫秒
+[2025/10/19]23:43:21 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C35, 等待時間:300
+[2025/10/19]23:43:21 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C35'], clickable = false
+[2025/10/19]23:43:21 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 18 毫秒
+[2025/10/19]23:43:22 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C37, 等待時間:300
+[2025/10/19]23:43:22 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C37'], clickable = false
+[2025/10/19]23:43:22 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 19 毫秒
+[2025/10/19]23:43:23 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C54, 等待時間:300
+[2025/10/19]23:43:23 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C54'], clickable = false
+[2025/10/19]23:43:23 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 19 毫秒
+[2025/10/19]23:43:23 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //table[@width='100%' and @class='table table-bordered search-table' and @id='tran_list'], clickable = false
+[2025/10/19]23:43:23 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 19 毫秒
+[2025/10/19]23:43:23 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.xpath: //input[@type='checkbox' and string-length(@id)=3 and (starts-with(@id,'C') or starts-with(@id,'A'))], 是否有找到? true
+[2025/10/19]23:43:24 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C02, 等待時間:300
+[2025/10/19]23:43:24 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C02'], clickable = false
+[2025/10/19]23:43:24 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 18 毫秒
+[2025/10/19]23:43:25 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A16, 等待時間:300
+[2025/10/19]23:43:25 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A16'], clickable = false
+[2025/10/19]23:43:25 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 19 毫秒
+[2025/10/19]23:43:25 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //div[@class='btn_box_d']/a[@id='next'], clickable = true
+[2025/10/19]23:43:25 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 47 毫秒
+[2025/10/19]23:43:25 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
+[2025/10/19]23:43:25 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //div[@class='btn_box_d']/a[@id='next']]
+[2025/10/19]23:43:25 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
+[2025/10/19]23:43:25 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
+[2025/10/19]23:43:27 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
+[2025/10/19]23:43:27 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //div[@class='btn_box_d']/a[@id='next']]
+[2025/10/19]23:43:27 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
+[2025/10/19]23:43:27 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2096 毫秒
+[2025/10/19]23:43:29 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.id: errormeg, clickable = false
+[2025/10/19]23:43:29 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 25 毫秒
+[2025/10/19]23:43:29 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.xpath: //label[string-length(@for)=3 and (starts-with(@for,'C') or starts-with(@for,'A'))], 是否有找到? true
+[2025/10/19]23:43:30 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C05, 等待時間:300
+[2025/10/19]23:43:30 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C05'], clickable = false
+[2025/10/19]23:43:30 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 20 毫秒
+[2025/10/19]23:43:31 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C06, 等待時間:300
+[2025/10/19]23:43:31 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C06'], clickable = false
+[2025/10/19]23:43:31 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 21 毫秒
+[2025/10/19]23:43:31 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A15, 等待時間:300
+[2025/10/19]23:43:31 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A15'], clickable = false
+[2025/10/19]23:43:31 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 20 毫秒
+[2025/10/19]23:43:32 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A26, 等待時間:300
+[2025/10/19]23:43:32 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A26'], clickable = false
+[2025/10/19]23:43:32 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 19 毫秒
+[2025/10/19]23:43:33 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: A32, 等待時間:300
+[2025/10/19]23:43:33 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='A32'], clickable = false
+[2025/10/19]23:43:33 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 20 毫秒
+[2025/10/19]23:43:34 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C37, 等待時間:300
+[2025/10/19]23:43:34 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C37'], clickable = false
+[2025/10/19]23:43:34 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 19 毫秒
+[2025/10/19]23:43:35 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: C54, 等待時間:300
+[2025/10/19]23:43:35 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //label[@for='C54'], clickable = false
+[2025/10/19]23:43:35 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 75 毫秒
+[2025/10/19]23:43:36 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //table[@width='100%' and @class='table table-bordered search-table' and @id='tran_list'], clickable = false
+[2025/10/19]23:43:36 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 21 毫秒
+[2025/10/19]23:43:36 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.xpath: //input[@type='checkbox' and string-length(@id)=3 and (starts-with(@id,'C') or starts-with(@id,'A'))], 是否有找到? true
+[2025/10/19]23:43:36 DEBUG csrsupport.CSROneCallPass.runPolicyChange_AllSelect_FilterAndEnterStep2(484) - [PolicyChange] 準備進 Step2 的允許清單: [C01, C03, A04, A10, A11, A23, C35]
+[2025/10/19]23:43:36 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //div[@class='btn_box_d']/a[@id='next'], clickable = true
+[2025/10/19]23:43:36 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 37 毫秒
+[2025/10/19]23:43:36 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
+[2025/10/19]23:43:36 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //div[@class='btn_box_d']/a[@id='next']]
+[2025/10/19]23:43:36 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
+[2025/10/19]23:43:36 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
+[2025/10/19]23:43:38 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
+[2025/10/19]23:43:38 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //div[@class='btn_box_d']/a[@id='next']]
+[2025/10/19]23:43:38 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
+[2025/10/19]23:43:38 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2096 毫秒
+[2025/10/19]23:43:42 INFO csrsupport.CSROneCallPass.handleCommonStep2Sections(558) - [Common-Section] Handling common Step 2 sections (Payment/Recipient Info)...
+[2025/10/19]23:43:43 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(102) - 找不到元素，locator=By.xpath: //div[contains(text(),'選擇補費方式')]/following-sibling::div//input[@type='radio']/ancestor::label[1], 等待時間:800error msg: Expected condition failed: waiting for element to be clickable: By.xpath: //div[contains(text(),'選擇補費方式')]/following-sibling::div//input[@type='radio']/ancestor::label[1] (tried for 0 second(s) with 500 milliseconds interval)
 Build info: version: '4.35.0', revision: '1c58e5028b'
 System info: os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '17.0.1'
 Driver info: org.openqa.selenium.edge.EdgeDriver
-Capabilities {acceptInsecureCerts: false, browserName: MicrosoftEdge, browserVersion: 141.0.3537.71, fedcm:accounts: true, ms:edgeOptions: {debuggerAddress: localhost:60840}, msedge: {msedgedriverVersion: 141.0.3537.85 (229e1a17645e..., userDataDir: C:\Users\423749\AppData\Loc...}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:60840/devtoo..., se:cdpVersion: 141.0.3537.71, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
-Session ID: 896907177b4515fcf0e8072217e3d64b
-[2025/10/19]23:12:16 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //div[@class='radio radio-inline radio-main form-group']//label[@for='TOaccount'], clickable = true
-[2025/10/19]23:12:16 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 53 毫秒
-[2025/10/19]23:12:16 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
-[2025/10/19]23:12:16 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //div[@class='radio radio-inline radio-main form-group']//label[@for='TOaccount']]
-[2025/10/19]23:12:16 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
-[2025/10/19]23:12:16 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
-[2025/10/19]23:12:18 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
-[2025/10/19]23:12:18 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //div[@class='radio radio-inline radio-main form-group']//label[@for='TOaccount']]
-[2025/10/19]23:12:18 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
-[2025/10/19]23:12:18 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2095 毫秒
-[2025/10/19]23:12:19 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.id: TOaccountlist, clickable = false
-[2025/10/19]23:12:19 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 35 毫秒
-[2025/10/19]23:12:19 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: TOaccountlist, clickable = true
-[2025/10/19]23:12:19 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 43 毫秒
-[2025/10/19]23:12:19 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: TOaccountlist, clickable = true
-[2025/10/19]23:12:19 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 38 毫秒
-[2025/10/19]23:12:19 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //label[@for='cAddress'], clickable = true
-[2025/10/19]23:12:19 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 43 毫秒
-[2025/10/19]23:12:19 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
-[2025/10/19]23:12:19 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //label[@for='cAddress']]
-[2025/10/19]23:12:19 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
-[2025/10/19]23:12:19 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
-[2025/10/19]23:12:21 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
-[2025/10/19]23:12:21 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //label[@for='cAddress']]
-[2025/10/19]23:12:21 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
-[2025/10/19]23:12:21 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2089 毫秒
-[2025/10/19]23:12:21 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: collectAddress, clickable = false
-[2025/10/19]23:12:21 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 43 毫秒
-[2025/10/19]23:12:21 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: clinetName, clickable = true
-[2025/10/19]23:12:21 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 47 毫秒
-[2025/10/19]23:12:21 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: mailType, clickable = true
-[2025/10/19]23:12:21 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 44 毫秒
-[2025/10/19]23:12:21 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.cssSelector: #tb_doc tbody input[type='checkbox'], 是否有找到? true
-[2025/10/19]23:12:21 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.cssSelector: #tb_note tbody input[type='checkbox'], 是否有找到? true
-[2025/10/19]23:12:21 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.cssSelector: #tb_doc tbody tr, 是否有找到? true
-[2025/10/19]23:12:22 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.cssSelector: #tb_note tbody tr, 是否有找到? true
-[2025/10/19]23:12:22 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_1'], clickable = true
-[2025/10/19]23:12:22 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 46 毫秒
-[2025/10/19]23:12:24 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.xpath: //div[@class='tab_content tab_1' and contains(@class,'active')], 等待時間:1500
-[2025/10/19]23:12:24 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_3'], clickable = true
-[2025/10/19]23:12:24 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 43 毫秒
-[2025/10/19]23:12:24 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
-[2025/10/19]23:12:24 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_3']]
-[2025/10/19]23:12:24 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
-[2025/10/19]23:12:24 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
-[2025/10/19]23:12:26 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
-[2025/10/19]23:12:26 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_3']]
-[2025/10/19]23:12:26 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
-[2025/10/19]23:12:26 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2092 毫秒
-[2025/10/19]23:12:28 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.xpath: //div[@class='tab_content tab_3' and contains(@class,'active')], 等待時間:1500
-[2025/10/19]23:12:28 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_4'], clickable = true
-[2025/10/19]23:12:28 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 44 毫秒
-[2025/10/19]23:12:28 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
-[2025/10/19]23:12:28 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_4']]
-[2025/10/19]23:12:28 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
-[2025/10/19]23:12:28 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
-[2025/10/19]23:12:30 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
-[2025/10/19]23:12:30 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_4']]
-[2025/10/19]23:12:30 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
-[2025/10/19]23:12:30 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2099 毫秒
-[2025/10/19]23:12:31 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.xpath: //div[@class='tab_content tab_4' and contains(@class,'active')], 等待時間:1500
-[2025/10/19]23:12:31 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_5'], clickable = true
-[2025/10/19]23:12:31 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 42 毫秒
-[2025/10/19]23:12:31 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
-[2025/10/19]23:12:31 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_5']]
-[2025/10/19]23:12:31 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
-[2025/10/19]23:12:31 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
-[2025/10/19]23:12:33 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
-[2025/10/19]23:12:33 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_5']]
-[2025/10/19]23:12:34 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
-[2025/10/19]23:12:34 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2075 毫秒
-[2025/10/19]23:12:35 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.xpath: //div[@class='tab_content tab_5' and contains(@class,'active')], 等待時間:1500
-[2025/10/19]23:12:35 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_6'], clickable = true
-[2025/10/19]23:12:35 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 44 毫秒
-[2025/10/19]23:12:36 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
-[2025/10/19]23:12:36 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_6']]
-[2025/10/19]23:12:36 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
-[2025/10/19]23:12:36 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
-[2025/10/19]23:12:38 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
-[2025/10/19]23:12:38 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_6']]
-[2025/10/19]23:12:38 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
-[2025/10/19]23:12:38 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2083 毫秒
-[2025/10/19]23:12:39 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.xpath: //div[@class='tab_content tab_6' and contains(@class,'active')], 等待時間:1500
-[2025/10/19]23:12:42 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(102) - 找不到元素，locator=By.xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_8'], 等待時間:2500error msg: Expected condition failed: waiting for element to be clickable: By.xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_8'] (tried for 2 second(s) with 500 milliseconds interval)
+Capabilities {acceptInsecureCerts: false, browserName: MicrosoftEdge, browserVersion: 141.0.3537.71, fedcm:accounts: true, ms:edgeOptions: {debuggerAddress: localhost:49164}, msedge: {msedgedriverVersion: 141.0.3537.85 (229e1a17645e..., userDataDir: C:\Users\423749\AppData\Loc...}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:49164/devtoo..., se:cdpVersion: 141.0.3537.71, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Session ID: aa3ae2fddabbeabb5037bcb503501973
+[2025/10/19]23:43:43 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //div[@class='radio radio-inline radio-main form-group']//label[@for='TOaccount'], clickable = true
+[2025/10/19]23:43:43 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 45 毫秒
+[2025/10/19]23:43:43 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
+[2025/10/19]23:43:43 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //div[@class='radio radio-inline radio-main form-group']//label[@for='TOaccount']]
+[2025/10/19]23:43:43 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
+[2025/10/19]23:43:43 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
+[2025/10/19]23:43:45 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
+[2025/10/19]23:43:45 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //div[@class='radio radio-inline radio-main form-group']//label[@for='TOaccount']]
+[2025/10/19]23:43:45 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
+[2025/10/19]23:43:45 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2107 毫秒
+[2025/10/19]23:43:45 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.id: TOaccountlist, clickable = false
+[2025/10/19]23:43:45 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 30 毫秒
+[2025/10/19]23:43:45 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: TOaccountlist, clickable = true
+[2025/10/19]23:43:45 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 43 毫秒
+[2025/10/19]23:43:45 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: TOaccountlist, clickable = true
+[2025/10/19]23:43:45 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 38 毫秒
+[2025/10/19]23:43:46 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //label[@for='cAddress'], clickable = true
+[2025/10/19]23:43:46 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 43 毫秒
+[2025/10/19]23:43:46 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
+[2025/10/19]23:43:46 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //label[@for='cAddress']]
+[2025/10/19]23:43:46 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
+[2025/10/19]23:43:46 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
+[2025/10/19]23:43:48 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
+[2025/10/19]23:43:48 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //label[@for='cAddress']]
+[2025/10/19]23:43:48 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
+[2025/10/19]23:43:48 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2090 毫秒
+[2025/10/19]23:43:48 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: collectAddress, clickable = false
+[2025/10/19]23:43:48 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 46 毫秒
+[2025/10/19]23:43:48 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: clinetName, clickable = true
+[2025/10/19]23:43:48 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 47 毫秒
+[2025/10/19]23:43:48 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: mailType, clickable = true
+[2025/10/19]23:43:48 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 44 毫秒
+[2025/10/19]23:43:48 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.cssSelector: #tb_doc tbody input[type='checkbox'], 是否有找到? true
+[2025/10/19]23:43:48 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.cssSelector: #tb_note tbody input[type='checkbox'], 是否有找到? true
+[2025/10/19]23:43:48 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.cssSelector: #tb_doc tbody tr, 是否有找到? true
+[2025/10/19]23:43:48 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.cssSelector: #tb_note tbody tr, 是否有找到? true
+[2025/10/19]23:43:49 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_1'], clickable = true
+[2025/10/19]23:43:49 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 42 毫秒
+[2025/10/19]23:43:50 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.xpath: //div[@class='tab_content tab_1' and contains(@class,'active')], 等待時間:1500
+[2025/10/19]23:43:50 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_3'], clickable = true
+[2025/10/19]23:43:50 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 45 毫秒
+[2025/10/19]23:43:50 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
+[2025/10/19]23:43:50 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_3']]
+[2025/10/19]23:43:50 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
+[2025/10/19]23:43:50 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
+[2025/10/19]23:43:52 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
+[2025/10/19]23:43:52 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_3']]
+[2025/10/19]23:43:52 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
+[2025/10/19]23:43:52 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2090 毫秒
+[2025/10/19]23:43:54 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.xpath: //div[@class='tab_content tab_3' and contains(@class,'active')], 等待時間:1500
+[2025/10/19]23:43:54 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_4'], clickable = true
+[2025/10/19]23:43:54 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 46 毫秒
+[2025/10/19]23:43:54 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
+[2025/10/19]23:43:54 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_4']]
+[2025/10/19]23:43:54 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
+[2025/10/19]23:43:54 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
+[2025/10/19]23:43:56 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
+[2025/10/19]23:43:56 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_4']]
+[2025/10/19]23:43:56 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
+[2025/10/19]23:43:56 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2093 毫秒
+[2025/10/19]23:43:58 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.xpath: //div[@class='tab_content tab_4' and contains(@class,'active')], 等待時間:1500
+[2025/10/19]23:43:58 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_5'], clickable = true
+[2025/10/19]23:43:58 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 40 毫秒
+[2025/10/19]23:43:58 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
+[2025/10/19]23:43:58 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_5']]
+[2025/10/19]23:43:58 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
+[2025/10/19]23:43:58 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
+[2025/10/19]23:44:00 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
+[2025/10/19]23:44:00 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_5']]
+[2025/10/19]23:44:00 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
+[2025/10/19]23:44:00 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2097 毫秒
+[2025/10/19]23:44:02 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.xpath: //div[@class='tab_content tab_5' and contains(@class,'active')], 等待時間:1500
+[2025/10/19]23:44:02 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_6'], clickable = true
+[2025/10/19]23:44:02 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 54 毫秒
+[2025/10/19]23:44:02 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
+[2025/10/19]23:44:02 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_6']]
+[2025/10/19]23:44:02 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
+[2025/10/19]23:44:02 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
+[2025/10/19]23:44:04 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
+[2025/10/19]23:44:04 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_6']]
+[2025/10/19]23:44:04 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
+[2025/10/19]23:44:04 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2092 毫秒
+[2025/10/19]23:44:06 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.xpath: //div[@class='tab_content tab_6' and contains(@class,'active')], 等待時間:1500
+[2025/10/19]23:44:08 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(102) - 找不到元素，locator=By.xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_8'], 等待時間:2500error msg: Expected condition failed: waiting for element to be clickable: By.xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_8'] (tried for 2 second(s) with 500 milliseconds interval)
 Build info: version: '4.35.0', revision: '1c58e5028b'
 System info: os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '17.0.1'
 Driver info: org.openqa.selenium.edge.EdgeDriver
-Capabilities {acceptInsecureCerts: false, browserName: MicrosoftEdge, browserVersion: 141.0.3537.71, fedcm:accounts: true, ms:edgeOptions: {debuggerAddress: localhost:60840}, msedge: {msedgedriverVersion: 141.0.3537.85 (229e1a17645e..., userDataDir: C:\Users\423749\AppData\Loc...}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:60840/devtoo..., se:cdpVersion: 141.0.3537.71, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
-Session ID: 896907177b4515fcf0e8072217e3d64b
-[2025/10/19]23:12:42 WARN csrsupport.CSROneCallPass.activateTab(606) - [Tab] Cannot find tab element for code A23 (rel=tab_8)
-[2025/10/19]23:12:44 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(102) - 找不到元素，locator=By.xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_9'], 等待時間:2500error msg: Expected condition failed: waiting for element to be clickable: By.xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_9'] (tried for 2 second(s) with 500 milliseconds interval)
+Capabilities {acceptInsecureCerts: false, browserName: MicrosoftEdge, browserVersion: 141.0.3537.71, fedcm:accounts: true, ms:edgeOptions: {debuggerAddress: localhost:49164}, msedge: {msedgedriverVersion: 141.0.3537.85 (229e1a17645e..., userDataDir: C:\Users\423749\AppData\Loc...}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:49164/devtoo..., se:cdpVersion: 141.0.3537.71, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Session ID: aa3ae2fddabbeabb5037bcb503501973
+[2025/10/19]23:44:08 WARN csrsupport.CSROneCallPass.activateTab(606) - [Tab] Cannot find tab element for code A23 (rel=tab_8)
+[2025/10/19]23:44:11 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(102) - 找不到元素，locator=By.xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_9'], 等待時間:2500error msg: Expected condition failed: waiting for element to be clickable: By.xpath: //div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_9'] (tried for 2 second(s) with 500 milliseconds interval)
 Build info: version: '4.35.0', revision: '1c58e5028b'
 System info: os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '17.0.1'
 Driver info: org.openqa.selenium.edge.EdgeDriver
-Capabilities {acceptInsecureCerts: false, browserName: MicrosoftEdge, browserVersion: 141.0.3537.71, fedcm:accounts: true, ms:edgeOptions: {debuggerAddress: localhost:60840}, msedge: {msedgedriverVersion: 141.0.3537.85 (229e1a17645e..., userDataDir: C:\Users\423749\AppData\Loc...}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:60840/devtoo..., se:cdpVersion: 141.0.3537.71, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
-Session ID: 896907177b4515fcf0e8072217e3d64b
-[2025/10/19]23:12:44 WARN csrsupport.CSROneCallPass.activateTab(606) - [Tab] Cannot find tab element for code C35 (rel=tab_9)
-[2025/10/19]23:12:44 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: review, clickable = true
-[2025/10/19]23:12:44 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 42 毫秒
-[2025/10/19]23:12:44 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
-[2025/10/19]23:12:45 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> id: review]
-[2025/10/19]23:12:45 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
-[2025/10/19]23:12:45 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
-[2025/10/19]23:12:47 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
-[2025/10/19]23:12:47 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> id: review]
-[2025/10/19]23:12:47 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
-[2025/10/19]23:12:47 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2232 毫秒
-[2025/10/19]23:12:48 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: loanData3, 等待時間:1200
-[2025/10/19]23:12:50 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: tdTtransfer, 等待時間:1200
-[2025/10/19]23:12:52 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: tddoc, 等待時間:1200
-[2025/10/19]23:12:52 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.tagName: body, clickable = false
-[2025/10/19]23:12:52 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 24 毫秒
-[2025/10/19]23:12:54 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(102) - 找不到元素，locator=By.xpath: (//a[@class='btn btn-default' and normalize-space(text())='取消申請'])[2], 等待時間:800error msg: Expected condition failed: waiting for element to be clickable: By.xpath: (//a[@class='btn btn-default' and normalize-space(text())='取消申請'])[2] (tried for 0 second(s) with 500 milliseconds interval)
+Capabilities {acceptInsecureCerts: false, browserName: MicrosoftEdge, browserVersion: 141.0.3537.71, fedcm:accounts: true, ms:edgeOptions: {debuggerAddress: localhost:49164}, msedge: {msedgedriverVersion: 141.0.3537.85 (229e1a17645e..., userDataDir: C:\Users\423749\AppData\Loc...}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:49164/devtoo..., se:cdpVersion: 141.0.3537.71, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Session ID: aa3ae2fddabbeabb5037bcb503501973
+[2025/10/19]23:44:11 WARN csrsupport.CSROneCallPass.activateTab(606) - [Tab] Cannot find tab element for code C35 (rel=tab_9)
+[2025/10/19]23:44:11 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(75) - 找到元素且顯示 WebElement , locator = By.id: review, clickable = true
+[2025/10/19]23:44:11 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(77) - 花費的時間為 47 毫秒
+[2025/10/19]23:44:11 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
+[2025/10/19]23:44:11 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> id: review]
+[2025/10/19]23:44:11 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
+[2025/10/19]23:44:11 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
+[2025/10/19]23:44:13 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
+[2025/10/19]23:44:13 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> id: review]
+[2025/10/19]23:44:13 DEBUG utils.WebElementActionUtil.click(186) - <= 點擊元素結束
+[2025/10/19]23:44:13 DEBUG utils.WebElementActionUtil.click(187) - 花費的時間為 2247 毫秒
+[2025/10/19]23:44:15 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: loanData3, 等待時間:1200
+[2025/10/19]23:44:17 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: tdTtransfer, 等待時間:1200
+[2025/10/19]23:44:18 DEBUG utils.WebElementActionUtil.findElement(54) - 找不到對應的元素，locator=By.id: tddoc, 等待時間:1200
+[2025/10/19]23:44:18 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.tagName: body, clickable = false
+[2025/10/19]23:44:18 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 28 毫秒
+[2025/10/19]23:44:20 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(102) - 找不到元素，locator=By.xpath: (//a[@class='btn btn-default' and normalize-space(text())='取消申請'])[2], 等待時間:800error msg: Expected condition failed: waiting for element to be clickable: By.xpath: (//a[@class='btn btn-default' and normalize-space(text())='取消申請'])[2] (tried for 0 second(s) with 500 milliseconds interval)
 Build info: version: '4.35.0', revision: '1c58e5028b'
 System info: os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '17.0.1'
 Driver info: org.openqa.selenium.edge.EdgeDriver
-Capabilities {acceptInsecureCerts: false, browserName: MicrosoftEdge, browserVersion: 141.0.3537.71, fedcm:accounts: true, ms:edgeOptions: {debuggerAddress: localhost:60840}, msedge: {msedgedriverVersion: 141.0.3537.85 (229e1a17645e..., userDataDir: C:\Users\423749\AppData\Loc...}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:60840/devtoo..., se:cdpVersion: 141.0.3537.71, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
-Session ID: 896907177b4515fcf0e8072217e3d64b
-[2025/10/19]23:12:55 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(102) - 找不到元素，locator=By.xpath: (//a[contains(concat(' ',normalize-space(@class),' '),' btn ') and contains(concat(' ',normalize-space(@class),' '),' btn-default ') and normalize-space(text())='取消申請'])[2], 等待時間:800error msg: Expected condition failed: waiting for element to be clickable: By.xpath: (//a[contains(concat(' ',normalize-space(@class),' '),' btn ') and contains(concat(' ',normalize-space(@class),' '),' btn-default ') and normalize-space(text())='取消申請'])[2] (tried for 0 second(s) with 500 milliseconds interval)
+Capabilities {acceptInsecureCerts: false, browserName: MicrosoftEdge, browserVersion: 141.0.3537.71, fedcm:accounts: true, ms:edgeOptions: {debuggerAddress: localhost:49164}, msedge: {msedgedriverVersion: 141.0.3537.85 (229e1a17645e..., userDataDir: C:\Users\423749\AppData\Loc...}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:49164/devtoo..., se:cdpVersion: 141.0.3537.71, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Session ID: aa3ae2fddabbeabb5037bcb503501973
+[2025/10/19]23:44:21 DEBUG utils.WebElementActionUtil.findElementIsDisplayed(102) - 找不到元素，locator=By.xpath: (//a[contains(concat(' ',normalize-space(@class),' '),' btn ') and contains(concat(' ',normalize-space(@class),' '),' btn-default ') and normalize-space(text())='取消申請'])[2], 等待時間:800error msg: Expected condition failed: waiting for element to be clickable: By.xpath: (//a[contains(concat(' ',normalize-space(@class),' '),' btn ') and contains(concat(' ',normalize-space(@class),' '),' btn-default ') and normalize-space(text())='取消申請'])[2] (tried for 0 second(s) with 500 milliseconds interval)
 Build info: version: '4.35.0', revision: '1c58e5028b'
 System info: os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '17.0.1'
 Driver info: org.openqa.selenium.edge.EdgeDriver
-Capabilities {acceptInsecureCerts: false, browserName: MicrosoftEdge, browserVersion: 141.0.3537.71, fedcm:accounts: true, ms:edgeOptions: {debuggerAddress: localhost:60840}, msedge: {msedgedriverVersion: 141.0.3537.85 (229e1a17645e..., userDataDir: C:\Users\423749\AppData\Loc...}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:60840/devtoo..., se:cdpVersion: 141.0.3537.71, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
-Session ID: 896907177b4515fcf0e8072217e3d64b
-[2025/10/19]23:12:55 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.xpath: //a[@class='btn btn-default' and normalize-space(text())='取消申請'], 是否有找到? true
-[2025/10/19]23:12:55 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
-[2025/10/19]23:12:55 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //a[@class='btn btn-default' and normalize-space(text())='取消申請']]
-[2025/10/19]23:12:55 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
-[2025/10/19]23:12:55 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
-[2025/10/19]23:12:57 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
-[2025/10/19]23:12:57 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //a[@class='btn btn-default' and normalize-space(text())='取消申請']]
-[2025/10/19]23:12:57 DEBUG utils.WebElementActionUtil.click(190) - click 錯誤，error msg : org.openqa.selenium.ElementNotInteractableException: element not interactable
+Capabilities {acceptInsecureCerts: false, browserName: MicrosoftEdge, browserVersion: 141.0.3537.71, fedcm:accounts: true, ms:edgeOptions: {debuggerAddress: localhost:49164}, msedge: {msedgedriverVersion: 141.0.3537.85 (229e1a17645e..., userDataDir: C:\Users\423749\AppData\Loc...}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:49164/devtoo..., se:cdpVersion: 141.0.3537.71, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Session ID: aa3ae2fddabbeabb5037bcb503501973
+[2025/10/19]23:44:21 DEBUG utils.WebElementActionUtil.findElements(281) - 找尋WebElements結束 , locator = By.xpath: //a[@class='btn btn-default' and normalize-space(text())='取消申請'], 是否有找到? true
+[2025/10/19]23:44:22 DEBUG utils.WebElementActionUtil.click(175) - =>isScroll = true
+[2025/10/19]23:44:22 DEBUG utils.WebElementActionUtil.scrollTo(517) - 滾動到指定元素:[[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //a[@class='btn btn-default' and normalize-space(text())='取消申請']]
+[2025/10/19]23:44:22 DEBUG utils.WebElementActionUtil.click(179) - 設定為捲動到待點擊之元素
+[2025/10/19]23:44:22 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
+[2025/10/19]23:44:24 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
+[2025/10/19]23:44:24 DEBUG utils.WebElementActionUtil.click(184) - => 點擊元素開始，element = [[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //a[@class='btn btn-default' and normalize-space(text())='取消申請']]
+[2025/10/19]23:44:24 DEBUG utils.WebElementActionUtil.click(190) - click 錯誤，error msg : org.openqa.selenium.ElementNotInteractableException: element not interactable
   (Session info: MicrosoftEdge=141.0.3537.71)
 Build info: version: '4.35.0', revision: '1c58e5028b'
 System info: os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '17.0.1'
 Driver info: org.openqa.selenium.edge.EdgeDriver
-Command: [896907177b4515fcf0e8072217e3d64b, clickElement {id=f.FB01EF81778D3D0CB734A95D43337DE1.d.DFEA107C0EB8FB9A07C1C5D7EFC7DE1F.e.3258}]
-Capabilities {acceptInsecureCerts: false, browserName: MicrosoftEdge, browserVersion: 141.0.3537.71, fedcm:accounts: true, ms:edgeOptions: {debuggerAddress: localhost:60840}, msedge: {msedgedriverVersion: 141.0.3537.85 (229e1a17645e..., userDataDir: C:\Users\423749\AppData\Loc...}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:60840/devtoo..., se:cdpVersion: 141.0.3537.71, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
-Element: [[EdgeDriver: MicrosoftEdge on windows (896907177b4515fcf0e8072217e3d64b)] -> xpath: //a[@class='btn btn-default' and normalize-space(text())='取消申請']]
-Session ID: 896907177b4515fcf0e8072217e3d64b, 改用 js click 
-[2025/10/19]23:13:00 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //table[@width='100%' and @class='table table-bordered search-table' and @id='tran_list'], clickable = false
-[2025/10/19]23:13:00 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 28 毫秒
-[2025/10/19]23:13:00 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //th[text()='選擇異動保單']/ancestor::table[@class='table table-bordered search-table'], clickable = false
-[2025/10/19]23:13:00 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 50 毫秒
-[2025/10/19]23:13:00 INFO stepdef.CSRServiceSupportStepDef.CSRoneCallPass(86) - 一電通頁面驗證=>Pass
+Command: [aa3ae2fddabbeabb5037bcb503501973, clickElement {id=f.49E090ADCC76F230CEBCD33B68937ECA.d.52771DD6FEBDA41AF5C3FF546D2BFE80.e.3259}]
+Capabilities {acceptInsecureCerts: false, browserName: MicrosoftEdge, browserVersion: 141.0.3537.71, fedcm:accounts: true, ms:edgeOptions: {debuggerAddress: localhost:49164}, msedge: {msedgedriverVersion: 141.0.3537.85 (229e1a17645e..., userDataDir: C:\Users\423749\AppData\Loc...}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:49164/devtoo..., se:cdpVersion: 141.0.3537.71, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Element: [[EdgeDriver: MicrosoftEdge on windows (aa3ae2fddabbeabb5037bcb503501973)] -> xpath: //a[@class='btn btn-default' and normalize-space(text())='取消申請']]
+Session ID: aa3ae2fddabbeabb5037bcb503501973, 改用 js click 
+[2025/10/19]23:44:26 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //table[@width='100%' and @class='table table-bordered search-table' and @id='tran_list'], clickable = false
+[2025/10/19]23:44:26 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 22 毫秒
+[2025/10/19]23:44:26 DEBUG utils.WebElementActionUtil.findElement(48) - 找到WebElement , locator = By.xpath: //th[text()='選擇異動保單']/ancestor::table[@class='table table-bordered search-table'], clickable = false
+[2025/10/19]23:44:26 DEBUG utils.WebElementActionUtil.findElement(51) - 花費的時間為 29 毫秒
+[2025/10/19]23:44:26 INFO stepdef.CSRServiceSupportStepDef.CSRoneCallPass(86) - 一電通頁面驗證=>Pass
   Then 一電通 correctly displays the queried data                                            # stepdef.CSRServiceSupportStepDef.CSRoneCallPass()
-[2025/10/19]23:13:00 INFO commonstepdef.CucumberStepDef.afterStep(136) - After step
-[2025/10/19]23:13:00 DEBUG stepdef.CucumberStepDef.afterStep(71) - After step
-[2025/10/19]23:13:00 INFO commonstepdef.CucumberStepDef.afterScenario(88) - 執行 submodule 的 CucumberStepDef
-[2025/10/19]23:13:00 INFO commonstepdef.CucumberStepDef.afterScenario(89) - after scenario: that all functional pages of the web application are correct for view
-[2025/10/19]23:13:00 INFO utils.CommUtil.fullPageScreenshot(1067) - originalWidth: 1382, originalHeight: 744
-[2025/10/19]23:13:01 INFO utils.CommUtil.fullPageScreenshot(1073) - visibleWidth: 1303, visibleHeight: 968
-[2025/10/19]23:13:01 INFO utils.CommUtil.fullPageScreenshot(1081) - final setSize to width: 1382, height:968, then take screenshot
-[2025/10/19]23:13:01 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
-[2025/10/19]23:13:03 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
-[2025/10/19]23:13:03 DEBUG utils.CommUtil.saveScreenshot(533) - scenario 的狀態為:io.cucumber.java.Scenario@4b033eac
+[2025/10/19]23:44:26 INFO commonstepdef.CucumberStepDef.afterStep(136) - After step
+[2025/10/19]23:44:26 DEBUG stepdef.CucumberStepDef.afterStep(71) - After step
+[2025/10/19]23:44:26 INFO commonstepdef.CucumberStepDef.afterScenario(88) - 執行 submodule 的 CucumberStepDef
+[2025/10/19]23:44:26 INFO commonstepdef.CucumberStepDef.afterScenario(89) - after scenario: that all functional pages of the web application are correct for view
+[2025/10/19]23:44:26 INFO utils.CommUtil.fullPageScreenshot(1067) - originalWidth: 1382, originalHeight: 744
+[2025/10/19]23:44:26 INFO utils.CommUtil.fullPageScreenshot(1073) - visibleWidth: 1303, visibleHeight: 968
+[2025/10/19]23:44:27 INFO utils.CommUtil.fullPageScreenshot(1081) - final setSize to width: 1382, height:968, then take screenshot
+[2025/10/19]23:44:27 DEBUG utils.CommUtil.sleep(505) - => 暫停2秒 開始
+[2025/10/19]23:44:29 DEBUG utils.CommUtil.sleep(509) - <= 暫停2秒 結束
+[2025/10/19]23:44:29 DEBUG utils.CommUtil.saveScreenshot(533) - scenario 的狀態為:io.cucumber.java.Scenario@69c532af
 
-    Embedding after scenario [image/png 54517 bytes]
+    Embedding after scenario [image/png 69684 bytes]
 
-[2025/10/19]23:13:03 INFO stepdef.CucumberStepDef.afterScenario(30) - 執行外層的 CucumberStepDef
-[2025/10/19]23:13:03 DEBUG stepdef.CucumberStepDef.afterScenario(58) - 本機測試或 Driver 已關閉，不執行遠端關閉流程
-[2025/10/19]23:13:03 INFO commontestrunner.TestRunner.afterClass(35) - afterclass
-[2025/10/19]23:13:03 DEBUG utils.ZipCompress.compressFile(47) - Copy file from C:\Users\423749\eclipse-workspace\eService\Html-Reports\cucumber.html =>C:\Users\423749\eclipse-workspace\eService\Html-Reports\ESV\ESV_202510192313.zip
-[2025/10/19]23:13:03 DEBUG utils.ZipCompress.compressFile(68) - File successfully compressed to C:\Users\423749\eclipse-workspace\eService\Html-Reports\ESV\ESV_202510192313.zip
-[2025/10/19]23:13:03 INFO utils.CommUtil.createTestingReport(876) - 報告壓縮建立成功，位置=C:\Users\423749\eclipse-workspace\eService\Html-Reports\ESV\ESV_202510192313.zip
-[2025/10/19]23:13:03 INFO commontestrunner.TestRunner.afterClass(38) - 測試報告建立成功!
-[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 329.7 s -- in testrunner.ESV_TestRunner
+[2025/10/19]23:44:29 INFO stepdef.CucumberStepDef.afterScenario(30) - 執行外層的 CucumberStepDef
+[2025/10/19]23:44:29 DEBUG stepdef.CucumberStepDef.afterScenario(58) - 本機測試或 Driver 已關閉，不執行遠端關閉流程
+[2025/10/19]23:44:29 INFO commontestrunner.TestRunner.afterClass(35) - afterclass
+[2025/10/19]23:44:29 DEBUG utils.ZipCompress.compressFile(47) - Copy file from C:\Users\423749\eclipse-workspace\eService\Html-Reports\cucumber.html =>C:\Users\423749\eclipse-workspace\eService\Html-Reports\ESV\ESV_202510192344.zip
+[2025/10/19]23:44:29 DEBUG utils.ZipCompress.compressFile(68) - File successfully compressed to C:\Users\423749\eclipse-workspace\eService\Html-Reports\ESV\ESV_202510192344.zip
+[2025/10/19]23:44:29 INFO utils.CommUtil.createTestingReport(876) - 報告壓縮建立成功，位置=C:\Users\423749\eclipse-workspace\eService\Html-Reports\ESV\ESV_202510192344.zip
+[2025/10/19]23:44:29 INFO commontestrunner.TestRunner.afterClass(38) - 測試報告建立成功!
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 317.5 s -- in testrunner.ESV_TestRunner
 [INFO] 
 [INFO] Results:
 [INFO] 
@@ -647,6 +647,6 @@ Session ID: 896907177b4515fcf0e8072217e3d64b, 改用 js click
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  06:03 min
-[INFO] Finished at: 2025-10-19T23:13:05+08:00
+[INFO] Total time:  05:35 min
+[INFO] Finished at: 2025-10-19T23:44:30+08:00
 [INFO] ------------------------------------------------------------------------
