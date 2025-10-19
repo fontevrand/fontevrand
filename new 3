@@ -1,3 +1,4 @@
+```java
 // === 完整檔案開始 ===
 package com.autotest.pages.csrpage.csrsupport;
 
@@ -1896,7 +1897,7 @@ public class CSROneCallPass extends AbstractBasePage {
 		String a = normalizeNumber(s2);
 		String b = normalizeNumber(s3);
 		boolean same = a.equals(b);
-		if (!same) logger.debug("[數字不一致] " + label + " | S2='" + s2 "'(" + a + ") vs S3='" + s3 + "'(" + b + ")");
+		if (!same) logger.debug("[數字不一致] " + label + " | S2='" + s2 + "'(" + a + ") vs S3='" + s3 + "'(" + b + ")");
 		return same;
 	}
 
@@ -2224,3 +2225,4 @@ public class CSROneCallPass extends AbstractBasePage {
 	}
 }
 // === 完整檔案結束 ===
+```
