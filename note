@@ -298,4 +298,4 @@ private boolean equalsIgnoreCaseTrim(String a, String b) {
     return x.equalsIgnoreCase(y);
 }
 
-The method equalsIgnoreCaseTrim(String, String) is undefined for the type CSROneCallPass
+if (code == null continue;);
