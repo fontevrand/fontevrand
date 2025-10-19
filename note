@@ -1,5 +1,4 @@
-if (!same) logger.debug("[數字不一致] " + label + " | S2='" + s2 + "'(" + a + ") vs S3='" + s3 + "'(" + b + ")");
-logger.debug("[數字不一致] {} | S2='{}'({}) vs S3='{}'({})", label, s2, a, s3, b);
+2050 這行有報錯 } catch (InterruptedException ie) {
 
 
 //div[@class='dropdown bootstrap-select span3 addr']/select[@name='span3 addr selectpicker']
