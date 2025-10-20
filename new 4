@@ -32,7 +32,7 @@ public class CSROneCallPass extends AbstractBasePage {
 	private static final String POLICY_NO = "80241059";
 
 	// [ADDED] 版本標記，方便你在 log 端確認真的有換到新檔
-	private static final String BUILD_TAG = "CSROneCallPass-2025-10-20-r2";
+	private static final String BUILD_TAG = "CSROneCallPass-2025-10-20-r4";
 
 	// 「沒有 errormeg」時的容錯策略切換：A=全選都允許, B=保留原本勾選（預設B）
 	private static final String NO_ERROR_FALLBACK_STRATEGY = "B";
@@ -654,7 +654,7 @@ public class CSROneCallPass extends AbstractBasePage {
 			By.xpath("//*[@id='tab_" + tabIndex + "'][not(contains(@style,'display: none'))]")
 		);
 		boolean ok = content != null && content.isDisplayed();
-		if (!ok) logger.warn("[Tab] rel=tab_" + tabIndex + " appears not visible after click.");
+		if (!ok) logger.warn("[Tab] rel=tab_{} appears not visible after click.", tabIndex);
 		return ok;
 	}
 
@@ -1075,6 +1075,10 @@ public class CSROneCallPass extends AbstractBasePage {
 			if (chosen == null) return false;
 
 			selectedForCompare.put("A11.職業代碼", getSelectedText(fromElement(targetSelect)));
+
+			// ★ 新增：A11 的三個公司相關欄位若為空，填入「保誠人壽」
+			fillA11CompanyInputs(tabRoot, "保誠人壽");
+
 			return true;
 		} catch (Exception e) {
 			logger.warn("[A11] 例外: " + e.getMessage());
@@ -1117,6 +1121,58 @@ public class CSROneCallPass extends AbstractBasePage {
 		} catch (Exception e) {
 			logger.warn("[C35] 例外: " + e.getMessage());
 			return false;
+		}
+	}
+
+	/** A11：將三個公司相關 input（若為空）填入指定文字（預期為「保誠人壽」） */
+	private void fillA11CompanyInputs(WebElement tabRoot, String text) {
+		if (tabRoot == null || text == null) return;
+		// 優先依常見標籤關鍵字定位
+		List<String> labelKeywords = Arrays.asList(
+			"公司名稱","服務單位","雇主名稱","單位名稱","工作單位","服務機構","雇主","公司"
+		);
+		LinkedHashSet<WebElement> targets = new LinkedHashSet<>();
+
+		for (String k : labelKeywords) {
+			try {
+				WebElement el = tabRoot.findElement(By.xpath(
+					".//*[self::label or self::th or self::td][contains(normalize-space(.),'" + k + "')]" +
+					"/following::*[self::input and @type='text' and not(@disabled) and not(contains(@style,'display:none'))][1]"
+				));
+				if (el != null && el.isDisplayed()) targets.add(el);
+				if (targets.size() >= 3) break;
+			} catch (Exception ignore) {}
+		}
+
+		// 若不足三個，再補該分頁內前三個可見的文字輸入框（排除已抓到者）
+		if (targets.size() < 3) {
+			try {
+				List<WebElement> extras = tabRoot.findElements(By.xpath(
+					".//input[@type='text' and not(@disabled) and not(contains(@style,'display:none'))]"
+				));
+				for (WebElement e : extras) {
+					if (!e.isDisplayed()) continue;
+					if (targets.contains(e)) continue;
+					String cur = safeAttr(e, "value");
+					if (cur == null || cur.trim().isEmpty()) {
+						targets.add(e);
+						if (targets.size() >= 3) break;
+					}
+				}
+			} catch (Exception ignore) {}
+		}
+
+		int idx = 1;
+		for (WebElement input : targets) {
+			try {
+				String cur = safeAttr(input, "value");
+				if (cur == null || normalizeText(cur).isEmpty()) {
+					clearAndType(input, text);
+					selectedForCompare.put("A11.公司相關欄位" + idx, text);
+					idx++;
+					if (idx > 3) break;
+				}
+			} catch (Exception ignore) {}
 		}
 	}
 
@@ -2233,7 +2289,7 @@ public class CSROneCallPass extends AbstractBasePage {
 	}
 
 	/* =========================
-	  Step3 定位輔助（修正：找到元素就停留在該 frame）
+	  Step3 定位輔助
 	  ========================= */
 	private boolean locateStep3RootInCurrentWindowOnly(String tag) {
 		if (switchToFrameContaining(By.id("loanData3"), 1500)) return true;
@@ -2241,41 +2297,28 @@ public class CSROneCallPass extends AbstractBasePage {
 		if (switchToFrameContaining(By.id("tdTtransfer"), 1500)) return true;
 		return false;
 	}
-
-	// [CHANGED]：若找到元素，保持在該 frame（不再自動切回 defaultContent）
 	private boolean switchToFrameContaining(By by, int timeoutMs) {
 		long end = System.currentTimeMillis() + timeoutMs;
-
 		while (System.currentTimeMillis() < end) {
 			try {
-				// 1) 先看 defaultContent 有沒有
 				driver.switchTo().defaultContent();
 				WebElement el = findElement(by, false, 200);
-				if (el != null) {
-					// 就留在 defaultContent
-					return true;
-				}
+				if (el != null) return true;
 
-				// 2) 遍歷 top-level iframes
 				List<WebElement> ifs = driver.findElements(By.tagName("iframe"));
 				for (int i = 0; i < ifs.size(); i++) {
 					try {
-						driver.switchTo().defaultContent();
 						driver.switchTo().frame(i);
 						el = findElement(by, false, 180);
-						if (el != null) {
-							// ★ 保持停在此 frame，讓後續 findElement 直接可用
-							return true;
-						}
+						if (el != null) return true;
 					} catch (Exception ignore) {
-						// 失敗就回 default 繼續
+					} finally {
 						driver.switchTo().defaultContent();
 					}
 				}
 			} catch (Exception ignore) {}
 			try { Thread.sleep(100); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
 		}
-		// 兜底：回到 defaultContent
 		try { driver.switchTo().defaultContent(); } catch (Exception ignore) {}
 		return false;
 	}
