@@ -1,4 +1,3 @@
-// === 完整檔案開始 ===
 package com.autotest.pages.csrpage.csrsupport;
 
 import java.time.Duration;
@@ -31,6 +30,9 @@ public class CSROneCallPass extends AbstractBasePage {
 
 	// ===== 常數 =====
 	private static final String POLICY_NO = "80241059";
+
+	// [ADDED] 版本標記，方便你在 log 端確認真的有換到新檔
+	private static final String BUILD_TAG = "CSROneCallPass-2025-10-20-r1";
 
 	// 「沒有 errormeg」時的容錯策略切換：A=全選都允許, B=保留原本勾選（預設B）
 	private static final String NO_ERROR_FALLBACK_STRATEGY = "B";
@@ -124,6 +126,9 @@ public class CSROneCallPass extends AbstractBasePage {
 		ERROR_SYNONYM_TO_CODE.put("紅利/回饋金匯款帳戶變更", "C54");
 		ERROR_SYNONYM_TO_CODE.put("紅利／回饋金匯款帳戶變更", "C54");
 		ERROR_SYNONYM_TO_CODE.put("紅利回饋金匯款帳戶變更", "C54");
+		// [ADDED] 多補兩個常見字眼，避免解析不到而落入保底策略
+		ERROR_SYNONYM_TO_CODE.put("收費管道變更", "C02");
+		ERROR_SYNONYM_TO_CODE.put("附約保障異動", "A16");
 	}
 
 	// 供 Step3 或日後比對：把各 Tab 最終“選到/輸入”的值記下來
@@ -154,6 +159,8 @@ public class CSROneCallPass extends AbstractBasePage {
 	public CSROneCallPass() {
 		pageDisplayCorrectlyLocator = By
 				.xpath("//th[text()='選擇異動保單']/ancestor::table[@class='table table-bordered search-table']");
+		// [ADDED] 建構時打版本 log，幫你驗證確實換檔
+		try { logger.info("[CSROneCallPass] build=" + BUILD_TAG); } catch (Exception ignore) {}
 	}
 
 	@Override
@@ -1162,15 +1169,19 @@ public class CSROneCallPass extends AbstractBasePage {
 		// fallback: any checkbox
 		try { return scope.findElement(By.xpath(".//input[@type='checkbox']")); } catch (Exception e) { return null; }
 	}
+
+	// [CHANGED] 改善 By 反查邏輯：若沒有 id，退而求其次用 name，再退用就近 select 的穩健查找
 	private By fromElement(WebElement el) {
-		// 製作一個可直接用 getSelectedText/選擇器的 By：若有 id，用 id；否則用相對 xpath
 		try {
 			String id = el.getAttribute("id");
 			if (id != null && !id.isBlank()) return By.id(id);
 		} catch (Exception ignore) {}
-		// 沒 id 就回傳一個就近 xpath（僅供 getSelectedText/select* 使用）
-		// 這裡簡化：直接返回一個能重新找到的 xpath（同 scope 再找第一個 select）
-		return By.xpath("//div[contains(@class,'tab_content') and contains(@class,'active')]//select");
+		try {
+			String name = el.getAttribute("name");
+			if (name != null && !name.isBlank()) return By.name(name);
+		} catch (Exception ignore) {}
+		// 最後退路：抓第一個可見 select（避免綁 active tab，提升容錯）
+		return By.xpath("//select[not(@disabled) and not(contains(@style,'display: none'))]");
 	}
 
 	/* =========================
@@ -1878,6 +1889,9 @@ public class CSROneCallPass extends AbstractBasePage {
 					if (!found) {
 						for (WebElement opt : s.getOptions()) {
 							String t = safeText(opt);
+							// [CHANGED] 過濾 disabled/空白/請選
+							boolean disabled = "true".equalsIgnoreCase(opt.getAttribute("disabled")) || opt.getAttribute("class") != null && opt.getAttribute("class").contains("disabled");
+							if (disabled) continue;
 							if (!t.isBlank() && !t.contains("請選")) { s.selectByVisibleText(t); break; }
 						}
 					}
@@ -1910,8 +1924,19 @@ public class CSROneCallPass extends AbstractBasePage {
 	private void openDropdown(WebElement toggle, WebDriverWait wait, JavascriptExecutor js) {
 		try { wait.until(ExpectedConditions.elementToBeClickable(toggle)).click(); }
 		catch (Exception e) { js.executeScript("arguments[0].click();", toggle); }
+		// [ADDED] 等 dropdown 展開（避免立刻去找 menu 還沒渲染好）
+		try {
+			wait.until(d -> {
+				try {
+					WebElement parent = toggle.findElement(By.xpath("ancestor::div[contains(@class,'bootstrap-select')]"));
+					WebElement menu = parent.findElement(By.cssSelector(".dropdown-menu"));
+					return menu.isDisplayed();
+				} catch (Exception ex) { return false; }
+			});
+		} catch (Exception ignore) {}
 	}
 
+	// [CHANGED] 過濾 disabled/請選/空白選項，確保真的選到有效值
 	private String selectFirstOptionFromSelectOrBootstrap(By selectBy) {
 		WebElement sel = findElementIsDisplayed(selectBy, true, 2000);
 		if (sel == null) return null;
@@ -1920,6 +1945,8 @@ public class CSROneCallPass extends AbstractBasePage {
 			for (WebElement opt : s.getOptions()) {
 				String t = opt.getText() == null ? "" : opt.getText().trim();
 				String v = opt.getAttribute("value");
+				boolean disabled = "true".equalsIgnoreCase(opt.getAttribute("disabled")) || (opt.getAttribute("class") != null && opt.getAttribute("class").contains("disabled"));
+				if (disabled) continue;
 				if (t.isBlank() || v == null || v.isBlank() || t.contains("請選") || t.contains("Select")) continue;
 				s.selectByValue(v);
 				waitGlobalMasksGone(4);
@@ -1931,7 +1958,7 @@ public class CSROneCallPass extends AbstractBasePage {
 				if (toggle != null) {
 					openDropdown(toggle, new WebDriverWait(driver, Duration.ofSeconds(6)), (JavascriptExecutor)driver);
 					WebElement menu = toggle.findElement(By.xpath("ancestor::div[contains(@class,'bootstrap-select')]")).findElement(By.cssSelector(".dropdown-menu"));
-					List<WebElement> items = menu.findElements(By.xpath(".//a[.//span[@class='text' and normalize-space()!='' and not(contains(.,'請選'))]]"));
+					List<WebElement> items = menu.findElements(By.xpath(".//a[not(contains(@class,'disabled')) and .//span[@class='text' and normalize-space()!='' and not(contains(.,'請選'))]]"));
 					if (!items.isEmpty()) {
 						((JavascriptExecutor)driver).executeScript("arguments[0].click();", items.get(0));
 						waitGlobalMasksGone(4);
@@ -2502,4 +2529,3 @@ public class CSROneCallPass extends AbstractBasePage {
 		return null;
 	}
 }
-// === 完整檔案結束 ===
