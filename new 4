@@ -809,7 +809,7 @@ public class CSROneCallPass extends AbstractBasePage {
 			}
 		}
 
-		// 3) 寫入資料（純數字），用 JS 直接寫入避免任何自動加 dash 的遮罩
+		// 3) 寫入資料（純數字），用 JS 直接寫入 + 觸發 input/change/blur，避免頁面自動插入 dash
 		try {
 			if (areaInput != null && areaInput.isEnabled()) {
 				typeDigitsOnly(areaInput, areaCode);
