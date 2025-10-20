@@ -191,7 +191,7 @@ public class CSROneCallPass extends AbstractBasePage {
             // 依你需求：逐一處理各 Tab（有 mapping 才切換）
             boolean allOk = dispatchPolicyChangeStep2Validation();
 
-            // 送出預覽 → 進 Step3（寬鬆驗證）
+            // 送出預覽 → 進 Step3（寬鬆驗證 + 新視窗兜底） // [CHANGED]
             clickReviewAndVerifyStep3();
 
             // 回 Step1（使流程完整可重複）
@@ -967,15 +967,19 @@ public class CSROneCallPass extends AbstractBasePage {
 		// fallback: any checkbox
 		try { return scope.findElement(By.xpath(".//input[@type='checkbox']")); } catch (Exception e) { return null; }
 	}
-	private By fromElement(WebElement el) {
-		// 製作一個可直接用 getSelectedText/選擇器的 By：若有 id，用 id；否則用相對 xpath
+	private By fromElement(WebElement el) { // [CHANGED] 改善 fallback，不再限定 active，改找可見的 tab_content
+		// 1) 先用 id
 		try {
 			String id = el.getAttribute("id");
 			if (id != null && !id.isBlank()) return By.id(id);
 		} catch (Exception ignore) {}
-		// 沒 id 就回傳一個就近 xpath（僅供 getSelectedText/select* 使用）
-		// 這裡簡化：直接返回一個能重新找到的 xpath（同 scope 再找第一個 select）
-		return By.xpath("//div[contains(@class,'tab_content') and contains(@class,'active')]//select");
+		// 2) 再用 name
+		try {
+			String name = el.getAttribute("name");
+			if (name != null && !name.isBlank()) return By.name(name);
+		} catch (Exception ignore) {}
+		// 3) fallback：在「當前可見」的 tab_content 內找第一個 select
+		return By.xpath("//div[contains(@class,'tab_content') and not(contains(@style,'display: none'))]//select[1]");
 	}
 
 	/* =========================
@@ -1163,7 +1167,7 @@ public class CSROneCallPass extends AbstractBasePage {
 				setPolicyChangeChecked(code, true);
 			}
 
-			// 驗證補強
+			// 驗證補強（若一次沒全勾上，二次回補） // [CHANGED]
 			List<String> checkedCodes = getCheckedPolicyChangeCodes();
 			int attempt = 0;
 			while (checkedCodes.size() < (labels.size() * 0.6) && attempt < 2) {
@@ -2236,22 +2240,62 @@ public class CSROneCallPass extends AbstractBasePage {
 		input(el, text);
 	}
 
-	private boolean clickReviewAndVerifyStep3() {
-		WebElement reviewBtn = findElementIsDisplayed(reviewButtonId, true, 2000);
-		if (reviewBtn == null) reviewBtn = findElementIsDisplayed(reviewButtonXPath, true, 2000);
+	private boolean clickReviewAndVerifyStep3() { // [CHANGED] 強化處理新視窗/iframe 並做寬鬆比對
+		WebElement reviewBtn = findElementIsDisplayed(reviewButtonId, true, 2200);
+		if (reviewBtn == null) reviewBtn = findElementIsDisplayed(reviewButtonXPath, true, 2200);
 		if (reviewBtn == null) return false;
 		safeClick(reviewBtn);
+
 		waitGlobalMasksGone(6);
+		waitForWindowHandlesToSettle(600, 8000);
+		tapBlankToDismissDownloadBubble();
+		preferMainWindowFocus();
 		waitForStable();
 
-		boolean step3Reachable =
+		// 嘗試定位 Step3 常見錨點
+		boolean hasStep3Anchor =
 			   findElement(By.id("loanData3"), false, 1200) != null
 			|| findElement(By.id("tdTtransfer"), false, 1200) != null
 			|| findElement(By.id("tddoc"), false, 1200) != null
 			|| findElement(By.tagName("body"), false, 1200) != null;
-		if (!step3Reachable) {
-			logger.warn("[Step3] 未捕捉到既有錨點，但先不阻斷流程。");
+
+		if (!hasStep3Anchor) {
+			// 兜底：嘗試切換其他活著的視窗找一次
+			boolean found = false;
+			try {
+				List<String> order = new ArrayList<>(driver.getWindowHandles());
+				for (int i = order.size() - 1; i >= 0; i--) {
+					String h = order.get(i);
+					if (h.equals(step1Handle)) continue;
+					if (isLikelyTransientPopup(h)) continue;
+					try {
+						driver.switchTo().window(h);
+						driver.switchTo().defaultContent();
+						if (locateStep3RootInCurrentWindowOnly("policy-change-review")) { found = true; break; }
+					} catch (Exception ignore) {}
+				}
+			} finally { preferMainWindowFocus(); }
+			if (!found) {
+				logger.warn("[Step3] 未捕捉到既有錨點，但先不阻斷流程。");
+				return true;
+			}
 		}
+
+		// 寬鬆驗證：嘗試把 Step2 選過/填寫的值在 Step3 找到（存在則加分，不存在不阻斷）
+		try {
+			String pageText = getWholePageText();
+			for (Map.Entry<String,String> kv : selectedForCompare.entrySet()) {
+				String key = kv.getKey();
+				String val = kv.getValue();
+				if (normalizeText(val).isEmpty()) continue;
+				boolean ok = containsText(pageText, val, "Step3 顯示 - " + key);
+				if (!ok) {
+					// 不阻斷，但留 log
+					logger.debug("[Step3 Loose Verify] 未於頁面上找到: " + key + " = " + val);
+				}
+			}
+		} catch (Exception ignore) {}
+
 		return true;
 	}
 
