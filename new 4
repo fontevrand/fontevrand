@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.regex.*;
 import java.util.stream.Collectors;
+import java.util.Comparator;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -32,7 +33,7 @@ public class CSROneCallPass extends AbstractBasePage {
 	private static final String POLICY_NO = "80241059";
 
 	// [ADDED] 版本標記，方便你在 log 端確認真的有換到新檔
-	private static final String BUILD_TAG = "CSROneCallPass-2025-10-20-r4";
+	private static final String BUILD_TAG = "CSROneCallPass-2025-10-21-r5";
 
 	// 「沒有 errormeg」時的容錯策略切換：A=全選都允許, B=保留原本勾選（預設B）
 	private static final String NO_ERROR_FALLBACK_STRATEGY = "B";
@@ -751,6 +752,7 @@ public class CSROneCallPass extends AbstractBasePage {
 	}
 
 	// 依 label 找到同一列(tr)的兩個可輸入框：第一格填區碼、第二格填號碼；強制純數字
+	// ★★★ 強化版：更精準判斷區碼/號碼欄，並在必要時自動交換 ★★★
 	private void fillPhoneRow(WebElement scope, List<String> labelKeywords,
 							  String areaCode, String phoneNumber,
 							  String compareKeyArea, String compareKeyNum) {
@@ -770,63 +772,188 @@ public class CSROneCallPass extends AbstractBasePage {
 		}
 		if (row == null) return;
 
-		// 2) 取得該列所有可見 input
+		// 2) 取得該列所有可見且可輸入的 input（文字或 tel）
 		List<WebElement> inputs = new ArrayList<>();
 		try {
-			inputs = row.findElements(By.xpath(".//input[not(@type='hidden') and not(contains(@style,'display:none'))]"));
+			inputs = row.findElements(By.xpath(".//input[(not(@type) or @type='text' or @type='tel') and not(@type='hidden') and not(contains(@style,'display:none')) and not(contains(@style,'display: none')) and not(@disabled)]"));
 		} catch (Exception ignore) {}
+		List<WebElement> candidates = new ArrayList<>();
+		for (WebElement in : inputs) {
+			try { if (in.isDisplayed() && in.isEnabled()) candidates.add(in); } catch (Exception ignore) {}
+		}
+		if (candidates.isEmpty()) return;
 
-		// 優先直接抓常見 id/name（若頁面有）
-		WebElement areaInput = firstDisplayed(
-			row, Arrays.asList(
-				By.xpath(".//input[contains(translate(@id,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'area')]"),
-				By.xpath(".//input[contains(translate(@name,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'area')]"),
-				By.xpath(".//input[contains(@placeholder,'區碼')]")
-			)
-		);
-		WebElement numInput = firstDisplayed(
-			row, Arrays.asList(
-				By.xpath(".//input[contains(translate(@id,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'tel') or contains(translate(@id,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'phone')]"),
-				By.xpath(".//input[contains(translate(@name,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'tel') or contains(translate(@name,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'phone')]"),
-				By.xpath(".//input[contains(@placeholder,'電話') or contains(@placeholder,'號碼')]")
-			)
-		);
+		// 排除「分機」欄（若有）
+		List<WebElement> extRemoved = new ArrayList<>();
+		for (WebElement in : candidates) {
+			if (!looksLikeExt(in)) extRemoved.add(in);
+		}
+		if (extRemoved.isEmpty()) extRemoved = candidates;
 
-		// 2a) 若仍判斷不出，就用 maxlength 估（區碼 <= 4，號碼 >= 6）
-		if (areaInput == null || numInput == null) {
-			for (WebElement in : inputs) {
-				if (in == null || !in.isDisplayed() || !in.isEnabled()) continue;
-				int maxLen = 0; try { maxLen = Integer.parseInt(String.valueOf(in.getAttribute("maxlength"))); } catch (Exception ignore) {}
-				if (areaInput == null && maxLen > 0 && maxLen <= 4) { areaInput = in; continue; }
+		// 3) 打分數判斷誰像「區碼」、誰像「號碼」
+		WebElement areaInput = null;
+		WebElement numInput  = null;
+
+		// 3a) 先依關鍵字/placeholder/id/name 判斷
+		int bestAreaScore = Integer.MIN_VALUE;
+		int bestNumScore  = Integer.MIN_VALUE;
+		for (WebElement in : extRemoved) {
+			int aScore = areaScore(in);
+			int nScore = numberScore(in);
+			if (aScore > bestAreaScore) { bestAreaScore = aScore; areaInput = in; }
+			if (nScore > bestNumScore)  { bestNumScore  = nScore;  numInput  = in; }
+		}
+
+		// 3b) 若判斷到同一格，則用長度/位置拆解；或任一為 null，用補強策略
+		if (areaInput != null && areaInput.equals(numInput)) {
+			// 以 maxlength 小者為區碼，較大者為號碼；再不行用位置（X）
+			WebElement minLen = areaInput;
+			WebElement maxLen = areaInput;
+			int minL = parseMaxLen(areaInput);
+			int maxL = minL;
+			for (WebElement in : extRemoved) {
+				int L = parseMaxLen(in);
+				if (L > maxL) { maxL = L; maxLen = in; }
+				if (L < minL) { minL = L; minLen = in; }
 			}
-			for (WebElement in : inputs) {
-				if (in == null || !in.isDisplayed() || !in.isEnabled()) continue;
-				int maxLen = 0; try { maxLen = Integer.parseInt(String.valueOf(in.getAttribute("maxlength"))); } catch (Exception ignore) {}
-				if (numInput == null && maxLen >= 6) { numInput = in; }
+			if (minLen != maxLen) {
+				areaInput = minLen;
+				numInput  = maxLen;
+			} else {
+				// 用位置（靠左者當區碼，靠右者當號碼）
+				extRemoved.sort(Comparator.comparingInt(e -> {
+					try { return e.getLocation().getX(); } catch (Exception ex) { return Integer.MAX_VALUE; }
+				}));
+				areaInput = extRemoved.get(0);
+				numInput  = extRemoved.size() > 1 ? extRemoved.get(1) : extRemoved.get(0);
+			}
+		} else {
+			// 若還有空位沒判定
+			if (areaInput == null || numInput == null) {
+				// 先以長度/位置補齊
+				extRemoved.sort(Comparator.comparingInt(e -> parseMaxLen(e)));
+				if (areaInput == null) areaInput = extRemoved.get(0); // 最小 maxlength 傾向區碼
+				if (numInput  == null) numInput  = extRemoved.get(extRemoved.size() - 1); // 最大 maxlength 傾向號碼
+				// 避免相同
+				if (areaInput.equals(numInput) && extRemoved.size() >= 2) {
+					numInput = extRemoved.get(1);
+				}
 			}
 		}
 
-		// 2b) 再不行就取前兩個可輸入框
-		if (areaInput == null || numInput == null) {
-			if (inputs.size() >= 2) {
-				if (areaInput == null) areaInput = inputs.get(0);
-				if (numInput  == null) numInput  = inputs.get(1);
-			} else if (inputs.size() == 1) {
-				areaInput = inputs.get(0);
-			}
+		// 3c) 最後保底：若仍只剩一個，就用 DOM/位置推估
+		if (areaInput == null && !extRemoved.isEmpty()) {
+			extRemoved.sort(Comparator.comparingInt(e -> {
+				try { return e.getLocation().getX(); } catch (Exception ex) { return Integer.MAX_VALUE; }
+			}));
+			areaInput = extRemoved.get(0);
+		}
+		if (numInput == null && extRemoved.size() >= 2) {
+			extRemoved.sort(Comparator.comparingInt(e -> -parseMaxLen(e)));
+			numInput = extRemoved.get(0).equals(areaInput) ? extRemoved.get(1) : extRemoved.get(0);
 		}
 
-		// 3) 寫入資料（純數字），用 JS 直接寫入 + 觸發 input/change/blur，避免頁面自動插入 dash
+		// 4) 寫入資料（純數字），用 JS 直接寫入 + 觸發事件，避免頁面自動插入 dash
 		try {
 			if (areaInput != null && areaInput.isEnabled()) {
 				typeDigitsOnly(areaInput, areaCode);
-				selectedForCompare.put(compareKeyArea, areaCode.replaceAll("\\D+",""));
 			}
 			if (numInput != null && numInput.isEnabled()) {
 				typeDigitsOnly(numInput, phoneNumber);
-				selectedForCompare.put(compareKeyNum, phoneNumber.replaceAll("\\D+",""));
+			}
+			waitGlobalMasksGone(2);
+		} catch (Exception ignore) {}
+
+		// 5) 寫入後檢核：若「區碼格」看起來被放進了長號碼（例如 7 開頭 7~10 碼），則與號碼格交換一次
+		try {
+			String vArea = safeAttr(areaInput, "value");
+			String vNum  = safeAttr(numInput, "value");
+			boolean areaLooksLong = vArea != null && vArea.replaceAll("\\D+","").length() >= 6;
+			boolean numLooksShort = vNum == null || vNum.replaceAll("\\D+","").length() <= 4;
+			boolean suspicious7   = vArea != null && vArea.replaceAll("\\D+","").startsWith("7");
+
+			if ((areaLooksLong && numLooksShort) || suspicious7) {
+				logger.debug("[C01] 偵測到區碼/號碼可能放反，嘗試交換一次。");
+				// 清空後對調輸入
+				typeDigitsOnly(areaInput, phoneNumber);
+				typeDigitsOnly(numInput,  areaCode);
+				waitGlobalMasksGone(2);
+				// 交換完再校正：若區碼仍過長，再強制切割
+				String va2 = safeAttr(numInput, "value");
+				String vb2 = safeAttr(areaInput, "value");
+				String areaDigits = vb2 == null ? "" : vb2.replaceAll("\\D+","");
+				if (areaDigits.length() > 4 && !areaDigits.isEmpty()) {
+					String fixedArea = areaDigits.substring(0, Math.min(4, areaDigits.length()));
+					typeDigitsOnly(areaInput, fixedArea);
+				}
 			}
 		} catch (Exception ignore) {}
+
+		// 6) 回存比對值
+		if (areaInput != null) selectedForCompare.put(compareKeyArea, (safeAttr(areaInput,"value")+"").replaceAll("\\D+",""));
+		if (numInput  != null) selectedForCompare.put(compareKeyNum,  (safeAttr(numInput,"value")+"").replaceAll("\\D+",""));
+	}
+
+	// 判斷是否像「分機」欄
+	private boolean looksLikeExt(WebElement in) {
+		try {
+			String ph = (in.getAttribute("placeholder")+"").toLowerCase();
+			String id = (in.getAttribute("id")+"").toLowerCase();
+			String nm = (in.getAttribute("name")+"").toLowerCase();
+			String lbl= (in.getAttribute("aria-label")+"").toLowerCase();
+			if (ph.contains("分機") || ph.contains("ext") || ph.contains("extension")) return true;
+			if (id.contains("ext") || id.contains("extension") || nm.contains("ext")) return true;
+			if (lbl.contains("分機") || lbl.contains("ext")) return true;
+			int ml = parseMaxLen(in);
+			return ml > 0 && ml <= 5; // 很短的多半是分機
+		} catch (Exception e) { return false; }
+	}
+
+	// Area 欄位打分
+	private int areaScore(WebElement in) {
+		int score = 0;
+		try {
+			String ph = (in.getAttribute("placeholder")+"").toLowerCase();
+			String id = (in.getAttribute("id")+"").toLowerCase();
+			String nm = (in.getAttribute("name")+"").toLowerCase();
+			String lbl= (in.getAttribute("aria-label")+"").toLowerCase();
+			if (ph.contains("區碼")) score += 3;
+			if (lbl.contains("區碼")) score += 2;
+			if (id.contains("area") || id.contains("areacode") || id.contains("telarea")) score += 2;
+			if (nm.contains("area") || nm.contains("areacode") || nm.contains("telarea")) score += 2;
+			int ml = parseMaxLen(in);
+			if (ml > 0 && ml <= 4) score += 2;
+			else if (ml > 0 && ml <= 5) score += 1;
+			else score -= 1;
+		} catch (Exception ignore) {}
+		return score;
+	}
+
+	// 號碼欄位打分
+	private int numberScore(WebElement in) {
+		int score = 0;
+		try {
+			String ph = (in.getAttribute("placeholder")+"").toLowerCase();
+			String id = (in.getAttribute("id")+"").toLowerCase();
+			String nm = (in.getAttribute("name")+"").toLowerCase();
+			String lbl= (in.getAttribute("aria-label")+"").toLowerCase();
+			if (ph.contains("電話") || ph.contains("號碼") || ph.contains("市話")) score += 2;
+			if (lbl.contains("電話") || lbl.contains("號碼") || lbl.contains("市話")) score += 2;
+			if (id.contains("tel") || id.contains("phone") || id.contains("number")) score += 2;
+			if (nm.contains("tel") || nm.contains("phone") || nm.contains("number")) score += 2;
+			int ml = parseMaxLen(in);
+			if (ml >= 7) score += 2;
+			else if (ml >= 6) score += 1;
+		} catch (Exception ignore) {}
+		return score;
+	}
+
+	private int parseMaxLen(WebElement in) {
+		try {
+			String s = in.getAttribute("maxlength");
+			if (s == null || s.isEmpty()) return 0;
+			return Integer.parseInt(s);
+		} catch (Exception e) { return 0; }
 	}
 
 	// 只輸入數字（去除非數字），並用 JS 寫入 + 觸發 input/change/blur，避免頁面自動插入 dash
@@ -1237,7 +1364,7 @@ public class CSROneCallPass extends AbstractBasePage {
 			if (name != null && !name.isBlank()) return By.name(name);
 		} catch (Exception ignore) {}
 		// 最後退路：抓第一個可見 select（避免綁 active tab，提升容錯）
-		return By.xpath("//select[not(@disabled) and not(contains(@style, 'display: none'))]");
+		return By.xpath("//select[not(@disabled) and not(contains(@style,'display: none'))]");
 	}
 
 	/* =========================
