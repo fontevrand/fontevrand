@@ -32,7 +32,7 @@ public class CSROneCallPass extends AbstractBasePage {
 	private static final String POLICY_NO = "80241059";
 
 	// [ADDED] 版本標記，方便你在 log 端確認真的有換到新檔
-	private static final String BUILD_TAG = "CSROneCallPass-2025-10-20-r1";
+	private static final String BUILD_TAG = "CSROneCallPass-2025-10-20-r2";
 
 	// 「沒有 errormeg」時的容錯策略切換：A=全選都允許, B=保留原本勾選（預設B）
 	private static final String NO_ERROR_FALLBACK_STRATEGY = "B";
@@ -654,7 +654,7 @@ public class CSROneCallPass extends AbstractBasePage {
 			By.xpath("//*[@id='tab_" + tabIndex + "'][not(contains(@style,'display: none'))]")
 		);
 		boolean ok = content != null && content.isDisplayed();
-		if (!ok) logger.warn("[Tab] rel=tab_{} appears not visible after click.", tabIndex);
+		if (!ok) logger.warn("[Tab] rel=tab_" + tabIndex + " appears not visible after click.");
 		return ok;
 	}
 
@@ -2233,7 +2233,7 @@ public class CSROneCallPass extends AbstractBasePage {
 	}
 
 	/* =========================
-	  Step3 定位輔助
+	  Step3 定位輔助（修正：找到元素就停留在該 frame）
 	  ========================= */
 	private boolean locateStep3RootInCurrentWindowOnly(String tag) {
 		if (switchToFrameContaining(By.id("loanData3"), 1500)) return true;
@@ -2241,28 +2241,41 @@ public class CSROneCallPass extends AbstractBasePage {
 		if (switchToFrameContaining(By.id("tdTtransfer"), 1500)) return true;
 		return false;
 	}
+
+	// [CHANGED]：若找到元素，保持在該 frame（不再自動切回 defaultContent）
 	private boolean switchToFrameContaining(By by, int timeoutMs) {
 		long end = System.currentTimeMillis() + timeoutMs;
+
 		while (System.currentTimeMillis() < end) {
 			try {
+				// 1) 先看 defaultContent 有沒有
 				driver.switchTo().defaultContent();
 				WebElement el = findElement(by, false, 200);
-				if (el != null) return true;
+				if (el != null) {
+					// 就留在 defaultContent
+					return true;
+				}
 
+				// 2) 遍歷 top-level iframes
 				List<WebElement> ifs = driver.findElements(By.tagName("iframe"));
 				for (int i = 0; i < ifs.size(); i++) {
 					try {
+						driver.switchTo().defaultContent();
 						driver.switchTo().frame(i);
 						el = findElement(by, false, 180);
-						if (el != null) return true;
+						if (el != null) {
+							// ★ 保持停在此 frame，讓後續 findElement 直接可用
+							return true;
+						}
 					} catch (Exception ignore) {
-					} finally {
+						// 失敗就回 default 繼續
 						driver.switchTo().defaultContent();
 					}
 				}
 			} catch (Exception ignore) {}
 			try { Thread.sleep(100); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
 		}
+		// 兜底：回到 defaultContent
 		try { driver.switchTo().defaultContent(); } catch (Exception ignore) {}
 		return false;
 	}
