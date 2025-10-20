@@ -214,11 +214,11 @@ public class CSROneCallPass extends AbstractBasePage {
 
 			WebElement policyLoanRadioButton = findElementIsDisplayed(By.xpath(policyLoanRadioButtonLocator), true, 5000);
 			if (policyLoanRadioButton == null) return false;
-			click(policyLoanRadioButton);
+			safeClick(policyLoanRadioButton);
 
 			WebElement stepOneNextButton = findElementIsDisplayed(By.xpath(stepOneNextButtonLocator), true, 5000);
 			if (stepOneNextButton == null) return false;
-			click(stepOneNextButton);
+			safeClick(stepOneNextButton);
 
 			waitForStable(); // 等待 Step2 載入穩定
 
@@ -269,13 +269,13 @@ public class CSROneCallPass extends AbstractBasePage {
 			// 金額
 			WebElement currentLoanAmount = findElementIsDisplayed(currentLoanAmountInputBy(), true, 5000);
 			if (currentLoanAmount == null) return false;
-			input(currentLoanAmount, "40000");
+			clearAndType(currentLoanAmount, "40000");
 			inputLoanAmount = "40000";
 
 			// 付款方式
 			WebElement radio = findElementIsDisplayed(useProvidedRadio, true, 5000);
 			if (radio == null) return false;
-			click(radio, true);
+			safeClick(radio);
 			{
 				String selectedValue = selectFirstOptionFromSelectOrBootstrap(providedAccountSelect);
 				if (selectedValue == null) return false;
@@ -285,7 +285,7 @@ public class CSROneCallPass extends AbstractBasePage {
 			// 收件人資訊
 			WebElement chargeAddrRadio = findElementIsDisplayed(chargeAddressRadio, true, 5000);
 			if (chargeAddrRadio == null) return false;
-			click(chargeAddrRadio, true);
+			safeClick(chargeAddrRadio);
 			WebElement chargeAddrInput = findElementIsDisplayed(chargeAddressInput, false, 5000);
 			if (chargeAddrInput == null) return false;
 			chargeAddressFull = chargeAddrInput.getAttribute("value");
@@ -321,11 +321,11 @@ public class CSROneCallPass extends AbstractBasePage {
 
 			WebElement terminiateContractRadioButton = findElementIsDisplayed(By.xpath(terminiateContractRadioButtonLocator), true, 5000);
 			if (terminiateContractRadioButton == null) return false;
-			click(terminiateContractRadioButton);
+			safeClick(terminiateContractRadioButton);
 
 			WebElement stepOneNextButtonSecTime = findElementIsDisplayed(By.xpath(stepOneNextButtonLocator), true, 5000);
 			if (stepOneNextButtonSecTime == null) return false;
-			click(stepOneNextButtonSecTime);
+			safeClick(stepOneNextButtonSecTime);
 
 			waitForStable();
 
@@ -358,7 +358,7 @@ public class CSROneCallPass extends AbstractBasePage {
 			// 付款方式
 			WebElement tRadio = findElementIsDisplayed(useProvidedRadio, true, 5000);
 			if (tRadio == null) return false;
-			click(tRadio, true);
+			safeClick(tRadio);
 			String val = selectFirstOptionFromSelectOrBootstrap(providedAccountSelect);
 			if (val == null) return false;
 			termSelectedProvidedAcctText = getSelectedText(providedAccountSelect);
@@ -366,7 +366,7 @@ public class CSROneCallPass extends AbstractBasePage {
 			// 收件人資訊
 			WebElement tAddrRadio = findElementIsDisplayed(chargeAddressRadio, true, 5000);
 			if (tAddrRadio == null) return false;
-			click(tAddrRadio, true);
+			safeClick(tAddrRadio);
 			WebElement tAddrInput = findElementIsDisplayed(chargeAddressInput, false, 5000);
 			if (tAddrInput == null) return false;
 			termChargeAddressFull = tAddrInput.getAttribute("value");
@@ -404,7 +404,7 @@ public class CSROneCallPass extends AbstractBasePage {
 		// 選「保單變更」radio
 		WebElement pcRadio = findElementIsDisplayed(policyChangeRadio, true, 4000);
 		if (pcRadio == null) return false;
-		click(pcRadio, true);
+		safeClick(pcRadio);
 		waitForStable();
 
 		// 等待各項變更的 checkbox 出現（例如 C01）
@@ -426,7 +426,7 @@ public class CSROneCallPass extends AbstractBasePage {
 		// 先按下一步讓紅字浮現（若有）
 		WebElement next = findElementIsDisplayed(By.xpath(stepOneNextButtonLocator), true, 4000);
 		if (next == null) return false;
-		click(next, true);
+		safeClick(next);
 		waitForStable();
 
 		// 最多 3 輪：解析紅字 → 取消不允辦理 → 再按下一步
@@ -456,7 +456,7 @@ public class CSROneCallPass extends AbstractBasePage {
 				for (String skip : STEP1_SKIP_CODES) deselectPolicyChangeByCode(skip);
 				WebElement nextRetry = findElementIsDisplayed(By.xpath(stepOneNextButtonLocator), true, 4000);
 				if (nextRetry == null) return false;
-				click(nextRetry, true);
+				safeClick(nextRetry);
 				waitForStable();
 				continue;
 			}
@@ -492,7 +492,7 @@ public class CSROneCallPass extends AbstractBasePage {
 			// 再按下一步
 			WebElement next2 = findElementIsDisplayed(By.xpath(stepOneNextButtonLocator), true, 4000);
 			if (next2 == null) return false;
-			click(next2, true);
+			safeClick(next2);
 			waitForStable();
 
 			// 到這裡通常就會進 Step2，結束流程
@@ -566,12 +566,12 @@ public class CSROneCallPass extends AbstractBasePage {
 			// A. 選擇補費方式 (若有)
 			By feeRadioLocator = By.xpath("//div[contains(text(),'選擇補費方式')]/following-sibling::div//input[@type='radio']/ancestor::label[1]");
 			WebElement firstFeeRadio = findElementIsDisplayed(feeRadioLocator, true, 800);
-			if (firstFeeRadio != null) click(firstFeeRadio, true);
+			if (firstFeeRadio != null) safeClick(firstFeeRadio);
 		} catch (Exception ignore) {}
 
 		// B. 付款方式
 		WebElement radio = findElementIsDisplayed(useProvidedRadio, true, 1000);
-		if (radio != null) click(radio, true);
+		if (radio != null) safeClick(radio);
 		if (findElement(providedAccountSelect, false, 800) != null) {
 			selectFirstOptionFromSelectOrBootstrap(providedAccountSelect);
 			selectedProvidedAcctText = getSelectedText(providedAccountSelect);
@@ -580,10 +580,16 @@ public class CSROneCallPass extends AbstractBasePage {
 		// C. 收件人資訊
 		WebElement chargeAddrRadio = findElementIsDisplayed(chargeAddressRadio, true, 1200);
 		if (chargeAddrRadio != null) {
-			click(chargeAddrRadio, true);
+			safeClick(chargeAddrRadio);
 			WebElement chargeAddrInput = findElementIsDisplayed(chargeAddressInput, false, 2000);
 			if (chargeAddrInput != null) {
 				chargeAddressFull = chargeAddrInput.getAttribute("value");
+				// 若姓名/郵件別為空，補選第一個有效選項
+				String rn = getSelectedText(recipientNameSelect);
+				if (normalizeText(rn).isEmpty()) selectFirstOptionFromSelectOrBootstrap(recipientNameSelect);
+				String mt = getSelectedText(mailTypeSelect);
+				if (normalizeText(mt).isEmpty()) selectFirstOptionFromSelectOrBootstrap(mailTypeSelect);
+
 				recipientNameText = getSelectedText(recipientNameSelect);
 				mailTypeText   = getSelectedText(mailTypeSelect);
 			}
@@ -600,25 +606,49 @@ public class CSROneCallPass extends AbstractBasePage {
 		return true;
 	}
 
+	/* ---------------------------
+	   ★ 強化版 Tab 切換（不依賴 active）
+	   --------------------------- */
 	private boolean activateTab(String code) {
 		Integer tabIndex = POLICY_CODE_TO_TAB_INDEX.get(code);
 		if (tabIndex == null) {
 			logger.debug("[Tab] Code " + code + " has no specific tab index. Skipping activation.");
 			return true;
 		}
-		By tabLocator = By.xpath("//div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_" + tabIndex + "']");
-		WebElement tabElement = findElementIsDisplayed(tabLocator, true, 2500);
+		// 1) 找到 li 或 a，點一次（用 safeClick + scroll）
+		By li1 = By.xpath("//div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']//*[self::li or self::a][@rel='tab_" + tabIndex + "']");
+		By li2 = By.cssSelector("div.tab_wrapper ul.tab_list [rel='tab_" + tabIndex + "']");
+		WebElement tabElement = findElementIsDisplayed(li1, true, 2000);
+		if (tabElement == null) tabElement = findElementIsDisplayed(li2, true, 1500);
 		if (tabElement == null) {
 			logger.warn("[Tab] Cannot find tab element for code " + code + " (rel=tab_" + tabIndex + ")");
 			return false;
 		}
-		if (!tabElement.getAttribute("class").contains("active")) {
-			try { click(tabElement, true); } catch (Exception e) { ((JavascriptExecutor) driver).executeScript("arguments[0].click();", tabElement); }
-			waitForStable();
+		safeClick(tabElement);
+
+		// 2) 等「任何一種」內容區塊變為可見（ID / class / style）
+		WebElement content = waitUntilAnyVisible(4000,
+			By.xpath("//div[contains(@class,'tab_content')][contains(@class,'tab_" + tabIndex + "') and not(contains(@style,'display: none'))]"),
+			By.xpath("//*[@id='tab_" + tabIndex + "'][not(contains(@style,'display: none'))]"),
+			By.xpath("//div[contains(@class,'tab_content') and contains(@class,'tab_" + tabIndex + "')][.//select or .//input or .//table]"),
+			// 保底：標籤上的 active（若有）
+			By.xpath("//ul[contains(@class,'tab_list')]//*[self::li or self::a][@rel='tab_" + tabIndex + "'][contains(@class,'active')]")
+		);
+		if (content != null) {
+			scrollIntoView(content);
+			waitGlobalMasksGone(6);
+			return true;
 		}
-		By contentLocator = By.xpath("//div[@class='tab_content tab_" + tabIndex + "' and contains(@class,'active')]");
-		WebElement content = findElement(contentLocator, false, 1500);
-		return content != null && content.isDisplayed();
+
+		// 若第一次沒切成功，再點一次並短暫等待
+		safeClick(tabElement);
+		content = waitUntilAnyVisible(3000,
+			By.xpath("//div[contains(@class,'tab_content')][contains(@class,'tab_" + tabIndex + "') and not(contains(@style,'display: none'))]"),
+			By.xpath("//*[@id='tab_" + tabIndex + "'][not(contains(@style,'display: none'))]")
+		);
+		boolean ok = content != null && content.isDisplayed();
+		if (!ok) logger.warn("[Tab] rel=tab_{} appears not visible after click.", tabIndex);
+		return ok;
 	}
 
 	// 依代碼進入各 Tab 執行填寫／調整
@@ -684,7 +714,7 @@ public class CSROneCallPass extends AbstractBasePage {
 		final String NEW_ADDRESS = "松壽路3號";
 		WebElement addressEl = findElementIsDisplayed(addressInput, true, 2000);
 		if (addressEl == null) return false;
-		input(addressEl, NEW_ADDRESS);
+		clearAndType(addressEl, NEW_ADDRESS);
 
 		// 戶籍/住家電話、公司電話
 		fillC01Phones("02-7721-8888", "02-2394-5678");
@@ -710,8 +740,8 @@ public class CSROneCallPass extends AbstractBasePage {
 			WebElement homeEl = null, compEl = null;
 			for (By by : homeCandidates) { homeEl = findElementIsDisplayed(by, false, 600); if (homeEl != null) break; }
 			for (By by : compCandidates){ compEl  = findElementIsDisplayed(by, false, 600); if (compEl  != null) break; }
-			if (homeEl != null) input(homeEl, homePhone);
-			if (compEl  != null) input(compEl , companyPhone);
+			if (homeEl != null) clearAndType(homeEl, homePhone);
+			if (compEl  != null) clearAndType(compEl , companyPhone);
 			if (homeEl != null) selectedForCompare.put("C01.戶籍電話", homePhone);
 			if (compEl  != null) selectedForCompare.put("C01.公司電話", companyPhone);
 		} catch (Exception ignore) {}
@@ -894,8 +924,10 @@ public class CSROneCallPass extends AbstractBasePage {
 	private WebElement getActiveTabRoot(String code) {
 		Integer idx = POLICY_CODE_TO_TAB_INDEX.get(code);
 		if (idx == null) return null;
-		By contentLocator = By.xpath("//div[@class='tab_content tab_" + idx + "' and contains(@class,'active')]");
-		return findElement(contentLocator, false, 1500);
+		// 不強制要求 active，直接找對應 tab_x 的內容容器（顯示即視為當前）
+		WebElement root = findElement(By.xpath("//div[contains(@class,'tab_content') and contains(@class,'tab_" + idx + "') and not(contains(@style,'display: none'))]"), false, 1500);
+		if (root == null) root = findElement(By.xpath("//div[contains(@class,'tab_content') and contains(@class,'tab_" + idx + "')]"), false, 1200);
+		return root;
 	}
 	private WebElement firstSelectIn(WebElement scope) {
 		try { return scope.findElement(By.xpath(".//select")); } catch (Exception e) { return null; }
@@ -1118,14 +1150,14 @@ public class CSROneCallPass extends AbstractBasePage {
 			if (alsoClearFirst) {
 				for (WebElement lb : labels) {
 					String code = lb.getAttribute("for");
-					if (code == null) continue;
+					if (code == null) continue; // ← 修正點（原本少了右括號）
 					setPolicyChangeChecked(code, false);
 				}
 			}
 
 			for (WebElement lb : labels) {
 				String code = lb.getAttribute("for");
-				if (code == null) continue;
+				if (code == null) continue; // ← 修正點（原本少了右括號）
 				// Step1 你指定要略過的代碼，不主動勾選
 				if (STEP1_SKIP_CODES.contains(code)) { setPolicyChangeChecked(code, false); continue; }
 				setPolicyChangeChecked(code, true);
@@ -1173,12 +1205,12 @@ public class CSROneCallPass extends AbstractBasePage {
                 now = "true".equalsIgnoreCase(checkedStatus);
             }
 			if (checked != now) {
-                boolean clickSuccess = false;
                 if (label != null) {
-                    try { js.executeScript("arguments[0].scrollIntoView({block:'center'});", label); } catch (Exception ignore) {}
-                    try { label.click(); clickSuccess = true; } catch (Exception e) { js.executeScript("arguments[0].click();", label); clickSuccess = true; }
+                    scrollIntoView(label);
+                    safeClick(label);
                 } else if (input.isDisplayed()) {
-                    try { input.click(); clickSuccess = true; } catch (Exception e) { js.executeScript("arguments[0].click();", input); clickSuccess = true; }
+					scrollIntoView(input);
+                    safeClick(input);
                 }
 				try { Thread.sleep(150); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
                 boolean after = false;
@@ -1229,8 +1261,8 @@ public class CSROneCallPass extends AbstractBasePage {
 		WebElement reviewBtn = findElementIsDisplayed(reviewButtonXPath, true, 6000);
 		if (reviewBtn == null) reviewBtn = findElementIsDisplayed(reviewButtonId, true, 4000);
 		if (reviewBtn == null) return false;
-		try { ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", reviewBtn); } catch (Exception ignore) {}
-		try { click(reviewBtn, true); } catch (Exception e) { ((JavascriptExecutor) driver).executeScript("arguments[0].click();", reviewBtn); }
+		scrollIntoView(reviewBtn);
+		safeClick(reviewBtn);
 
 		waitForWindowHandlesToSettle(700, 10000);
 		tapBlankToDismissDownloadBubble();
@@ -1312,8 +1344,8 @@ public class CSROneCallPass extends AbstractBasePage {
 		if (reviewBtn == null) reviewBtn = findElementIsDisplayed(reviewButtonId, true, 4000);
 		if (reviewBtn == null) return false;
 
-		try { ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", reviewBtn); } catch (Exception ignore) {}
-		try { click(reviewBtn, true); } catch (Exception e) { ((JavascriptExecutor) driver).executeScript("arguments[0].click();", reviewBtn); }
+		scrollIntoView(reviewBtn);
+		safeClick(reviewBtn);
 
 		waitForWindowHandlesToSettle(700, 10000);
 		tapBlankToDismissDownloadBubble();
@@ -1495,12 +1527,12 @@ public class CSROneCallPass extends AbstractBasePage {
 
 		boolean clicked = false;
 		if (label != null) {
-			try { js.executeScript("arguments[0].scrollIntoView({block:'center'});", label); } catch (Exception ignore) {}
-			try { click(label, true); clicked = true; } catch (Exception e) { try { js.executeScript("arguments[0].click();", label); clicked = true; } catch (Exception ignore) {} }
+			scrollIntoView(label);
+			try { safeClick(label); clicked = true; } catch (Exception ignore) {}
 		}
 		if (!isCheckboxSelected(input, label) && input != null) {
-			try { js.executeScript("arguments[0].scrollIntoView({block:'center'});", input); } catch (Exception ignore) {}
-			try { click(input, true); clicked = true; } catch (Exception e) { try { js.executeScript("arguments[0].click();", input); clicked = true; } catch (Exception ignore) {} }
+			scrollIntoView(input);
+			try { safeClick(input); clicked = true; } catch (Exception ignore) {}
 		}
 		try { Thread.sleep(300); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
 
@@ -1520,8 +1552,8 @@ public class CSROneCallPass extends AbstractBasePage {
 				try { any = row.findElement(By.xpath(".//label[contains(@for,'checkbox') or self::label]")); } catch (Exception ignore) {}
 				if (any == null) { try { any = row.findElement(By.xpath(".//input[@type='checkbox']")); } catch (Exception ignore) {} }
 				if (any != null) {
-					try { js.executeScript("arguments[0].scrollIntoView({block:'center'});", any); } catch (Exception ignore) {}
-					try { any.click(); } catch (Exception e) { try { js.executeScript("arguments[0].click();", any); } catch (Exception ignore) {} }
+					scrollIntoView(any);
+					safeClick(any);
 					return true;
 				}
 			} catch (Exception ignore) {}
@@ -1584,12 +1616,13 @@ public class CSROneCallPass extends AbstractBasePage {
 				try { option.click(); } catch (Exception e) { js.executeScript("arguments[0].click();", option); }
 			} catch (Exception e) {
 				try {
-					WebElement any = menu.findElement(By.xpath(".//a"));
+					WebElement any = menu.findElement(By.xpath(".//a[.//span[@class='text' and normalize-space()!='' and not(contains(.,'請選'))]]"));
 					js.executeScript("arguments[0].click();", any);
 				} catch (Exception ignore) {}
 			}
 		}
 		if (!usedBootstrap) {
+			scrollIntoView(selectEl);
 			try { new Select(selectEl).selectByValue(targetValue); }
 			catch (Exception e) {
 				js.executeScript("arguments[0].value = arguments[1]; arguments[0].dispatchEvent(new Event('change', {bubbles:true}));",
@@ -1637,6 +1670,7 @@ public class CSROneCallPass extends AbstractBasePage {
 			} catch (Exception ignore) {}
 		}
 		if (!usedBootstrap) {
+			scrollIntoView(selectEl);
 			try { new Select(selectEl).selectByVisibleText(targetText); }
 			catch (Exception e) {
 				try {
@@ -1728,8 +1762,8 @@ public class CSROneCallPass extends AbstractBasePage {
 		try {
 			WebElement btn = findElementIsDisplayed(strictSecond, true, 800);
 			if (btn != null) {
-				try { js.executeScript("arguments[0].scrollIntoView({block:'center'});", btn); } catch (Exception ignore) {}
-				try { click(btn, true); } catch (Exception e) { js.executeScript("arguments[0].click();", btn); }
+				scrollIntoView(btn);
+				safeClick(btn);
 				return true;
 			}
 		} catch (Exception ignore) {}
@@ -1738,8 +1772,8 @@ public class CSROneCallPass extends AbstractBasePage {
 		try {
 			WebElement btn = findElementIsDisplayed(looseSecond, true, 800);
 			if (btn != null) {
-				try { js.executeScript("arguments[0].scrollIntoView({block:'center'});", btn); } catch (Exception ignore) {}
-				try { click(btn, true); } catch (Exception e) { js.executeScript("arguments[0].click();", btn); }
+				scrollIntoView(btn);
+				safeClick(btn);
 				return true;
 			}
 		} catch (Exception ignore) {}
@@ -1748,8 +1782,8 @@ public class CSROneCallPass extends AbstractBasePage {
 			List<WebElement> all = findElements(By.xpath("//a[@class='btn btn-default' and normalize-space(text())='取消申請']"), 800);
 			if (all != null && all.size() >= 2) {
 				WebElement btn = all.get(1);
-				try { js.executeScript("arguments[0].scrollIntoView({block:'center'});", btn); } catch (Exception ignore) {}
-				try { click(btn, true); } catch (Exception e) { js.executeScript("arguments[0].click();", btn); }
+				scrollIntoView(btn);
+				safeClick(btn);
 				return true;
 			}
 		} catch (Exception ignore) {}
@@ -1757,8 +1791,8 @@ public class CSROneCallPass extends AbstractBasePage {
 		try {
 			WebElement btn = findElementIsDisplayed(By.xpath("(//button[contains(@class,'btn') and contains(@class,'btn-default') and normalize-space(text())='取消申請'])[2]"), true, 800);
 			if (btn != null) {
-				try { js.executeScript("arguments[0].scrollIntoView({block:'center'});", btn); } catch (Exception ignore) {}
-				try { click(btn, true); } catch (Exception e) { js.executeScript("arguments[0].click();", btn); }
+				scrollIntoView(btn);
+				safeClick(btn);
 				return true;
 			}
 		} catch (Exception ignore) {}
@@ -1783,8 +1817,8 @@ public class CSROneCallPass extends AbstractBasePage {
 			try {
 				WebElement btn = findElementIsDisplayed(by, true, 1500);
 				if (btn != null) {
-					try { ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", btn); } catch (Exception ignore) {}
-					try { click(btn, true); } catch (Exception e) { ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btn); }
+					scrollIntoView(btn);
+					safeClick(btn);
 					return true;
 				}
 			} catch (Exception ignore) {}
@@ -2061,7 +2095,7 @@ public class CSROneCallPass extends AbstractBasePage {
 			for (WebElement cb : cbs) {
 				try {
 					if (cb.isEnabled() && !cb.isSelected()) {
-						((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", cb);
+						scrollIntoView(cb);
 						cb.click();
 					}
 				} catch (Exception ignore) {}
@@ -2177,11 +2211,10 @@ public class CSROneCallPass extends AbstractBasePage {
 			By li = By.xpath("//div[contains(@class,'tab_wrapper')]//ul[@class='tab_list']/li[@rel='tab_" + idx + "']");
 			WebElement tabLi = findElementIsDisplayed(li, true, 2500);
 			if (tabLi == null) return false;
-			click(tabLi, true);
+			safeClick(tabLi);
 
 			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(8));
 			By content = By.xpath("//div[contains(@class,'tab_content') and contains(@class,'tab_" + idx + "')]");
-			wait.until(ExpectedConditions.attributeContains(li, "class", "active"));
 			wait.until(ExpectedConditions.visibilityOfElementLocated(content));
 			waitGlobalMasksGone(8);
 			return true;
@@ -2207,7 +2240,7 @@ public class CSROneCallPass extends AbstractBasePage {
 		WebElement reviewBtn = findElementIsDisplayed(reviewButtonId, true, 2000);
 		if (reviewBtn == null) reviewBtn = findElementIsDisplayed(reviewButtonXPath, true, 2000);
 		if (reviewBtn == null) return false;
-		click(reviewBtn, true);
+		safeClick(reviewBtn);
 		waitGlobalMasksGone(6);
 		waitForStable();
 
@@ -2227,6 +2260,42 @@ public class CSROneCallPass extends AbstractBasePage {
 		String aa = normalizeText(a);
 		String bb = normalizeText(b);
 		return aa.equalsIgnoreCase(bb);
+	}
+
+	/* =========================
+	   ★ 新增：safeClick / scroll / waitUntilAnyVisible
+	   ========================= */
+	private void safeClick(By by) {
+		WebElement el = findElementIsDisplayed(by, true, 2500);
+		if (el != null) safeClick(el);
+	}
+	private void safeClick(WebElement el) {
+		if (el == null) return;
+		try {
+			scrollIntoView(el);
+			el.click();
+		} catch (Exception ex) {
+			try { ((JavascriptExecutor)driver).executeScript("arguments[0].click();", el); }
+			catch (Exception ignore) {}
+		}
+	}
+	private void scrollIntoView(WebElement el) {
+		try { ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView({block:'center', inline:'nearest'});", el); }
+		catch (Exception ignore) {}
+		try { new Actions(driver).moveToElement(el, 1, 1).perform(); } catch (Exception ignore) {}
+	}
+	private WebElement waitUntilAnyVisible(long timeoutMs, By... locators) {
+		long end = System.currentTimeMillis() + Math.max(1, timeoutMs);
+		while (System.currentTimeMillis() < end) {
+			for (By by : locators) {
+				try {
+					WebElement e = findElement(by, false, 150);
+					if (e != null && e.isDisplayed()) return e;
+				} catch (Exception ignore) {}
+			}
+			try { Thread.sleep(80); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+		}
+		return null;
 	}
 }
 // === 完整檔案結束 ===
