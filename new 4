@@ -1237,7 +1237,7 @@ public class CSROneCallPass extends AbstractBasePage {
 			if (name != null && !name.isBlank()) return By.name(name);
 		} catch (Exception ignore) {}
 		// 最後退路：抓第一個可見 select（避免綁 active tab，提升容錯）
-		return By.xpath("//select[not(@disabled) and not(contains(@style,'display: none'))]");
+		return By.xpath("//select[not(@disabled) and not(contains(@style, 'display: none'))]");
 	}
 
 	/* =========================
