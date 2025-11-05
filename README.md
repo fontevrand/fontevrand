@@ -2,10 +2,6 @@
 ## note
 
 ## java log:
-Unreachable catch block for InterruptedException. This exception is never thrown from the try statement body
-
-
-<img width="1146" height="489" alt="image" src="https://github.com/user-attachments/assets/768f5624-fc36-449f-ab07-8e8bea5dbdbc" />
 
 
 ## html code:
