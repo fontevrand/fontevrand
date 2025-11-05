@@ -6,6 +6,439 @@
 
 ## html code:
 
+<div class="container">
+            <div class="cc_content">
+                <!--  NAV -->
+                <div class="cc_nav">
+                    <ul>
+                        <li>繳費專區</li>
+                        <li>信用卡卡號/效期變更</li>
+                    </ul>
+                </div>
+
+                <div class="redTag" id="red_tag">信用卡卡號/效期變更&nbsp;&nbsp;&nbsp; </div>
+                <div class="subTitle">有異動權限保單</div>
+
+                <input type="hidden" id="chgPolicies" value="[com.pca.esvrwd.model.onlinechange.ChgCreditCardValidDatePolicy@294510b4[
+  policyNumber=80424859
+  effectiveDate=105/05/20
+  policyholderName=神Ｑ雨翅蛾
+  insuredName=神Ｑ雨翅蛾
+  insuranceName=保誠人壽倍感安心終身醫療健康保險
+  bankName=玉山信用卡部
+  creditCardNumber=524255********2517
+  creditCardAuthorizationEndDate=20231201
+  creditCardAuthorizationEndDateChtText=2023年12月
+], com.pca.esvrwd.model.onlinechange.ChgCreditCardValidDatePolicy@1bfd3943[
+  policyNumber=80310031
+  effectiveDate=101/07/01
+  policyholderName=神Ｑ雨翅蛾
+  insuredName=神Ｑ雨翅蛾
+  insuranceName=保誠人壽悠遊人生變額壽險
+  bankName=玉山信用卡部
+  creditCardNumber=512308********2124
+  creditCardAuthorizationEndDate=20200501
+  creditCardAuthorizationEndDateChtText=2020年5月
+]]" disabled="">
+                <form id="chgCardDateFrom" action="/eservice/csr/oc/chgcvdcfrm" method="post"><input type="hidden" name="_csrf" value="02eb1a2d-71cf-4a27-bee3-e631f4ba6f12">
+                    <input type="hidden" name="email" id="email" value="sean.hy.chen@pcalife.com.tw">
+                    <input type="hidden" name="mobile" id="mobile" value="0999999999">
+
+                    <input type="hidden" name="sourceType" id="sourceType" value="E">
+                    <input type="hidden" name="contractNum" id="contractNum">
+                    <input type="hidden" name="policyholderName" id="policyholderName">
+                    <input type="hidden" name="insuredName" id="insuredName">
+                    <input type="hidden" name="insuranceName" id="insuranceName">
+                    <input type="hidden" name="creditCardNumber" id="creditCardNumber">
+                    <input type="hidden" name="endYear" id="endYear">
+                    <input type="hidden" name="endMonth" id="endMonth">
+                    <input type="hidden" name="note" id="note">
+                    <input type="hidden" name="changeType" id="changeType">
+                    <input type="hidden" name="newCreditCardNumber" id="newCreditCardNumber">
+                    <input type="hidden" name="beforeCreditCardAuthorizationEndDateChtText" id="beforeCreditCardAuthorizationEndDateChtText">
+
+                    <input type="hidden" name="_csrf" value="02eb1a2d-71cf-4a27-bee3-e631f4ba6f12">
+                </form>
+
+                <!-- for PC begin-->
+                <div class="tb_Table_pc">
+                    <div class="tb_row headeRow">
+                        <div class="tb_column sn"></div>
+                        <div class="tb_column insurecode">保單號碼</div>
+                        <div class="tb_column date">契約始期</div>
+                        <div class="tb_column name">要保人</div>
+                        <div class="tb_column name">被保險人</div>
+                        <div class="tb_column flexInsurance" style="text-align:left">險種名稱</div>
+                        <div class="tb_column bankname">發卡銀行</div>
+                        <div class="tb_column creditcard_code">信用卡號</div>
+                        <div class="tb_column expiry_date">信用卡效期</div>
+                    </div>
+
+                    <!--  PC 有異動權限保單-->
+                    <div class="tb_row selector">
+                        <div class="tb_column sn">
+                            <div class="checkBoxSet">
+                                <label class="cc-form-control">
+                                    <input type="radio" name="list_pc" value="80424859" style="margin: 0 0;" class="squareRadio policyNumberSelector">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="tb_column insurecode">
+                            <a href="/eservice/csr/pq/pl?policyNumber=80424859" class="partial-table__link">80424859</a></div>
+                        <div class="tb_column date">105/05/20</div>
+                        <div class="tb_column name policyholderName">神Ｑ雨翅蛾</div>
+                        <div class="tb_column name insuredName">神Ｑ雨翅蛾</div>
+                        <div class="tb_column flexInsurance insuranceName" style="text-align:left">保誠人壽倍感安心終身醫療健康保險</div>
+                        <div class="tb_column bankname">玉山信用卡部</div>
+                        <div class="tb_column creditcard_code creditCardNumber">524255********2517</div>
+                        <div class="tb_column creditCardAuthorizationEndDateChtText expiry_date">2023年12月</div>
+                    </div>
+                    <div class="tb_row selector">
+                        <div class="tb_column sn">
+                            <div class="checkBoxSet">
+                                <label class="cc-form-control">
+                                    <input type="radio" name="list_pc" value="80310031" style="margin: 0 0;" class="squareRadio policyNumberSelector">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="tb_column insurecode">
+                            <a href="/eservice/csr/pq/pl?policyNumber=80310031" class="partial-table__link">80310031</a></div>
+                        <div class="tb_column date">101/07/01</div>
+                        <div class="tb_column name policyholderName">神Ｑ雨翅蛾</div>
+                        <div class="tb_column name insuredName">神Ｑ雨翅蛾</div>
+                        <div class="tb_column flexInsurance insuranceName" style="text-align:left">保誠人壽悠遊人生變額壽險</div>
+                        <div class="tb_column bankname">玉山信用卡部</div>
+                        <div class="tb_column creditcard_code creditCardNumber">512308********2124</div>
+                        <div class="tb_column creditCardAuthorizationEndDateChtText expiry_date">2020年5月</div>
+                    </div>
+
+                    
+                </div>
+                <!-- for PC end-->
+
+                <!-- PC & Mobile 共用組件-->
+                <!-- 20251001 原效期變更 begin -->
+                <!--  
+                <div id="pcNewExpire" style="display:none">
+                    <div class="new_expire_date" id="new_expire_date">
+                        <div class="daterow">
+                            請輸入信用卡新效期：
+                            <input type="text" name="cc_expday" class="cc-expday" placeholder="MM/YY" size="6"
+                                   id="cc-expday" minlength="5" maxlength="5">
+                        </div>
+                        <br>
+                        
+                        <div class="noteBR" th:if="${showRemark == 'Y'}"></div>
+                        
+                        <div class="memo" th:if="${showRemark == 'Y'}">
+                            備註 <label for="memo"></label><input type="text" class="memo" id="memo"
+                                                                  style="height:32px;">
+                        </div>
+                    </div>
+                </div>
+                -->
+                <!-- 20251001 原效期變更 end -->
+
+                
+                
+                
+                
+                
+                
+                
+                                
+
+                <!--=================================== PC/Mobile 分隔線  ========================================-->
+
+                <!-- for mobile begin-->
+                <!--  MOBILE 有異動權限保單-->
+                <div class="tb_Table_mobile">
+                    <div class="tb_row headeRow">
+                        <div class="tb_column -f sn">
+                        </div>
+                        <div class="tb_column id">保單號碼</div>
+                        <div class="tb_column insurname">險種名稱</div>
+                    </div>
+
+                    <div class="selector">
+                        <div class="tb_row mobileKey">
+                            <div class="tb_column sn">
+                                <div class="checkBoxSet">
+                                    <label class="cc-form-control">
+                                        <input type="radio" name="radio_mobile" value="80424859" style="margin: 0 0;" class="squareRadios_mobile policyNumberSelector">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="tb_column id"><a href="/eservice/csr/pq/pl?policyNumber=80424859" class="partial-table__link">80424859</a></div>
+                            <div class="tb_column insurname insuranceName">保誠人壽倍感安心終身醫療健康保險</div>
+                        </div>
+
+                        <div class="tb_row ext">
+                            <div class="tb_row_mobile">
+                                <div class="tb_column_mobile">契約始期</div>
+                                <div class="tb_column_mobile">105/05/20</div>
+                            </div>
+                            <div class="tb_row_mobile">
+                                <div class="tb_column_mobile">要保人</div>
+                                <div class="tb_column_mobile policyholderName">神Ｑ雨翅蛾</div>
+                            </div>
+                            <div class="tb_row_mobile">
+                                <div class="tb_column_mobile">被保險人</div>
+                                <div class="tb_column_mobile insuredName">神Ｑ雨翅蛾</div>
+                            </div>
+                            <div class="tb_row_mobile">
+                                <div class="tb_column_mobile">發卡銀行</div>
+                                <div class="tb_column_mobile">玉山信用卡部</div>
+                            </div>
+                            <div class="tb_row_mobile">
+                                <div class="tb_column_mobile">信用卡號</div>
+                                <div class="tb_column_mobile creditCardNumber">524255********2517</div>
+                            </div>
+                            <div class="tb_row_mobile">
+                                <div class="tb_column_mobile">信用卡效期</div>
+                                <div class="tb_column_mobile creditCardAuthorizationEndDateChtText">2023年12月</div>
+                            </div>
+                        </div>
+
+                        <div class="mobileNewExpire"></div>
+                    </div>
+                </div>
+                <div class="tb_Table_mobile">
+                    <div class="tb_row headeRow">
+                        <div class="tb_column -f sn">
+                        </div>
+                        <div class="tb_column id">保單號碼</div>
+                        <div class="tb_column insurname">險種名稱</div>
+                    </div>
+
+                    <div class="selector">
+                        <div class="tb_row mobileKey">
+                            <div class="tb_column sn">
+                                <div class="checkBoxSet">
+                                    <label class="cc-form-control">
+                                        <input type="radio" name="radio_mobile" value="80310031" style="margin: 0 0;" class="squareRadios_mobile policyNumberSelector">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="tb_column id"><a href="/eservice/csr/pq/pl?policyNumber=80310031" class="partial-table__link">80310031</a></div>
+                            <div class="tb_column insurname insuranceName">保誠人壽悠遊人生變額壽險</div>
+                        </div>
+
+                        <div class="tb_row ext">
+                            <div class="tb_row_mobile">
+                                <div class="tb_column_mobile">契約始期</div>
+                                <div class="tb_column_mobile">101/07/01</div>
+                            </div>
+                            <div class="tb_row_mobile">
+                                <div class="tb_column_mobile">要保人</div>
+                                <div class="tb_column_mobile policyholderName">神Ｑ雨翅蛾</div>
+                            </div>
+                            <div class="tb_row_mobile">
+                                <div class="tb_column_mobile">被保險人</div>
+                                <div class="tb_column_mobile insuredName">神Ｑ雨翅蛾</div>
+                            </div>
+                            <div class="tb_row_mobile">
+                                <div class="tb_column_mobile">發卡銀行</div>
+                                <div class="tb_column_mobile">玉山信用卡部</div>
+                            </div>
+                            <div class="tb_row_mobile">
+                                <div class="tb_column_mobile">信用卡號</div>
+                                <div class="tb_column_mobile creditCardNumber">512308********2124</div>
+                            </div>
+                            <div class="tb_row_mobile">
+                                <div class="tb_column_mobile">信用卡效期</div>
+                                <div class="tb_column_mobile creditCardAuthorizationEndDateChtText">2020年5月</div>
+                            </div>
+                        </div>
+
+                        <div class="mobileNewExpire"></div>
+                    </div>
+                </div>
+
+                
+             
+                 
+                <!-- 20251001 新卡號變更 begin -->
+                <div id="changeArea" class="chg_Table" style="display: block;">
+ 					<div class="tb_row headeRow">
+                        <div class="tb_column tb-title">異動後內容</div>
+                    </div>
+                                 
+                	<div class="tb_row">
+                		
+                		<div class="switchTable">
+                			<div class="swRow">
+                				<div class="changeItems">
+	                				<div class="change_item">
+	                					<div class="checkBoxSet">
+			                                <label class="cc-form-control">
+			                                    <input type="radio" name="change_type" checked="true" value="cardNo" style="margin: 0 0;" class="squareRadio">
+			                                    信用卡號變更
+			                                </label>
+			                            </div>
+			                            
+	                				</div>
+	                				<div class="change_item">
+	                					<div class="checkBoxSet">
+			                                <label class="cc-form-control">
+			                                    <input type="radio" name="change_type" value="cardDate" style="margin: 0 0;" class="squareRadio">
+		                						效期變更			                                
+			                                </label>
+			                            </div>	                				
+	                				</div>    
+	                			</div>	            				
+                			</div>
+                			<div class="swRow">
+                				<!-- 改卡號 begin -->
+                				<div id="change_cardNo" class="cardTable" style="display: none;">
+                					<div class="row">
+	                					<div class="column">
+	                						持卡人身分
+	                					</div>
+	                					<div class="column -red -heavy">
+	                						<span style="font-size:1.2rem">要保人</span> (限用要保人本人之信用卡)
+	                					</div>	                					                					
+                					</div>
+                   					<div class="row">
+	                					<div class="column">
+	                						信用卡號
+	                					</div>
+	                					<div class="column">
+	                						<input type="text" name="card-num" placeholder="0000 0000 0000 0000" size="18" id="creditcard_no" minlength="19" maxlength="19">
+	                					</div>	                					                					
+                					</div>
+                					<div class="row">
+	                					<div class="column">
+	                						有效期限
+	                					</div>
+	                					<div class="column" id="newExpday">
+	                						
+	                					</div>	                					                					
+                					</div>      
+                					
+                					
+			                        <!--分割線-->
+			                        <!--  
+			                        <div class="noteBR" th:if="${showRemark == 'Y'}"></div>
+			                        -->
+			                        <!-- 備註輸入需要 csr4 -->
+			                                        					
+                					          					                					
+                				</div>
+                				<!-- 改卡號 end -->
+                				
+                				
+                				<!-- 改效期 begin-->
+			                    <div class="new_expire_date" id="new_expire_date" style="">
+			                        <div class="daterow">
+			                            請輸入信用卡新效期：
+			                            <span id="updateExpday">
+			                            <!--  
+			                            <input type="text" name="cc_expday" class="cc-expday" placeholder="MM/YY" size="6"
+			                                   id="cc-expday" minlength="5" maxlength="5">
+			                            -->       
+			                            <input type="text" name="cc-expday" placeholder="MM/YY" size="6" id="cc-expday" minlength="5" maxlength="5"></span>       
+			                        </div>
+			                        <br>
+			                        <!--分割線-->
+			                        
+			                        <!-- 備註輸入需要 csr4 -->
+			                        
+			                    </div>                				
+                				
+                				<!-- 改效期 end-->
+                				
+                			</div>                			
+                		</div>	
+                		
+                		
+                	</div>
+                </div>
+                <!-- 20251001 新卡號變更 end -->               
+                
+
+                <!-- 流程控制 -->
+                <div class="cc-flowDiv" id="senOTPzone">
+                    <button class="flowbutton  buttonDisabled" id="button_cancel" href="#button_cancel">取消
+                    </button>
+                    <button class="flowbutton  buttonEnabled" id="button_apply" href="#button_apply" type="submit">
+                        申請
+                    </button>
+                </div>
+
+                <!-- 無異動權限 -->
+                <div class="subTitle">無異動權限保單</div>
+
+                <!-- for PC 無異動權限 begin-->
+                <div class="tb_Table_pc">
+                    <div class="tb_row headeRow">
+                        <div class="tb_column sn"></div>
+                        <div class="tb_column insurecode">保單號碼</div>
+                        <div class="tb_column date">起保日期</div>
+                        <div class="tb_column name">要保人</div>
+                        <div class="tb_column name">被保險人</div>
+                        <div class="tb_column flexInsurance" style="text-align:left">險種名稱</div>
+                        <div class="tb_column bankname">發卡銀行</div>
+                        <div class="tb_column creditcard_code">信用卡號</div>
+                        <div class="tb_column expiry_date">信用卡效期</div>
+                    </div>
+
+                    
+                    <div>
+                        <div class="tb_row" style="padding: 10px 12px;">目前無相關資料</div>
+                    </div>
+                </div>
+                <!-- for PC end-->
+
+                <!--=================================== PC/Mobile 分隔線  ========================================-->
+
+                <!-- for mobile 無異動權限 begin-->
+                
+
+                <div class="tb_Table_mobile">
+                    <div class="tb_row headeRow">
+                        <div class="tb_column -f sn">
+                            <div class="checkBoxSet" style="visibility: hidden;">
+                                <label class="cc-form-control">
+                                    <input type="radio" name="mobile1[]" id="O_mmm" value="O" style="margin: 0 0;" disabled="disabled">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="tb_column id">保單號碼</div>
+                        <div class="tb_column insurname">險種名稱</div>
+                    </div>
+                    <div class="tb_row" style="padding: 10px 12px;">目前無相關資料</div>
+                </div>
+
+            </div>
+            <!-- for mobile end-->
+
+            <!-- 說明 -->
+            <div class="mb-20 descript js-descript" id="description">
+                <div class="descript-title">
+                    <i class="fa fa-info-circle" aria-hidden="true"></i>
+                    <p>說明:</p>
+                    <span class="btn m-btn-collapse mobile">
+                        <span class="jsChangeText">展開</span>
+                        <i class="fa fa-angle-double-up" aria-hidden="true"></i></span>
+                </div>
+                <ul class="list-shape js-list-shape num-style">
+                    <li>
+                        信用卡卡號不變且有效期間按相同年期延展時，授權人同意原轉帳授權繼續有效，本公司得自動延展有效期間並進行扣款，無需重新授權
+                        ；信用卡卡號不變，但有效期間非按相同年期延展亦同，惟授權人應儘速通知本公司更新有效期間，俾便扣款手續有效完成，以維護保單效力
+                        。
+                    </li>
+                    <li>
+                        提醒您，申請信用卡效期變更，同一授權帳號之所有有效保單資料將一併更改。
+                    </li>
+                    <li>
+                        若您於一般工作日下午5:00以後執行線上變更，則視為次日之變更作業。另外，若您於國定例假日執行，則視為次一工作日之變更作業。
+                    </li>
+                </ul>
+            </div>
+            <!-- 說明 END-->
+
+        </div>
 
 
 <!--
