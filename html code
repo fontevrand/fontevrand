@@ -1,56 +1,1321 @@
-<div class="container">
+<div class="document">
+
+
+  <div>
+  
+<style>
+header .header-menu > li .submenu {
+  min-width: -webkit-fill-available;
+}
+
+.pcaRed{
+    color:#ed1b2e;
+}
+
+
+/*  20240229 新版menu begin   */  
+
+	
+#mobileMenu{
+	display:none;
+}
+
+.main {
+    margin-top: 100px;
+}
+
+.menu_Section{
+    background: #ed1b2e;
+    width:100%;
+    max-height: 55px;
+    text-align: center;
+}
+
+.menu_Section>.menuBG{
+    background: #ed1b2e;
+    min-height: 55px;;
+}
+
+.menu_Section>ul{
+    display: inline-block;
+    margin: auto;
+    max-width: 1360px;
+    margin-top: 3px;
+}
+
+.menu_Section>ul>li{
+    display: inline-block;
+}
+
+.mainLI{
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    padding: 10px 45px 11px 45px;
+    cursor: pointer;
+}
+
+
+.currentMenu{
+    background: #fff;
+    border-radius: 8px 8px 0px 0;
+    color: #e5001f;
+    transition-duration: 0.8s;
+}
+
+
+.mainLI:after{
+    content: '';
+    position: relative;
+    top: 0px;
+    right: -45px;
+    width: 1px;
+    height: 15px;
+    border-right: solid 1px #fff;
+    display: inline-table;
+}
+
+.mainLI:last-child::after{
+    content: '';
+    position: relative;
+    top: 0px;
+    right: -25px;
+    width: 1px;
+    height: 15px;
+    border-right: solid 0px #fff;
+    display: inline-table;
+}
+
+.subMenu_Section{
+    box-shadow: 0px 2px 5px #ccc;
+    /**min-height:270px;*/
+    padding-bottom:20px;
+    margin-top: 0px;
+    /*padding-left:9rem;*/
+    /*padding-left:11rem;*/ /*塞客戶資料查詢 與 回客戶列表*/
+    border-radius: 0px 0px 15px 15px;
+    padding-top: 20px;
+    
+    padding-left:calc((100% - 1360px)/2);
+}
+
+.subUL-newMenu{
+	/*width:calc((100% - 140px)*0.185);  */
+	width:calc((100% - 140px)*0.2);  
+    margin-right: 10px;;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.subMenu_Section>ul{
+    padding-left: 0px;
+    margin-top: -10px;
+}
+
+.subMenu_Section>ul>li:nth-child(1)>a{
+    color:#000;
+    text-decoration: none;
+}
+
+.subMenu_Section>ul>li:nth-child(1)>a:hover{
+    color:#000;
+    text-decoration: none;
+}
+
+.subMenu_Section>ul>li>a{
+    color:#666;
+    text-decoration: none;
+}
+
+.subMenu_Section>ul>li>a:hover{
+    color:#e5001f;
+    text-decoration: underline;
+    text-underline-offset:5px;
+}
+
+.subUL-newMenu>.moreItem.-hidden{
+    animation-name: toHide;
+    animation-duration: 0.1s;
+    display:none;
+}
+
+.subUL-newMenu>.moreItem.-show{
+    animation-name: toShow;
+    animation-duration: 0.1s;
+    display:block;
+}
+
+
+.subUL-newMenu>.openMore{
+    background-image: url(/eservice/images/midline-aaa.png);
+    background-repeat: no-repeat;
+    background-position:center center;
+    min-height: 30px;
+    cursor: pointer;
+}
+
+.subUL-newMenu>.openMore>img{
+    width: 30px;
+    position: relative;
+    left: 50%;
+    top: -2px;
+    margin-left: -15px;
+}
+
+.subUL-newMenu>.openMore>img.rotate180{
+    transition-duration: 1s;
+    transform: rotate(180deg);
+}
+
+.subUL-newMenu>.openMore>img.rotate0{
+    transition-duration: 0.5s;
+    transform: rotate(0deg);
+}
+
+@keyframes toShow {
+/*
+  0%   {height:0;}
+  100% {height:20px; }
+*/  
+  0%   {opacity:0;}
+  90% {opacity:0.8; }
+  100% {opacity:1; }  
+}
+
+@keyframes toHide {
+  0%   {height:20px;}
+  100% {height:0px; }
+}
+
+.subMenu_Section>ul>li:nth-child(1){
+    padding: 25px 5px 10px 5px;
+    font-size:18px;
+    font-weight:700;
+    color:#333; 
+    /*border-bottom: 1px solid #ccc; */
+}
+
+.subMenu_Section>ul>li:hover:nth-child(1){
+    color:#333;
+    text-decoration: none;
+    /*cursor: default;*/
+    cursor:pointer;
+}
+
+.subMenu_Section>ul>li{
+    padding: 15px 0px 0px 5px;
+    font-size:15px;
+    font-weight:500;  
+    color:#666; 
+    font-family: 微軟正黑體;
+    display: block;
+    text-decoration: none;   
+}
+
+.subMenu_Section>ul>li:hover{
+    color:#e5001f;
+    text-decoration: underline;
+    text-underline-offset:5px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.subMenu-opened{
+    transition-duration: 0.5s;
+    display: block;
+}
+
+.subMenu-closed{
+    transition-duration: 0.5s;
+    display:none ;
+}
+
+#descDialog{
+    background: #666;
+    color:#fff;
+    border-radius: 5px;
+    padding: 10px 20px;
+    width: fit-content;
+    position: absolute;
+    z-index: 10;
+    max-width: 240px;
+    font-size: 16px;
+    line-height: 22px;
+    letter-spacing: 0.7px;
+    box-shadow: 4px 4px 5px #ccc;
+    /*display: none;*/
+}
+
+#descDialog>.descDialogArrowRight{
+    background: #666;
+    position: relative;
+    transform: rotate(45deg);
+    /*right*/
+    min-width:20px;
+    min-height:20px;
+    width:20px;
+    height:20px;    
+    left: -21px;
+    top:20px;
+    margin-top: -20px;
+}
+
+
+#descDialog>.descDialogArrowDown{
+    background: #666;
+    position: relative;
+    transform: rotate(45deg);
+    /*below*/
+    min-width:10px;
+    min-height:10px;
+    width:10px;
+    height:10px;    
+    left: 0px;
+    top:-3px;
+    margin-top: -10px;
+}
+
+.dialogShow{
+    transition-duration: 0.25s;
+    opacity: 1;    
+    transform: scale(1);
+}
+
+.dialogHide{
+    transition-duration: 0.25s;
+    opacity: 0;     
+    transform: scale(0.3);
+}  
+
+
+@media only screen and (max-width: 1366px) {
+	.subMenu_Section{
+		padding-left:2rem;
+	}
+}
+
+@media only screen and (max-width: 768px) {
+	#newPcESVmenu{
+		display:none;
+	}
+	#mobileMenu{
+		display:block;
+	}
+	.main {
+	    margin-top: 45px;
+	}
+}
+
+/*  20240229 新版menu end   */    
+</style>  
+  
+ <script>
+/*  20240229 新版menu begin   */  
+window.addEventListener("load",function(){	
+	if(screen.width>768){
+    	menuControl.init();
+	}
+});
+
+var menuControl = {
+
+    closeAllTab : function(){
+        var mainLIs = document.getElementsByClassName("mainLI");
+        for(var i=0;i<mainLIs.length;i++){
+            mainLIs[i].className = "mainLI";
+        }           
+        document.getElementById("subMenu_Section").className = "subMenu_Section subMenu-closed";
+        this.state.isMenuOpened = false;  
+        
+        this.destroyMenuMask();
+    },
+
+    closeAllSubMenu : function(){
+        var subULs = document.getElementsByClassName("subUL-newMenu");
+        for(var i=0;i<subULs.length;i++){
+            subULs[i].style.display = "none";
+        }     
+        this.hideDescDialog();
+        if(this.config.foldOpenMoreAfterMenuClosed){
+            this.foldAllItemLists();
+        }
+    },
+
+    recoveryAllSubMenu : function(){
+        var subULs = document.getElementsByClassName("subUL-newMenu");
+        for(var i=0;i<subULs.length;i++){
+            subULs[i].style.display = "";
+        }
+    },
+
+    openSpecifySubMenu : function(idx){     
+        var subULs = document.getElementsByClassName("subUL-newMenu");
+        for(var i=0;i<subULs.length;i++){
+            var tmpCatagory = subULs[i].getAttribute("catagory");          
+            if(tmpCatagory==idx){
+                subULs[i].style.display = "";
+            }
+        }        
+    },
+
+    hideDescDialog : function(){
+        document.getElementById("descDialog").className = "dialogHide";
+    },
+
+    foldAllItemLists : function(){
+        var openMores = document.getElementsByClassName("openMore opened");
+        for(var i=(openMores.length-1);i>=0;i--){
+            openMores[i].click();
+        }
+    },
+
+    bindOpenDetail : function(){
+        var self =this;
+        var openMores = document.getElementsByClassName("openMore");
+        for(var i=0;i<openMores.length;i++){
+            openMores[i].onclick = function(){
+                var moreItems = this.parentNode.getElementsByClassName("moreItem");
+                var img = this.querySelector("img");
+                if(this.className=="openMore"){
+                    this.className = "openMore opened";                
+                    img.className = "rotate180";
+                    
+					//openItems = [];// //hide texts stack
+                    for(var j=0;j<moreItems.length;j++){                   
+                        moreItems[j].className = "moreItem -show";
+                        // //hide texts stack
+                        /*
+						openItems.push(moreItems[j]);
+                        setTimeout(
+                        	function(){
+                        		
+                        		for(var x in openItems){
+                        			openItems[x].style.opacity = 1;                   			
+                        		}
+                        		
+                        	},
+                        	250
+                        )
+                        */
+                        // 
+                    }  
+                    self.state.isOpening = true;    
+                    setTimeout(
+                        function(){
+                            self.state.isOpening = false; 
+                        },
+                        1000
+                    );
+                }else{
+                    this.className = "openMore"; 
+                    img.className = "rotate0";
+                    for(var j=0;j<moreItems.length;j++){
+                        moreItems[j].className = "moreItem -hidden";
+						//moreItems[j].style.opacity = 0;////hide texts stack
+                    }                      
+                }
+            }    
+        }
+    },
+
+    bindOutMenu : function(){
+        var self = this;
+        var menu_Section = document.getElementsByClassName("menu_Section");
+        menu_Section[0].onmouseover = function(){
+            isMouseOverMenu2 = true;
+        }
+        menu_Section[0].onmouseout = function(){
+            isMouseOverMenu2 = false;
+        }
+        var menu =document.getElementById("subMenu_Section");
+        menu.onmouseover = function(){
+            isMouseOverMenu = true;
+        }        
+        menu.onmouseout = function(){
+            isMouseOverMenu = false;
+        }        
+        document.body.onclick = function(){
+            if(self.state.isMenuOpened){
+                if(!isMouseOverMenu && !isMouseOverMenu2){
+                    self.closeAllTab();
+                }                
+            }
+        }
+    },
+
+    bindDescOnItems : function(){
+        var self = this;
+        var papa = document.getElementById("subMenu_Section");
+        var items = papa.getElementsByTagName("li");
+        for(var i=0;i<items.length;i++){
+       	
+            if(items[i].querySelector("img")==null){
+            	if(items[i].querySelector("a")==null){
+                	items[i].onclick = function(){
+                		
+                        if(this.querySelector("img")==null){
+                            var url = this.getAttribute("link");                       
+                            if(url!==null && url!==""){
+    							var target = this.getAttribute("target");	
+    							
+    							if(!menuControl.state.isModalShow){
+	                            	if(target=="_blank"){
+	                            		window.open(url);
+	                            	}else{
+	                            		window.location.href = url;	
+	                            	}
+    							}else{
+    								menuControl.state.isModalShow = false;
+    							}
+                            	
+                            }else{                   	
+                            	return false
+                            }                        
+                        }                  
+                    } 
+            		
+            	}
+              
+                items[i].onmouseover = function(){
+                    var link = this.getAttribute("link");
+                    if(link==null){
+                        this.style.cursor = "default";
+                        
+                    };
+
+                    //if Detail is opening, lag the mouseoverevent for 0.7sec
+                    var LI = this;
+                    
+                    
+                    
+                    
+                    if(self.state.isOpening){
+                        setTimeout(
+                            function(){
+                                loadTextShow();      
+                            },700
+                        )
+                    }else{
+                        loadTextShow();               
+                    };
+
+                    function loadTextShow(){
+                    	
+                        //let text = itemDescription[LI.innerHTML];
+                	
+                        //searchMoreIndeep 
+	                    var link = LI.getAttribute("link");
+	                    if(link==null){
+	                    	var a = LI.querySelector("a");
+	                    	if(a!==null){
+	                    		//a.style.color = "#e5001f";
+	                    		var text = itemDescription[a.innerHTML];
+	                    	}
+	                    }else{                    	
+	                    	var text = itemDescription[LI.innerHTML];
+	                    }
+                        
+                        if(text=="" || text==null){
+                            return false
+                        }
+
+                        var desc = document.getElementById("descDialog");
+                        desc.className = "dialogShow";
+                        desc.style.zIndex = 100;                                  
+
+                        if(self.config.descriptInRight){
+                            desc.style.top = (LI.offsetTop + 5) + "px";
+                            desc.style.left = (LI.offsetLeft + LI.offsetWidth + 0) + "px";
+                        }else{
+                            desc.style.top = (LI.offsetTop + LI.offsetHeight + 10) + "px";
+                            desc.style.left = (LI.offsetLeft + 5) + "px";
+                        }
+
+                        document.getElementById("descDialogContent").innerHTML = text;                            
+                    }
+
+                }
+/*
+                items[i].onmouseout = function(){
+                    var desc = document.getElementById("descDialog");
+                    desc.className = "dialogHide";
+                    desc.style.zIndex = -100;
+                    
+					var LI = this;	
+                   	var a = LI.querySelector("a");
+                   	if(a!==null){
+                   		a.style.color = "#666";
+                   	}
+                    
+                }  
+*/                
+
+                items[i].onmouseout = function(){
+                    var desc = document.getElementById("descDialog");
+                    desc.className = "dialogHide";
+                    desc.style.zIndex = -100;
+                }                 
+                
+                
+            }
+        }
+    },
+
+    bindMainMenu : function(){
+        var self = this;
+        var mainLIs = document.getElementsByClassName("mainLI");
+        for(var i=0;i<mainLIs.length;i++){
+            mainLIs[i].onclick = function(){
+                menuControl.closeAllTab();
+                this.className = "mainLI currentMenu";
+                document.getElementById("subMenu_Section").className = "subMenu_Section subMenu-opened";
+                var key_catagory = this.getAttribute("catagory");
+                var catagory = (key_catagory.split("_"))[1];
+                self.recoveryAllSubMenu();
+                self.closeAllSubMenu();
+                self.openSpecifySubMenu(catagory);  
+                self.state.isMenuOpened = true;
+                
+                self.createMenuMask();
+            }
+        };
+    },
+    
+    createMenuMask : function(){
+    	var mask = document.createElement("div");
+    	mask.id="newmenu-mask";
+    	mask.style.cssText = "position:absolute;width:calc(100vw - 18px);height:calc(100vh + 300px);top:120px;background:#fff;opacity:0.9";
+    	document.body.appendChild(mask);
+    },
+
+    destroyMenuMask : function(){
+    	if(document.getElementById("newmenu-mask")!==null){
+    		document.getElementById("newmenu-mask").parentNode.removeChild(document.getElementById("newmenu-mask"));
+    	}
+    },    
+    
+    state : {
+        isMenuOpened : false,
+        isOpening : false,
+        isModalShow : false
+    },
+
+    config :{
+        descriptInRight : false,
+        foldOpenMoreAfterMenuClosed : true
+    },
+
+    init : function(){
+
+        isMouseOverMenu = false;
+        isMouseOverMenu2 = false;
+        this.bindMainMenu();
+        this.bindOpenDetail();
+        this.bindOutMenu();
+        this.bindDescOnItems();
+        if(this.config.descriptInRight){
+            document.getElementById("descDialogArrow").className = "descDialogArrowRight";
+        }else{
+            document.getElementById("descDialogArrow").className = "descDialogArrowDown"; 
+        }
+    }
+}
+
+var itemDescription = {
+    
+	    
+	    // 一 我的保單
+	    "保單基本資料" : "查詢保單各項資料，包含通訊地址、收費管道及保單服務人員等資料",
+	    "投資帳戶資料" : "查詢投資型保單各項資料，包含投資報酬率、帳戶價值等資料",
+	    "重要通知" : "查詢近期通知的重要訊息",
+	    "保障總覽" : "查詢同一被保險人的各項保障累計",
+	    "新契約進度" : "查詢二個月內投保之新契約審核狀況",
+	    "電子保單下載" : "下載電子保單。",
+
+	    // 保戶會員資料
+	    "我的基本資料"  : "查詢個人資料，含地址、電話、Email等資料",
+	    "匯款帳戶變更"  : "新增/異動指定匯款帳戶供線上交易使用",
+	    "變更密碼"      : "",
+
+	    // 二 保單服務
+	    // 保單變更
+	    "地址/電話/Email變更" : "為了能正確寄送相關單據，請定期檢視並更新聯絡資料",
+	    "保戶e通知申請(電子通知單)" : "特定通知單以「電子郵件」傳送取代傳統書面郵寄",
+	    "繳別變更" : "僅提供無須補費或小額補費之保單可線上繳別變更",
+	    "墊繳選擇權變更" : "選擇是否同意以保單價值準備金墊付續期保險費",
+	    "保單紅利給付批註" : "適用分紅保單於保單終止時，仍有要保人應付未付之紅利金額及利息，將一併給付予保險金受益人",
+	    "結清紅利/增值回饋分享金" : "適用於分紅保單及利率變動型保單，結清累計紅利",
+	    "紅利/回饋金選擇權暨匯款帳戶變更" : "適用於美式分紅及利率變動型保單申請變更給付方式或約定現金給付之匯款帳號",
+	    "生存保險金匯款帳戶變更" : "適用於有生存保險金之保單，變更其匯款給付帳號",
+
+	    // 投資型保單變更
+	    "投資報酬率通知設定":"當投資報酬率達到預設門檻，將以「電子郵件」通知並呈現於保戶e點通「重要通知」內",
+	    "重新評估投資風險屬性":"填寫「投資風險取向分析問卷」，評估投資風險屬性暨適用基金風險等級",
+	    "投資標的轉換(基金轉換)" : "將某一投資標的目前持有之帳戶價值金額，轉投入至其他投資標的",
+	    "投資標的保險費配置比例變更" : "變更續期保險費所設定的投資標的比例，於最近一期繳費日起開始生效",
+	    "部分提領" : "提取投資型保單之帳戶價值部分金額",
+	    "每月費用扣除順序批註條款暨扣除順序變更" : "可自行安排持有基金中，每月應扣保險成本或保單管理費扣除順序",
+	    "非投資等級債劵基金風險預告書" : "瞭解非投資等級債券基金之特有風險",
+	    "現配/撥回現金給付匯款帳戶變更" : "適用有連結現金配息/資產撥回之投資標的，提供變更匯款給付帳號",
+	    "保費異動變更" : "變更投資型保單每期應繳目標保險費金額",
+	    "靈活配置變更" : "約定投資標的自動轉換比例、頻率",
+
+	    // 變更紀錄/查詢
+	    "繳費記錄" : "查詢二年內之續期繳費記錄",
+	    "線上變更記錄" : "查詢二年內於「保戶e點通」線上變更之記錄",
+	    "保單內容變更記錄" : "查詢二年內各項管道辦理之變更記錄",
+	    "保單借款/墊繳記錄" : "截至查詢日之保單借款或自動墊繳剩餘本金及利息",
+	    "紅利/回饋金分配記錄" : "查詢歷年之保單紅利給付記錄",
+	    "生存/滿期金給付記錄" : "查詢歷年之生存/滿期金給付記錄",
+
+	    // 保單試算專區
+	    "保單借款試算" : "試算保單目前最高可借款金額",
+	    "繳別變更試算" : "試算不同繳別之保費暨應補退保費",
+	    "減額繳清試算" : "試算辦理減額繳清後之保額",
+	    "解約試算" : "試算保單解約可領回之金額",
+
+	    // 申請/補發保單相關文件
+	    "補發電子保單" : "",
+	    "保戶e通知補發" : "補發一年內透過「電子通知單」寄發給您之單據",
+	    "繳費證明補發" : "補發當期繳費證明",
+
+	    // 三 保單借款
+	    "保單借款申請" : "限要被保人同一人且保單累積有保單價值準備金或帳戶價值可線上借款",
+	    "保單借款試算" : "試算保單目前最高可借款金額",
+
+	    // 四 繳費專區
+	    "線上信用卡繳費" : "適用收費管道為自行繳費/信用卡，並已開立續期繳費通知單之台幣有效保單，提供線上刷卡繳費",
+	    "信用卡卡號/效期變更" : "",
+	    "收費管道變更(限改為自行繳費)" : "",
+	    "繳費記錄":"查詢二年內之續期繳費記錄",
+
+	    // 五 理賠服務
+	    "網路理賠服務" : "線上申請理賠聯盟鏈或理賠醫起通服務",
+	    "理賠紀錄" : "",
+	    "身故理賠金額試算" : "",
+
+	    // 六 其他服務
+	    "表單下載" : "下載保單變更、理賠、收費相關申請書。",
+	    "投資型保險專區":"查詢各項投資標的之基本資料、歷史淨值、績效與風險，以及各項財經新聞、指數與匯率等資訊",
+	    "保單借款利率" : "本公司定期參考市埸利率進行借款利率適度調整，本功能提供您查詢最新之「保單借款利率」。",
+	    "分紅保單紅利宣告" : "查詢最新之「分紅保單紅利宣告」",
+	    "分紅保單儲存生息利率" : "查詢計算「分紅保單年度累計紅利利息」之利率",
+	    "利率變動型商品相關利率":"查詢「利率變動型商品」及「年金商品」之宣告利率",
+	    "保誠朋友卡":"下載保誠朋友卡",
+}
+
+/*  20240229 新版menu end   */  
+
+</script> 
+  
+<header>
+  <div class="header-container">
+    <a href="" class="logo photo">
+      <img class="hidden-mobile" src="/eservice/images/logo.jpg" alt="">
+      <img class="hidden-desktop hidden-pad" src="/eservice/images/logo_m.jpg" alt="">
+    </a>
+
+    <input type="hidden" id="userTypeLayout" value="csr">
+    <input type="hidden" id="usersrole" value="csr2">
+    <input type="hidden" id="clientSsoRole" value="customer3">
+    <input type="hidden" id="hasQueryClientCriterion" value="0">
+
+    <input type="hidden" id="nation" value="TWN">
+    <input type="hidden" id="otp" value="Y">
+    <input type="hidden" id="clientType" value="P">
+    <input type="hidden" id="email" value="sean.hy.chen@pcalife.com.tw">
+    <input type="hidden" id="mobile" value="0999999999">
+    <input type="hidden" id="clientLimitation" value="N">
+
+    <div hidden="hidden">
+      <input type="hidden" id="hasServiceClient" value="1">
+      <input type="hidden" id="isInsured" value="0">
+      <input type="hidden" id="isEmailAuth" value="1">
+      <input type="hidden" id="isAllPolicyHasIF" value="1">
+      <input type="hidden" id="isAllCntTypeIF" value="1">
+      <input type="hidden" id="isAllInvestmentIF" value="1">
+      
+      <input type="hidden" id="isAllPolicyHasIFOrMP" value="1">
+	    <input type="hidden" id="isAllUsaPolicyHasIF" value="1">
+      
+      
+      
+      
+      
+      <input type="hidden" id="isAllSwchind08YIF" value="0">
+      
+        
+    </div>
+    
+    <a src="/eservice/logout2" hidden="hidden" id="logoutUrl"></a>
+    <a src="https://onlineuat.pcalife.com.tw/sso/logout" hidden="hidden" id="ssoUrl"></a>
+	  <a src="https://onlineuat.pcalife.com.tw/sso/login" hidden="hidden" id="ssoLoginUrl"></a>
+    <a src="https://onlineuat.pcalife.com.tw/sso/timeout.html" hidden="hidden" id="timeoutUrl"></a>
+    <a src="https://onlineuat.pcalife.com.tw/pca-esv-web/" hidden="hidden" id="webUrl"></a>
+    <input value="; domain=pcalife.com.tw;" hidden="hidden" id="domain">
+
+    <!-- 20191220 快捷功能 -->
+    <div class="quick-func js-open-sidenav mobile js-qf-adj">
+      <div class="quick-func-icon js-qf-adj">
+        <i class="fa fa-star-o js-qf-adj" aria-hidden="true"></i>
+        <i class="fa fa-star js-qf-adj" aria-hidden="true"></i>
+      </div>
+      <p class="js-qf-adj">快捷功能</p>
+      <div class="sidenav js-sidenav js-qf-adj">
+        <a href="/eservice/csr/pq/ml" class="">
+          <span class="icon-notice "></span>
+          重要通知
+        </a>
+        <a href="/eservice/csr/pq/mi" class="">
+          <span class="icon-my-data "></span>
+          我的<br>基本資料
+        </a>
+        <a href="/eservice/csr/pq/pl" class="">
+          <span class="icon-ins-data "></span>
+          保單<br>基本資料
+        </a>
+        <a href="/eservice/csr/inv/pl" class="">
+          <span class="icon-safeguard "></span>
+          投資<br>
+          帳戶資料
+        </a>
+      </div>
+    </div>
+    <!-- 20191220 快捷功能 END -->
+    <!-- 20201119 調整 -->
+    <div class="mbr-func">
+      <div class="mbr-func__head js-mbrfunc">
+        <div class="mbr-func__head-icon">
+          <div class="icon-mbrfunc icon-mbrfunc--red"></div>
+          <div class="icon-mbrfunc icon-mbrfunc--white"></div>
+        </div>
+        <div class="mbr-func__head-title">會員資訊</div>
+      </div>
+      <div class="mbr-func__body">
+        <div class="mbr-func__msg">
+          <span class="mbr-func__msg--lg">錢柏州</span><br>歡迎使用「保戶e點通」服務！
+        </div>
+        <div class="mbr-func__time">上次登入時間：<span id="lastLoginDateM">114/11/06</span><br>上次修改密碼日期：<span id="passLastChgDteM">114/11/06</span></div>
+      </div>
+      <div class="mbr-func__overlay"></div>
+    </div>
+    <!-- /#20201119 調整 -->
+
+
+    <div class="hidden-desktop hidden-pad menu jsMenu">
+      <span class="menu-global menu-top"></span>
+      <span class="menu-global menu-middle"></span>
+      <span class="menu-global menu-bottom"></span>
+      <!-- <p class="menu-remind js-menu-remind">關閉<br>主選單</p> -->
+    </div>
+    <div class="mobile-info-collect jsMbInfoCollect">
+      <ul class="nav hidden-desktop hidden-pad header-m-login">
+        <li class="main-w50">
+          <a href="#" name="chgPd">
+            密碼變更
+            <img src="/eservice/images/icon-pw.svg" alt="">
+          </a>
+        </li>
+        <li class="main-w50">
+          <a href="javascript:void(0);" onclick="logoutFunction()" id="logout">
+            登出
+            <img src="/eservice/images/icon-signout.svg" alt="">
+          </a>
+        </li>
+      </ul>
+
+      <ul class="nav justify-content-end header-top-link hidden-mobile">
+        <li>
+          <a href="#" name="chgPd">
+            <img src="/eservice/images/icon-pw.svg" alt="">
+            變更密碼
+          </a>
+        </li>
+        <li>
+          <a href="https://onlineuat.pcalife.com.tw/pca-esv-web/htmls/productInfo/pca_eservice_manual.pdf">
+            <img src="/eservice/images/icon-que.svg" alt="">
+            使用說明
+          </a>
+        </li>
+        <li>
+          <a href="https://onlineuat.pcalife.com.tw/pca-esv-web/sitemap">
+            <img src="/eservice/images/icon-sitemap.svg" alt="">
+            網站地圖
+          </a>
+        </li>
+        <li>
+          <a href="https://www.pcalife.com.tw/zh" target="_blank">
+            <img src="/eservice/images/icon-index.svg" alt="">
+            保誠官網
+          </a>
+        </li>
+        <li>
+          <a href="javascript:void(0);" onclick="logoutFunction()" id="logoutBtn" class="red">
+            <img src="/eservice/images/icon-signout-red.svg" alt="">
+            登出
+          </a>
+        </li>
+      </ul>
+      <div class="nav justify-content-end header-login">
+
+        <!-- 20191220 快捷功能 -->
+        <div class="quick-func js-open-sidenav js-qf-adj hidden-mobile">
+          <div class="quick-func-icon js-qf-adj">
+            <i class="fa fa-star-o js-qf-adj" aria-hidden="true"></i>
+            <i class="fa fa-star js-qf-adj" aria-hidden="true"></i>
+          </div>
+          <p class="js-qf-adj">快捷功能</p>
+          <div class="sidenav js-sidenav js-qf-adj">
+            <a href="/eservice/csr/pq/ml" class="">
+              <span class="icon-notice "></span>
+              重要通知
+            </a>
+            <a href="/eservice/csr/pq/mi" class="">
+              <span class="icon-my-data "></span>
+              我的<br>基本資料
+            </a>
+            <a href="/eservice/csr/pq/pl" class="">
+              <span class="icon-ins-data "></span>
+              保單<br>基本資料
+            </a>
+            <a href="/eservice/csr/inv/pl" class="">
+              <span class="icon-safeguard"></span>
+              投資<br>
+              帳戶資料
+            </a>
+          </div>
+        </div>
+        <!-- 20191220 快捷功能 END -->
+
+        <div class="login-pic">
+          <img src="/eservice/images/user.png" alt="">
+        </div>
+        <div class="login-text">
+          <h3><span>錢柏州</span>
+            ，您好，歡迎使用「保戶e點通」服務！
+          </h3>
+          <ul class="login-text-status">
+            <li>上次登入日期：<span id="lastLoginDate">114/11/06</span></li>
+            <li>上次修改密碼日期：<span>114/11/06</span></li>
+          </ul>
+        </div>
+      </div>
+
+ 	<!-- ============================ 20240229 mobile用的選單 begin ===================================== -->      
+		<div id="mobileMenu"></div> 
+	
+	
+
+	 
+	<!-- ============================ 20240229 mobile用的選單 end ===================================== -->      
+      
+      
+      
+      
+      <ul class="nav justify-content-end header-top-link hidden-desktop hidden-pad">
+        <li>
+          <a href="https://onlineuat.pcalife.com.tw/pca-esv-web/htmls/productInfo/pca_eservice_manual.pdf">
+            <img src="/eservice/images/icon-que.svg" alt="">
+            使用說明
+          </a>
+        </li>
+        <li>
+          <a href="https://onlineuat.pcalife.com.tw/pca-esv-web/sitemap">
+            <img src="/eservice/images/icon-sitemap.svg" alt="">
+            網站地圖
+          </a>
+        </li>
+        <li>
+          <a href="https://www.pcalife.com.tw/zh" target="_blank">
+            <img src="/eservice/images/icon-index.svg" alt="">
+            保誠官網
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="mobile-overlay jsMenuClose"></div> 
+  </div>
+  
+  
+  
+      
+    <!-- ============================ 20240229 PC用的選單 begin ===================================== -->  
+	<div id="newPcESVmenu" style="position:absolute;top:121px;z-index: 10;background: #fff;width: 100%;border-bottom-left-radius: 11px;border-bottom-right-radius: 11px;">      
+	    
+	    <!-- === 主選單 === -->
+	    <div class="menu_Section">
+	        <ul class="mainUL">
+	            <li class="mainLI" catagory="key_g0001">我的保單</li>
+	            <li class="mainLI" catagory="key_g0002">保單變更/查詢</li>
+	            <li class="mainLI" catagory="key_g0003">保單借款</li>
+	            <li class="mainLI" catagory="key_g0004">繳費專區</li>
+	            <li class="mainLI" catagory="key_g0005">理賠服務</li>
+	            <li class="mainLI" catagory="key_g0006">其他服務</li>
+	            <li class="mainLI" catagory="key_g0007">服務支援</li>
+	        </ul>  
+	    </div>
+
+	
+	    <!--  === 次選單 === -->
+	    <div class="subMenu_Section subMenu-closed" id="subMenu_Section">
+	
+	        <!-- ====== descrtion dialogue ======= -->
+	        <div id="descDialog" class="dialogHide">
+	            <div id="descDialogArrow" class="descDialogArrowDown"></div>
+	            <div id="descDialogContent">Content</div> 
+	        </div> 
+	
+
+	        <!--===== 一 我的保單 ===== -->
+	        <ul class="subUL-newMenu" catagory="g0001">
+	            <li>
+	            	<a id="abcl" href="https://onlineuat.pcalife.com.tw/pca-esv-web/csr/pq/qscs" style="border:1px solid #aaa;padding:5px 25px 5px 13px">回客戶列表</a>
+	        	</li>
+	        </ul>
+	        <ul class="subUL-newMenu" catagory="g0001">
+	            <li link="/eservice/csr/pq/pl">保單基本資料</li>
+	        </ul>
+	        <ul class="subUL-newMenu" catagory="g0001">
+	            <li link="/eservice/csr/inv/pl">投資帳戶資料</li>
+	        </ul>
+	        <ul class="subUL-newMenu" catagory="g0001">
+	            <li link="/eservice/csr/pq/ml">重要通知</li>
+	        </ul>
+	        <ul class="subUL-newMenu" catagory="g0001">
+	            <li link="/eservice/csr/pq/go">保障總覽</li>
+	        </ul>
+	        
+	        <ul class="subUL-newMenu" catagory="g0001">
+	            <li>
+	            	<a id="aqc" style="border:1px solid #aaa;padding:5px 10px;cursor:pointer">客戶資料查詢</a>
+	            </li>	
+	        </ul>
+	        <ul class="subUL-newMenu" catagory="g0001">
+	            <li link="/eservice/csr/pq/ncp">新契約進度</li>
+	        </ul>		        
+	        
+	        <ul class="subUL-newMenu" catagory="g0001">
+	          <li>
+	            <a id="epolicy" href="/eservice/csr/pq/pdw">電子保單下載</a>
+	          </li>
+	        </ul>
+	        
+	
+	        <ul class="subUL-newMenu" catagory="g0001">
+	            <li>保戶會員資料</li>
+	            <li link="/eservice/csr/pq/mi">我的基本資料</li>
+	            <li>
+	            	<a id="chba" href="/eservice/csr/oc/chba">匯款帳戶變更</a>
+	            </li>
+	            <li link="https://onlineuat.pcalife.com.tw/sso/changeIdPasswordOTP.html">變更密碼</li>
+	        </ul>
+	        
+	
+	        <!--=====  二 保單服務 ===== -->
+	        <ul id="uloa" class="subUL-newMenu" catagory="g0002">
+	            <li>保單變更</li>
+	            <li>
+	            	<a id="chgpat" href="/eservice/csr/oc/chgat">地址/電話/Email變更</a>
+	            </li>
+	            <li>
+	            	<a id="aen" href="/eservice/csr/oc/aen">保戶e通知申請(電子通知單)</a>
+	            </li>
+	            <li>
+	            	<a id="chgpf" href="/eservice/csr/oc/chgpf">繳別變更</a>
+	            </li>
+	            <li>
+	            	<a id="chgaplo" href="/eservice/csr/oc/chgaplo">墊繳選擇權變更</a>
+	            </li>
+	            <li>
+	            	<a id="chgaplo1" href="https://onlineuat.pcalife.com.tw/pca-esv-web/csr/oc/chgaplo">墊繳選擇權變更(舊)</a>
+	            </li>
+	            <li>
+	            	<a id="diviendo" href="https://onlineuat.pcalife.com.tw/pca-esv-web/csr/oc/diviendo">保單紅利給付批註</a>
+	            </li>
+	            <li class="moreItem -hidden">
+	            	<a id="chgsetl" href="/eservice/csr/oc/setl">結清紅利/增值回饋分享金</a>
+	            </li>
+	            <li class="moreItem -hidden">
+	                <a id="chgdo" href="/eservice/csr/oc/chgdo">紅利/回饋金選擇權暨匯款帳戶變更</a>
+	            </li>
+	            <li class="moreItem -hidden">
+	            	<a id="chgsp" href="/eservice/csr/oc/chgsp">生存保險金匯款帳戶變更</a>
+	            </li>
+	            <li class="openMore"><img src="/eservice/images/arrow-down-aaa.png"></li>
+	        </ul>
+	
+	        <ul id="ulinv" class="subUL-newMenu" catagory="g0002">
+	            <li>投資型保單變更</li>
+	            <li>
+	            	<a href="https://onlineuat.pcalife.com.tw/pca-esv-web/csr/inv/cfroin">投資報酬率通知設定</a>
+	            </li>
+	            <li>
+	            	<a id="ireir" href="/eservice/csr/oc/reir/1">重新評估投資風險屬性</a>
+	            </li>
+	            <li>
+	            	<a id="ichgf" href="/eservice/csr/oc/chgit/1">投資標的轉換(基金轉換)</a>
+	            </li>
+	            <li>
+	            	<a id="ichgp" href="/eservice/csr/oc/chgip/1">投資標的保險費配置比例變更</a>
+	            </li>
+	            <li>
+	            	<a id="ir" href="/eservice/csr/oc/apr/1">部分提領</a>
+	            </li>
+	            <li class="moreItem -hidden">
+	            	<a id="ichgdo" href="https://onlineuat.pcalife.com.tw/pca-esv-web/csr/oc/chgcoip/1">每月費用扣除順序批註條款暨扣除順序變更</a>
+	            </li>
+	            <li class="moreItem -hidden">
+	            	<a id="hybf" href="https://onlineuat.pcalife.com.tw/pca-esv-web/csr/oc/hybfRisk/1">非投資等級債劵基金風險預告書</a>
+	            </li>
+	            <li class="moreItem -hidden">
+	            	<a id="chgdr" href="/eservice/csr/oc/chgdr">現配/撥回現金給付匯款帳戶變更</a>
+	            </li>
+	            <li class="moreItem -hidden">
+	            	<a id="chginvp" href="/eservice/csr/oc/chginvp">保費異動變更</a>
+	            </li>
+	            <li class="moreItem -hidden">
+	            	<a id="ichgaf" href="https://onlineuat.pcalife.com.tw/pca-esv-web/csr/oc/chgait/1">靈活配置變更</a>           
+	            </li>
+	            <li class="openMore"><img src="/eservice/images/arrow-down-aaa.png"></li>
+	        </ul>        
+	
+	        <ul class="subUL-newMenu" catagory="g0002">
+	            <li>變更紀錄/查詢</li>
+	            <li link="/eservice/csr/ph/p/1">繳費記錄</li>
+	            <li>
+                    <a id="och" href="/eservice/csr/oc/och">線上變更記錄</a></li>
+	            
+	            <li link="/eservice/csr/ph/pc">保單內容變更記錄</li>
+	            <li link="/eservice/csr/ph/pl">保單借款/墊繳紀錄</li>
+	            <li link="/eservice/csr/ph/dd">紅利/回饋金分配記錄</li>
+	            <li link="/eservice/csr/ph/rp" class="moreItem -hidden">生存/滿期金給付記錄</li>           
+	            <li class="openMore"><img src="/eservice/images/arrow-down-aaa.png"></li>
+	        </ul> 
+	
+	        <ul id="ulcalc" class="subUL-newMenu" catagory="g0002">
+	            <li>保單試算專區</li>
+	            <li>
+	            	<a id="pcpl2" href="/eservice/csr/pc/pl/1">保單借款試算</a>
+	            </li>
+	            <li>
+	            	<a id="pcpf" href="/eservice/csr/pc/pf">繳別變更試算</a>
+	            </li>
+	            <li>
+	            	<a id="pcrp" href="/eservice/csr/pc/rp">減額繳清試算</a>
+	            </li>
+	            <li>
+	            	<a id="pcc" href="/eservice/csr/pc/c">解約試算</a>
+	        	</li>
+	        </ul> 
+	
+	        <ul class="subUL-newMenu" catagory="g0002">
+	            <li>申請/補發保單相關文件</li>
+	            <li>
+	            	<a id="rpolicy" href="/eservice/csr/oc/rp">補發電子保單</a>
+	            </li>
+	            <li>
+	            	<a id="aren" href="https://onlineuat.pcalife.com.tw/pca-esv-web/csr/ph/ren">保戶e通知補發</a>
+	            </li>
+	            <li>
+	            	<a id="arrp" href="https://onlineuat.pcalife.com.tw/pca-esv-web/csr/ph/rrp">繳費證明補發</a>
+	        	</li>
+	        </ul> 	        
+	        
+	        <!--=====  三 保單借款 ===== -->
+	        <ul class="subUL-newMenu" catagory="g0003">
+	            <li>
+	            	<a id="apl" href="/eservice/csr/oc/apl">保單借款申請</a>
+	            </li>
+	        </ul>   
+	
+	        <ul class="subUL-newMenu" catagory="g0003">
+	         	<li>
+	        		<a id="pcpl2" href="/eservice/csr/pc/pl/2">保單借款試算</a>
+	        	</li>
+	        </ul>  	        
+	       
+	        <ul class="subUL-newMenu" catagory="g0003">
+	            <li link="https://www.pcalife.com.tw/zh/public-info/loans-rate" target="_blank">保單借款利率</li>
+	        </ul> 
+	        
+	
+	        <!--===== 四 繳費專區 ===== -->
+	        <ul class="subUL-newMenu" catagory="g0004">
+	          <li>
+	            <a id="creditcard" href="/eservice/csr/oc/cco">線上信用卡繳費</a>
+	          </li>
+	        </ul>      
+	        <ul id="chgcvdul" class="subUL-newMenu" catagory="g0004">
+	          <li>
+	            <a id="chgcvd" href="/eservice/csr/oc/chgcvd">信用卡卡號/效期變更</a>
+	          </li>
+	        </ul>
+	        <ul id="chgpmul" class="subUL-newMenu" catagory="g0004">
+	         	<li>
+                  <a id="chgpm" href="/eservice/csr/oc/chgpm">收費管道(限變更為自行繳費)</a></li>
+	            
+	        </ul>
+	        <ul class="subUL-newMenu" catagory="g0004">
+	            <li link="/eservice/csr/ph/p/2">繳費記錄</li>
+	        </ul> 	        
+
+	
+	        <!--=====  五 理賠服務 ===== -->
+	        <ul class="subUL-newMenu" catagory="g0005">
+	        	<li>
+	        		<a id="claim" href="/eservice/csr/ap/icat">網路理賠服務</a>
+	        	</li>
+	        </ul> 
+	        <ul class="subUL-newMenu" catagory="g0005">
+	        	<li link="/eservice/csr/ph/c">理賠紀錄</li>
+	        </ul> 
+	        <ul class="subUL-newMenu" catagory="g0005">
+	        	<li>
+	        		<a id="dclaim" href="https://onlineuat.pcalife.com.tw/pca-esv-web/csr/pc/dc">身故理賠金額試算</a>
+	        	</li>
+	        </ul>   	
+	        <!--=====  六 其他服務 ===== -->
+	        <ul class="subUL-newMenu" catagory="g0006">
+	        	<li link="https://www.pcalife.com.tw/zh/our-services/downloadforms/" target="_blank">表單下載</li>
+	        </ul>   
+	
+	        <ul class="subUL-newMenu" catagory="g0006">
+				<li link="https://www.pcalife.com.tw/zh/our-product/investment-type/recognize-investment-insurance" target="_blank">投資型保險專區</li> 
+	        </ul>   
+	
+   	        <ul class="subUL-newMenu" catagory="g0006">
+	            <li link="https://www.pcalife.com.tw/zh/our-company/public-info/bonus" target="_blank">分紅保單紅利宣告</li>
+	        </ul>   
+	
+	        <ul class="subUL-newMenu" catagory="g0006">
+	            <li link="https://www.pcalife.com.tw/zh/our-company/public-info/declare" target="_blank">分紅保單儲存生息利率</li>
+	        </ul>
+	        
+	         <ul class="subUL-newMenu" catagory="g0006">
+	            <li link="https://www.pcalife.com.tw/zh/our-company/public-info/annuity" target="_blank">利率變動型商品相關利率</li>
+	        </ul> 
+	
+	        <!--=====  七 服務支援 ===== -->
+	        <ul class="subUL-newMenu" catagory="g0007">
+	            <li>
+	            	<a id="qloabtn" href="https://onlineuat.pcalife.com.tw/pca-esv-web/csr/ss/qloa">授權書查詢</a>
+	            </li>
+	        </ul>   
+	           
+	         
+	        <ul class="subUL-newMenu" catagory="g0007">
+	        	<li>
+	            	<a id="qtbtn" href="https://onlineuat.pcalife.com.tw/pca-esv-web/csr/ss/qt">電銷名單查詢</a>
+	        	</li>
+	        </ul>           
+	        <ul class="subUL-newMenu" catagory="g0007">
+	            <li>
+	            	<a id="ew" href="https://onlineuat.pcalife.com.tw/pca-esv-web/csr/ewc/aplpc" target="_blank">一電通</a>
+	        	</li>
+	        </ul>  
+		</div>
+
+	 </div>   
+	<!-- ============================ 20240229 PC用的選單 end ===================================== -->   
+  <span class="header-bottom-bg bg-red" style="position: absolute;top:118px;height: 50px;"></span>
+  <span class="header-top-bg gradual-gray"></span>
+</header>
+
+<script>
+$(document).ready(function () {
+	var c = 0, r = '', e = '';
+	var arr;
+	var checkTimer = function(){
+		$('#timerMsgBox').modal('show');	
+	}
+	
+	$("#continueTimer").click(function(e){
+		var s1 = readCookie('TMSYNC');
+		$.when($.ajax({
+			type: "POST",
+			url:"/eservice/info/checkingTimer",
+// 			async : false,
+			data:{mode:'notice', info:s1},
+			success: function (data) {
+			},
+			error:function (jqXHR, exception) {
+			}
+		})).done(function(a1){
+			setTimeout(checkTimer, 600000);
+		});		
+	});
+	var s = readCookie('TMSYNC'); console.log('s:'+s);
+	$.ajax({
+		type: "POST",
+		url:"/eservice/info/checkingTimer",
+//		async : false,
+		data:{mode:'checking', info:s},
+		success: function (data) { console.log('data:'+data);
+			s = data;
+		},
+		error:function (jqXHR, exception) {
+		}
+	}).done(function(a1){
+		eraseCookie('TMSYNC');
+		createCookie('TMSYNC', s, 1);
+		setTimeout(checkTimer, 600000);
+	});
+});
+
+function createCookie(name, value, days) {
+	  let expires;
+	  if (days) {
+	    let date = new Date();
+	    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+	    expires = "; expires=" + date.toGMTString();
+	  } else expires = "";
+	  var domain = "; domain=pcalife.com.tw;";
+	  document.cookie = name + "=" + encodeURI(value) + expires + "; path=/" + domain;
+	}
+
+function eraseCookie(name) {
+	  createCookie(name, "", -1);
+	}
+function readCookie(name) {
+	  var nameEQ = name + "=";
+	  var ca = document.cookie.split(';');
+	  for (var i = 0; i < ca.length; i++) {
+	    var c = ca[i];
+	    while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+	    if (c.indexOf(nameEQ) === 0) return decodeURI(c.substring(nameEQ.length, c.length));
+	  }
+	  return "";
+	}
+</script>
+
+</div>
+  
+  
+    <!--    <script th:src="@{/js/_sswlib.js}"></script>-->
+    <script src="/eservice/js/rwd/onlineChange/chgPaymentMethodUI.js"></script>
+    <script src="/eservice/js/rwd/onlineChange/chgPaymentMethod.js"></script>
+    <div class="main main--h60">
+        <div class="container">
             <div class="cc_content">
                 <!--  NAV -->
                 <div class="cc_nav">
                     <ul>
                         <li>繳費專區</li>
-                        <li>信用卡卡號/效期變更</li>
+                        <li>收費管道(限變更為自行繳費)</li>
                     </ul>
                 </div>
 
-                <div class="redTag" id="red_tag">信用卡卡號/效期變更&nbsp;&nbsp;&nbsp; </div>
-                <div class="subTitle">有異動權限保單</div>
+                <div class="redTag" id="red_tag">收費管道(限變更為自行繳費)&nbsp;&nbsp;&nbsp; </div>
 
-                <input type="hidden" id="chgPolicies" value="[com.pca.esvrwd.model.onlinechange.ChgCreditCardValidDatePolicy@294510b4[
-  policyNumber=80424859
-  effectiveDate=105/05/20
-  policyholderName=神Ｑ雨翅蛾
-  insuredName=神Ｑ雨翅蛾
-  insuranceName=保誠人壽倍感安心終身醫療健康保險
-  bankName=玉山信用卡部
-  creditCardNumber=524255********2517
-  creditCardAuthorizationEndDate=20231201
-  creditCardAuthorizationEndDateChtText=2023年12月
-], com.pca.esvrwd.model.onlinechange.ChgCreditCardValidDatePolicy@1bfd3943[
-  policyNumber=80310031
-  effectiveDate=101/07/01
-  policyholderName=神Ｑ雨翅蛾
-  insuredName=神Ｑ雨翅蛾
-  insuranceName=保誠人壽悠遊人生變額壽險
-  bankName=玉山信用卡部
-  creditCardNumber=512308********2124
-  creditCardAuthorizationEndDate=20200501
-  creditCardAuthorizationEndDateChtText=2020年5月
-]]" disabled="">
-                <form id="chgCardDateFrom" action="/eservice/csr/oc/chgcvdcfrm" method="post"><input type="hidden" name="_csrf" value="02eb1a2d-71cf-4a27-bee3-e631f4ba6f12">
-                    <input type="hidden" name="email" id="email" value="sean.hy.chen@pcalife.com.tw">
-                    <input type="hidden" name="mobile" id="mobile" value="0999999999">
+                <input type="hidden" name="changeablePolicies" id="changeablePolicies" value="[{&quot;contractNum&quot;:&quot;80459278&quot;,&quot;commenceDate&quot;:&quot;106/01/10&quot;,&quot;ownerName&quot;:&quot;神Ｑ雨翅蛾&quot;,&quot;insuredName&quot;:&quot;神Ｑ雨翅蛾&quot;,&quot;fullDescription&quot;:&quot;保誠人壽一路長鴻終身壽險&quot;,&quot;contractStatusText&quot;:&quot;正常續繳&quot;,&quot;paymentMethod&quot;:&quot;D&quot;,&quot;paymentMethodText&quot;:&quot;自動轉帳&quot;,&quot;bankName&quot;:&quot;省合庫&quot;,&quot;payAccNum&quot;:&quot;3335********996&quot;},{&quot;contractNum&quot;:&quot;80439254&quot;,&quot;commenceDate&quot;:&quot;105/09/29&quot;,&quot;ownerName&quot;:&quot;神Ｑ雨翅蛾&quot;,&quot;insuredName&quot;:&quot;神Ｑ雨翅蛾&quot;,&quot;fullDescription&quot;:&quot;保誠人壽五五升豐增額終身壽險&quot;,&quot;contractStatusText&quot;:&quot;正常續繳&quot;,&quot;paymentMethod&quot;:&quot;D&quot;,&quot;paymentMethodText&quot;:&quot;自動轉帳&quot;,&quot;bankName&quot;:&quot;渣打銀行&quot;,&quot;payAccNum&quot;:&quot;6664********077&quot;},{&quot;contractNum&quot;:&quot;80424859&quot;,&quot;commenceDate&quot;:&quot;105/05/20&quot;,&quot;ownerName&quot;:&quot;神Ｑ雨翅蛾&quot;,&quot;insuredName&quot;:&quot;神Ｑ雨翅蛾&quot;,&quot;fullDescription&quot;:&quot;保誠人壽倍感安心終身醫療健康保險&quot;,&quot;contractStatusText&quot;:&quot;正常續繳&quot;,&quot;paymentMethod&quot;:&quot;T&quot;,&quot;paymentMethodText&quot;:&quot;信用卡&quot;,&quot;bankName&quot;:&quot;玉山信用卡部&quot;,&quot;payAccNum&quot;:&quot;524255********2517&quot;},{&quot;contractNum&quot;:&quot;80380658&quot;,&quot;commenceDate&quot;:&quot;104/10/24&quot;,&quot;ownerName&quot;:&quot;神Ｑ雨翅蛾&quot;,&quot;insuredName&quot;:&quot;神Ｑ雨翅蛾&quot;,&quot;fullDescription&quot;:&quot;保誠人壽美利325美元利率變動型增額養老保險&quot;,&quot;contractStatusText&quot;:&quot;正常續繳&quot;,&quot;paymentMethod&quot;:&quot;D&quot;,&quot;paymentMethodText&quot;:&quot;自動轉帳&quot;,&quot;bankName&quot;:&quot;國泰銀行&quot;,&quot;payAccNum&quot;:&quot;7777********774&quot;},{&quot;contractNum&quot;:&quot;80310031&quot;,&quot;commenceDate&quot;:&quot;101/07/01&quot;,&quot;ownerName&quot;:&quot;神Ｑ雨翅蛾&quot;,&quot;insuredName&quot;:&quot;神Ｑ雨翅蛾&quot;,&quot;fullDescription&quot;:&quot;保誠人壽悠遊人生變額壽險&quot;,&quot;contractStatusText&quot;:&quot;正常續繳&quot;,&quot;paymentMethod&quot;:&quot;T&quot;,&quot;paymentMethodText&quot;:&quot;信用卡&quot;,&quot;bankName&quot;:&quot;玉山信用卡部&quot;,&quot;payAccNum&quot;:&quot;512308********2124&quot;}]">
 
+                <form id="chgPaymentMethodForm" action="/eservice/csr/oc/chgpmcfrm" method="post"><input type="hidden" name="_csrf" value="59839237-fff1-4202-909b-c0c87955fdde">
+                    <input type="hidden" id="selectedData" name="selectedData">
                     <input type="hidden" name="sourceType" id="sourceType" value="E">
-                    <input type="hidden" name="contractNum" id="contractNum">
-                    <input type="hidden" name="policyholderName" id="policyholderName">
-                    <input type="hidden" name="insuredName" id="insuredName">
-                    <input type="hidden" name="insuranceName" id="insuranceName">
-                    <input type="hidden" name="creditCardNumber" id="creditCardNumber">
-                    <input type="hidden" name="endYear" id="endYear">
-                    <input type="hidden" name="endMonth" id="endMonth">
-                    <input type="hidden" name="note" id="note">
-                    <input type="hidden" name="changeType" id="changeType">
-                    <input type="hidden" name="newCreditCardNumber" id="newCreditCardNumber">
-                    <input type="hidden" name="beforeCreditCardAuthorizationEndDateChtText" id="beforeCreditCardAuthorizationEndDateChtText">
-
-                    <input type="hidden" name="_csrf" value="02eb1a2d-71cf-4a27-bee3-e631f4ba6f12">
+                    <input type="hidden" name="_csrf" value="59839237-fff1-4202-909b-c0c87955fdde">
                 </form>
+
+                <div class="subTitle">有異動權限保單</div>
 
                 <!-- for PC begin-->
                 <div class="tb_Table_pc">
@@ -61,138 +1326,200 @@
                         <div class="tb_column name">要保人</div>
                         <div class="tb_column name">被保險人</div>
                         <div class="tb_column flexInsurance" style="text-align:left">險種名稱</div>
-                        <div class="tb_column bankname">發卡銀行</div>
-                        <div class="tb_column creditcard_code">信用卡號</div>
-                        <div class="tb_column expiry_date">信用卡效期</div>
+                        <div class="tb_column status">保單狀況</div>
+                        <div class="tb_column tollmode">收費管道</div>
+                        <div class="tb_column bankname">銀行名稱</div>
+                        <div class="tb_column creditcard_code">信用卡號/銀行帳號</div>
+                        <div class="tb_column selfpay">自行繳費</div>
                     </div>
 
-                    <!--  PC 有異動權限保單-->
-                    <div class="tb_row selector">
+                    <!--  PC 有異動權限 -->
+                    <div class="tb_row">
                         <div class="tb_column sn">
                             <div class="checkBoxSet">
                                 <label class="cc-form-control">
-                                    <input type="radio" name="list_pc" value="80424859" style="margin: 0 0;" class="squareRadio policyNumberSelector">
+                                    <input type="checkbox" name="list_pc" value="80459278" style="margin: 0 0;" class="squareRadio">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="tb_column insurecode">
+                            <a href="/eservice/csr/pq/pl?policyNumber=80459278" class="partial-table__link">80459278</a></div>
+                        <div class="tb_column date">106/01/10</div>
+                        <div class="tb_column name">神Ｑ雨翅蛾</div>
+                        <div class="tb_column name">神Ｑ雨翅蛾</div>
+                        <div class="tb_column flexInsurance" style="text-align:justify">保誠人壽一路長鴻終身壽險</div>
+                        <div class="tb_column status">正常續繳</div>
+                        <div class="tb_column tollmode">自動轉帳</div>
+                        <div class="tb_column bankname">省合庫</div>
+                        <div class="tb_column creditcard_code">3335********996</div>
+                        <div class="tb_column selfpay">
+                            <label>
+                                <input type="checkbox" value="" class="isSelfPay" disabled="">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="tb_row">
+                        <div class="tb_column sn">
+                            <div class="checkBoxSet">
+                                <label class="cc-form-control">
+                                    <input type="checkbox" name="list_pc" value="80439254" style="margin: 0 0;" class="squareRadio">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="tb_column insurecode">
+                            <a href="/eservice/csr/pq/pl?policyNumber=80439254" class="partial-table__link">80439254</a></div>
+                        <div class="tb_column date">105/09/29</div>
+                        <div class="tb_column name">神Ｑ雨翅蛾</div>
+                        <div class="tb_column name">神Ｑ雨翅蛾</div>
+                        <div class="tb_column flexInsurance" style="text-align:justify">保誠人壽五五升豐增額終身壽險</div>
+                        <div class="tb_column status">正常續繳</div>
+                        <div class="tb_column tollmode">自動轉帳</div>
+                        <div class="tb_column bankname">渣打銀行</div>
+                        <div class="tb_column creditcard_code">6664********077</div>
+                        <div class="tb_column selfpay">
+                            <label>
+                                <input type="checkbox" value="" class="isSelfPay" disabled="">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="tb_row">
+                        <div class="tb_column sn">
+                            <div class="checkBoxSet">
+                                <label class="cc-form-control">
+                                    <input type="checkbox" name="list_pc" value="80424859" style="margin: 0 0;" class="squareRadio">
                                 </label>
                             </div>
                         </div>
                         <div class="tb_column insurecode">
                             <a href="/eservice/csr/pq/pl?policyNumber=80424859" class="partial-table__link">80424859</a></div>
                         <div class="tb_column date">105/05/20</div>
-                        <div class="tb_column name policyholderName">神Ｑ雨翅蛾</div>
-                        <div class="tb_column name insuredName">神Ｑ雨翅蛾</div>
-                        <div class="tb_column flexInsurance insuranceName" style="text-align:left">保誠人壽倍感安心終身醫療健康保險</div>
+                        <div class="tb_column name">神Ｑ雨翅蛾</div>
+                        <div class="tb_column name">神Ｑ雨翅蛾</div>
+                        <div class="tb_column flexInsurance" style="text-align:justify">保誠人壽倍感安心終身醫療健康保險</div>
+                        <div class="tb_column status">正常續繳</div>
+                        <div class="tb_column tollmode">信用卡</div>
                         <div class="tb_column bankname">玉山信用卡部</div>
-                        <div class="tb_column creditcard_code creditCardNumber">524255********2517</div>
-                        <div class="tb_column creditCardAuthorizationEndDateChtText expiry_date">2023年12月</div>
+                        <div class="tb_column creditcard_code">524255********2517</div>
+                        <div class="tb_column selfpay">
+                            <label>
+                                <input type="checkbox" value="" class="isSelfPay" disabled="">
+                            </label>
+                        </div>
                     </div>
-                    <div class="tb_row selector">
+                    <div class="tb_row">
                         <div class="tb_column sn">
                             <div class="checkBoxSet">
                                 <label class="cc-form-control">
-                                    <input type="radio" name="list_pc" value="80310031" style="margin: 0 0;" class="squareRadio policyNumberSelector">
+                                    <input type="checkbox" name="list_pc" value="80380658" style="margin: 0 0;" class="squareRadio">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="tb_column insurecode">
+                            <a href="/eservice/csr/pq/pl?policyNumber=80380658" class="partial-table__link">80380658</a></div>
+                        <div class="tb_column date">104/10/24</div>
+                        <div class="tb_column name">神Ｑ雨翅蛾</div>
+                        <div class="tb_column name">神Ｑ雨翅蛾</div>
+                        <div class="tb_column flexInsurance" style="text-align:justify">保誠人壽美利325美元利率變動型增額養老保險</div>
+                        <div class="tb_column status">正常續繳</div>
+                        <div class="tb_column tollmode">自動轉帳</div>
+                        <div class="tb_column bankname">國泰銀行</div>
+                        <div class="tb_column creditcard_code">7777********774</div>
+                        <div class="tb_column selfpay">
+                            <label>
+                                <input type="checkbox" value="" class="isSelfPay" disabled="">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="tb_row">
+                        <div class="tb_column sn">
+                            <div class="checkBoxSet">
+                                <label class="cc-form-control">
+                                    <input type="checkbox" name="list_pc" value="80310031" style="margin: 0 0;" class="squareRadio">
                                 </label>
                             </div>
                         </div>
                         <div class="tb_column insurecode">
                             <a href="/eservice/csr/pq/pl?policyNumber=80310031" class="partial-table__link">80310031</a></div>
                         <div class="tb_column date">101/07/01</div>
-                        <div class="tb_column name policyholderName">神Ｑ雨翅蛾</div>
-                        <div class="tb_column name insuredName">神Ｑ雨翅蛾</div>
-                        <div class="tb_column flexInsurance insuranceName" style="text-align:left">保誠人壽悠遊人生變額壽險</div>
+                        <div class="tb_column name">神Ｑ雨翅蛾</div>
+                        <div class="tb_column name">神Ｑ雨翅蛾</div>
+                        <div class="tb_column flexInsurance" style="text-align:justify">保誠人壽悠遊人生變額壽險</div>
+                        <div class="tb_column status">正常續繳</div>
+                        <div class="tb_column tollmode">信用卡</div>
                         <div class="tb_column bankname">玉山信用卡部</div>
-                        <div class="tb_column creditcard_code creditCardNumber">512308********2124</div>
-                        <div class="tb_column creditCardAuthorizationEndDateChtText expiry_date">2020年5月</div>
+                        <div class="tb_column creditcard_code">512308********2124</div>
+                        <div class="tb_column selfpay">
+                            <label>
+                                <input type="checkbox" value="" class="isSelfPay" disabled="">
+                            </label>
+                        </div>
                     </div>
 
                     
                 </div>
                 <!-- for PC end-->
 
-                <!-- PC & Mobile 共用組件-->
-                <!-- 20251001 原效期變更 begin -->
-                <!--  
-                <div id="pcNewExpire" style="display:none">
-                    <div class="new_expire_date" id="new_expire_date">
-                        <div class="daterow">
-                            請輸入信用卡新效期：
-                            <input type="text" name="cc_expday" class="cc-expday" placeholder="MM/YY" size="6"
-                                   id="cc-expday" minlength="5" maxlength="5">
-                        </div>
-                        <br>
-                        
-                        <div class="noteBR" th:if="${showRemark == 'Y'}"></div>
-                        
-                        <div class="memo" th:if="${showRemark == 'Y'}">
-                            備註 <label for="memo"></label><input type="text" class="memo" id="memo"
-                                                                  style="height:32px;">
-                        </div>
-                    </div>
-                </div>
-                -->
-                <!-- 20251001 原效期變更 end -->
-
-                
-                
-                
-                
-                
-                
-                
-                                
-
                 <!--=================================== PC/Mobile 分隔線  ========================================-->
-
                 <!-- for mobile begin-->
-                <!--  MOBILE 有異動權限保單-->
+                <!--  MOBILE 有異動權限-->
                 <div class="tb_Table_mobile">
                     <div class="tb_row headeRow">
                         <div class="tb_column -f sn">
                         </div>
                         <div class="tb_column id">保單號碼</div>
                         <div class="tb_column insurname">險種名稱</div>
+                        <div class="tb_column selfpay">自行繳費</div>
                     </div>
 
-                    <div class="selector">
-                        <div class="tb_row mobileKey">
-                            <div class="tb_column sn">
-                                <div class="checkBoxSet">
-                                    <label class="cc-form-control">
-                                        <input type="radio" name="radio_mobile" value="80424859" style="margin: 0 0;" class="squareRadios_mobile policyNumberSelector">
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="tb_column id"><a href="/eservice/csr/pq/pl?policyNumber=80424859" class="partial-table__link">80424859</a></div>
-                            <div class="tb_column insurname insuranceName">保誠人壽倍感安心終身醫療健康保險</div>
-                        </div>
-
-                        <div class="tb_row ext">
-                            <div class="tb_row_mobile">
-                                <div class="tb_column_mobile">契約始期</div>
-                                <div class="tb_column_mobile">105/05/20</div>
-                            </div>
-                            <div class="tb_row_mobile">
-                                <div class="tb_column_mobile">要保人</div>
-                                <div class="tb_column_mobile policyholderName">神Ｑ雨翅蛾</div>
-                            </div>
-                            <div class="tb_row_mobile">
-                                <div class="tb_column_mobile">被保險人</div>
-                                <div class="tb_column_mobile insuredName">神Ｑ雨翅蛾</div>
-                            </div>
-                            <div class="tb_row_mobile">
-                                <div class="tb_column_mobile">發卡銀行</div>
-                                <div class="tb_column_mobile">玉山信用卡部</div>
-                            </div>
-                            <div class="tb_row_mobile">
-                                <div class="tb_column_mobile">信用卡號</div>
-                                <div class="tb_column_mobile creditCardNumber">524255********2517</div>
-                            </div>
-                            <div class="tb_row_mobile">
-                                <div class="tb_column_mobile">信用卡效期</div>
-                                <div class="tb_column_mobile creditCardAuthorizationEndDateChtText">2023年12月</div>
+                    <div class="tb_row mobileKey">
+                        <div class="tb_column sn">
+                            <div class="checkBoxSet">
+                                <label class="cc-form-control">
+                                    <input type="checkbox" name="list_mobile" value="80459278" style="margin: 0 0;" class="squareRadios_mobile">
+                                </label>
                             </div>
                         </div>
+                        <div class="tb_column id"><a href="/eservice/csr/pq/pl?policyNumber=80459278" class="partial-table__link">80459278</a></div>
+                        <div class="tb_column insurname">保誠人壽一路長鴻終身壽險</div>
+                        <div class="tb_column selfpay">
+                            <label>
+                                <input type="checkbox" value="" class="isSelfPay" disabled="">
+                            </label>
+                        </div>
+                    </div>
 
-                        <div class="mobileNewExpire"></div>
+                    <div class="tb_row ext">
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">契約始期</div>
+                            <div class="tb_column_mobile">106/01/10</div>
+                        </div>
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">要保人</div>
+                            <div class="tb_column_mobile">神Ｑ雨翅蛾</div>
+                        </div>
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">被保險人</div>
+                            <div class="tb_column_mobile">神Ｑ雨翅蛾</div>
+                        </div>
+
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">保單狀況</div>
+                            <div class="tb_column_mobile">正常續繳</div>
+                        </div>
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">收費管道</div>
+                            <div class="tb_column_mobile">自動轉帳</div>
+                        </div>
+
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">銀行名稱</div>
+                            <div class="tb_column_mobile">省合庫</div>
+                        </div>
+
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">信用卡號/銀行帳號</div>
+                            <div class="tb_column_mobile">3335********996</div>
+                        </div>
                     </div>
                 </div>
                 <div class="tb_Table_mobile">
@@ -201,233 +1528,481 @@
                         </div>
                         <div class="tb_column id">保單號碼</div>
                         <div class="tb_column insurname">險種名稱</div>
+                        <div class="tb_column selfpay">自行繳費</div>
                     </div>
 
-                    <div class="selector">
-                        <div class="tb_row mobileKey">
-                            <div class="tb_column sn">
-                                <div class="checkBoxSet">
-                                    <label class="cc-form-control">
-                                        <input type="radio" name="radio_mobile" value="80310031" style="margin: 0 0;" class="squareRadios_mobile policyNumberSelector">
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="tb_column id"><a href="/eservice/csr/pq/pl?policyNumber=80310031" class="partial-table__link">80310031</a></div>
-                            <div class="tb_column insurname insuranceName">保誠人壽悠遊人生變額壽險</div>
-                        </div>
-
-                        <div class="tb_row ext">
-                            <div class="tb_row_mobile">
-                                <div class="tb_column_mobile">契約始期</div>
-                                <div class="tb_column_mobile">101/07/01</div>
-                            </div>
-                            <div class="tb_row_mobile">
-                                <div class="tb_column_mobile">要保人</div>
-                                <div class="tb_column_mobile policyholderName">神Ｑ雨翅蛾</div>
-                            </div>
-                            <div class="tb_row_mobile">
-                                <div class="tb_column_mobile">被保險人</div>
-                                <div class="tb_column_mobile insuredName">神Ｑ雨翅蛾</div>
-                            </div>
-                            <div class="tb_row_mobile">
-                                <div class="tb_column_mobile">發卡銀行</div>
-                                <div class="tb_column_mobile">玉山信用卡部</div>
-                            </div>
-                            <div class="tb_row_mobile">
-                                <div class="tb_column_mobile">信用卡號</div>
-                                <div class="tb_column_mobile creditCardNumber">512308********2124</div>
-                            </div>
-                            <div class="tb_row_mobile">
-                                <div class="tb_column_mobile">信用卡效期</div>
-                                <div class="tb_column_mobile creditCardAuthorizationEndDateChtText">2020年5月</div>
+                    <div class="tb_row mobileKey">
+                        <div class="tb_column sn">
+                            <div class="checkBoxSet">
+                                <label class="cc-form-control">
+                                    <input type="checkbox" name="list_mobile" value="80439254" style="margin: 0 0;" class="squareRadios_mobile">
+                                </label>
                             </div>
                         </div>
+                        <div class="tb_column id"><a href="/eservice/csr/pq/pl?policyNumber=80439254" class="partial-table__link">80439254</a></div>
+                        <div class="tb_column insurname">保誠人壽五五升豐增額終身壽險</div>
+                        <div class="tb_column selfpay">
+                            <label>
+                                <input type="checkbox" value="" class="isSelfPay" disabled="">
+                            </label>
+                        </div>
+                    </div>
 
-                        <div class="mobileNewExpire"></div>
+                    <div class="tb_row ext">
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">契約始期</div>
+                            <div class="tb_column_mobile">105/09/29</div>
+                        </div>
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">要保人</div>
+                            <div class="tb_column_mobile">神Ｑ雨翅蛾</div>
+                        </div>
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">被保險人</div>
+                            <div class="tb_column_mobile">神Ｑ雨翅蛾</div>
+                        </div>
+
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">保單狀況</div>
+                            <div class="tb_column_mobile">正常續繳</div>
+                        </div>
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">收費管道</div>
+                            <div class="tb_column_mobile">自動轉帳</div>
+                        </div>
+
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">銀行名稱</div>
+                            <div class="tb_column_mobile">渣打銀行</div>
+                        </div>
+
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">信用卡號/銀行帳號</div>
+                            <div class="tb_column_mobile">6664********077</div>
+                        </div>
                     </div>
                 </div>
+                <div class="tb_Table_mobile">
+                    <div class="tb_row headeRow">
+                        <div class="tb_column -f sn">
+                        </div>
+                        <div class="tb_column id">保單號碼</div>
+                        <div class="tb_column insurname">險種名稱</div>
+                        <div class="tb_column selfpay">自行繳費</div>
+                    </div>
 
+                    <div class="tb_row mobileKey">
+                        <div class="tb_column sn">
+                            <div class="checkBoxSet">
+                                <label class="cc-form-control">
+                                    <input type="checkbox" name="list_mobile" value="80424859" style="margin: 0 0;" class="squareRadios_mobile">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="tb_column id"><a href="/eservice/csr/pq/pl?policyNumber=80424859" class="partial-table__link">80424859</a></div>
+                        <div class="tb_column insurname">保誠人壽倍感安心終身醫療健康保險</div>
+                        <div class="tb_column selfpay">
+                            <label>
+                                <input type="checkbox" value="" class="isSelfPay" disabled="">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="tb_row ext">
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">契約始期</div>
+                            <div class="tb_column_mobile">105/05/20</div>
+                        </div>
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">要保人</div>
+                            <div class="tb_column_mobile">神Ｑ雨翅蛾</div>
+                        </div>
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">被保險人</div>
+                            <div class="tb_column_mobile">神Ｑ雨翅蛾</div>
+                        </div>
+
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">保單狀況</div>
+                            <div class="tb_column_mobile">正常續繳</div>
+                        </div>
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">收費管道</div>
+                            <div class="tb_column_mobile">信用卡</div>
+                        </div>
+
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">銀行名稱</div>
+                            <div class="tb_column_mobile">玉山信用卡部</div>
+                        </div>
+
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">信用卡號/銀行帳號</div>
+                            <div class="tb_column_mobile">524255********2517</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tb_Table_mobile">
+                    <div class="tb_row headeRow">
+                        <div class="tb_column -f sn">
+                        </div>
+                        <div class="tb_column id">保單號碼</div>
+                        <div class="tb_column insurname">險種名稱</div>
+                        <div class="tb_column selfpay">自行繳費</div>
+                    </div>
+
+                    <div class="tb_row mobileKey">
+                        <div class="tb_column sn">
+                            <div class="checkBoxSet">
+                                <label class="cc-form-control">
+                                    <input type="checkbox" name="list_mobile" value="80380658" style="margin: 0 0;" class="squareRadios_mobile">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="tb_column id"><a href="/eservice/csr/pq/pl?policyNumber=80380658" class="partial-table__link">80380658</a></div>
+                        <div class="tb_column insurname">保誠人壽美利325美元利率變動型增額養老保險</div>
+                        <div class="tb_column selfpay">
+                            <label>
+                                <input type="checkbox" value="" class="isSelfPay" disabled="">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="tb_row ext">
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">契約始期</div>
+                            <div class="tb_column_mobile">104/10/24</div>
+                        </div>
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">要保人</div>
+                            <div class="tb_column_mobile">神Ｑ雨翅蛾</div>
+                        </div>
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">被保險人</div>
+                            <div class="tb_column_mobile">神Ｑ雨翅蛾</div>
+                        </div>
+
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">保單狀況</div>
+                            <div class="tb_column_mobile">正常續繳</div>
+                        </div>
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">收費管道</div>
+                            <div class="tb_column_mobile">自動轉帳</div>
+                        </div>
+
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">銀行名稱</div>
+                            <div class="tb_column_mobile">國泰銀行</div>
+                        </div>
+
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">信用卡號/銀行帳號</div>
+                            <div class="tb_column_mobile">7777********774</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tb_Table_mobile">
+                    <div class="tb_row headeRow">
+                        <div class="tb_column -f sn">
+                        </div>
+                        <div class="tb_column id">保單號碼</div>
+                        <div class="tb_column insurname">險種名稱</div>
+                        <div class="tb_column selfpay">自行繳費</div>
+                    </div>
+
+                    <div class="tb_row mobileKey">
+                        <div class="tb_column sn">
+                            <div class="checkBoxSet">
+                                <label class="cc-form-control">
+                                    <input type="checkbox" name="list_mobile" value="80310031" style="margin: 0 0;" class="squareRadios_mobile">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="tb_column id"><a href="/eservice/csr/pq/pl?policyNumber=80310031" class="partial-table__link">80310031</a></div>
+                        <div class="tb_column insurname">保誠人壽悠遊人生變額壽險</div>
+                        <div class="tb_column selfpay">
+                            <label>
+                                <input type="checkbox" value="" class="isSelfPay" disabled="">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="tb_row ext">
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">契約始期</div>
+                            <div class="tb_column_mobile">101/07/01</div>
+                        </div>
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">要保人</div>
+                            <div class="tb_column_mobile">神Ｑ雨翅蛾</div>
+                        </div>
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">被保險人</div>
+                            <div class="tb_column_mobile">神Ｑ雨翅蛾</div>
+                        </div>
+
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">保單狀況</div>
+                            <div class="tb_column_mobile">正常續繳</div>
+                        </div>
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">收費管道</div>
+                            <div class="tb_column_mobile">信用卡</div>
+                        </div>
+
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">銀行名稱</div>
+                            <div class="tb_column_mobile">玉山信用卡部</div>
+                        </div>
+
+                        <div class="tb_row_mobile">
+                            <div class="tb_column_mobile">信用卡號/銀行帳號</div>
+                            <div class="tb_column_mobile">512308********2124</div>
+                        </div>
+                    </div>
+                </div>
                 
-             
-                 
-                <!-- 20251001 新卡號變更 begin -->
-                <div id="changeArea" class="chg_Table" style="display: block;">
- 					<div class="tb_row headeRow">
-                        <div class="tb_column tb-title">異動後內容</div>
-                    </div>
-                                 
-                	<div class="tb_row">
-                		
-                		<div class="switchTable">
-                			<div class="swRow">
-                				<div class="changeItems">
-	                				<div class="change_item">
-	                					<div class="checkBoxSet">
-			                                <label class="cc-form-control">
-			                                    <input type="radio" name="change_type" checked="true" value="cardNo" style="margin: 0 0;" class="squareRadio">
-			                                    信用卡號變更
-			                                </label>
-			                            </div>
-			                            
-	                				</div>
-	                				<div class="change_item">
-	                					<div class="checkBoxSet">
-			                                <label class="cc-form-control">
-			                                    <input type="radio" name="change_type" value="cardDate" style="margin: 0 0;" class="squareRadio">
-		                						效期變更			                                
-			                                </label>
-			                            </div>	                				
-	                				</div>    
-	                			</div>	            				
-                			</div>
-                			<div class="swRow">
-                				<!-- 改卡號 begin -->
-                				<div id="change_cardNo" class="cardTable" style="display: none;">
-                					<div class="row">
-	                					<div class="column">
-	                						持卡人身分
-	                					</div>
-	                					<div class="column -red -heavy">
-	                						<span style="font-size:1.2rem">要保人</span> (限用要保人本人之信用卡)
-	                					</div>	                					                					
-                					</div>
-                   					<div class="row">
-	                					<div class="column">
-	                						信用卡號
-	                					</div>
-	                					<div class="column">
-	                						<input type="text" name="card-num" placeholder="0000 0000 0000 0000" size="18" id="creditcard_no" minlength="19" maxlength="19">
-	                					</div>	                					                					
-                					</div>
-                					<div class="row">
-	                					<div class="column">
-	                						有效期限
-	                					</div>
-	                					<div class="column" id="newExpday">
-	                						
-	                					</div>	                					                					
-                					</div>      
-                					
-                					
-			                        <!--分割線-->
-			                        <!--  
-			                        <div class="noteBR" th:if="${showRemark == 'Y'}"></div>
-			                        -->
-			                        <!-- 備註輸入需要 csr4 -->
-			                                        					
-                					          					                					
-                				</div>
-                				<!-- 改卡號 end -->
-                				
-                				
-                				<!-- 改效期 begin-->
-			                    <div class="new_expire_date" id="new_expire_date" style="">
-			                        <div class="daterow">
-			                            請輸入信用卡新效期：
-			                            <span id="updateExpday">
-			                            <!--  
-			                            <input type="text" name="cc_expday" class="cc-expday" placeholder="MM/YY" size="6"
-			                                   id="cc-expday" minlength="5" maxlength="5">
-			                            -->       
-			                            <input type="text" name="cc-expday" placeholder="MM/YY" size="6" id="cc-expday" minlength="5" maxlength="5"></span>       
-			                        </div>
-			                        <br>
-			                        <!--分割線-->
-			                        
-			                        <!-- 備註輸入需要 csr4 -->
-			                        
-			                    </div>                				
-                				
-                				<!-- 改效期 end-->
-                				
-                			</div>                			
-                		</div>	
-                		
-                		
-                	</div>
-                </div>
-                <!-- 20251001 新卡號變更 end -->               
+
+                <!-- 備註欄 -->
+                
+                    
+                    
+                        <div class="new_expire_date" style="display: none">
+                            <div class="memo">
+                                備註 <label for="memo_dummy"></label><input type="text" placeholder="上限50個中文字" class="memo" id="memo_dummy" maxlength="50">
+                            </div>
+                        </div>
+                    
                 
 
                 <!-- 流程控制 -->
                 <div class="cc-flowDiv" id="senOTPzone">
-                    <button class="flowbutton  buttonDisabled" id="button_cancel" href="#button_cancel">取消
-                    </button>
-                    <button class="flowbutton  buttonEnabled" id="button_apply" href="#button_apply" type="submit">
-                        申請
-                    </button>
+                    <button class="flowbutton  buttonDisabled" id="button_cancel">取消</button>
+                    <button class="flowbutton  buttonEnabled" id="button_apply">申請</button>
                 </div>
+
 
                 <!-- 無異動權限 -->
                 <div class="subTitle">無異動權限保單</div>
 
-                <!-- for PC 無異動權限 begin-->
+                <!-- for PC begin-->
                 <div class="tb_Table_pc">
                     <div class="tb_row headeRow">
                         <div class="tb_column sn"></div>
                         <div class="tb_column insurecode">保單號碼</div>
-                        <div class="tb_column date">起保日期</div>
+                        <div class="tb_column date">契約始期</div>
                         <div class="tb_column name">要保人</div>
                         <div class="tb_column name">被保險人</div>
                         <div class="tb_column flexInsurance" style="text-align:left">險種名稱</div>
-                        <div class="tb_column bankname">發卡銀行</div>
-                        <div class="tb_column creditcard_code">信用卡號</div>
-                        <div class="tb_column expiry_date">信用卡效期</div>
+                        <div class="tb_column status">保單狀況</div>
+                        <div class="tb_column tollmode">收費管道</div>
+                        <div class="tb_column bankname">銀行名稱</div>
+                        <div class="tb_column creditcard_code">信用卡號/銀行帳號</div>
+                        <!--                        <div class="tb_column selfpay">自行繳費</div>-->
                     </div>
 
                     
+
                     <div>
                         <div class="tb_row" style="padding: 10px 12px;">目前無相關資料</div>
                     </div>
                 </div>
+
                 <!-- for PC end-->
-
                 <!--=================================== PC/Mobile 分隔線  ========================================-->
+                <!-- for mobile begin-->
 
-                <!-- for mobile 無異動權限 begin-->
                 
 
                 <div class="tb_Table_mobile">
                     <div class="tb_row headeRow">
-                        <div class="tb_column -f sn">
-                            <div class="checkBoxSet" style="visibility: hidden;">
-                                <label class="cc-form-control">
-                                    <input type="radio" name="mobile1[]" id="O_mmm" value="O" style="margin: 0 0;" disabled="disabled">
-                                </label>
-                            </div>
-                        </div>
+                        <div class="tb_column -f sn"></div>
                         <div class="tb_column id">保單號碼</div>
                         <div class="tb_column insurname">險種名稱</div>
                     </div>
                     <div class="tb_row" style="padding: 10px 12px;">目前無相關資料</div>
                 </div>
 
-            </div>
-            <!-- for mobile end-->
-
-            <!-- 說明 -->
-            <div class="mb-20 descript js-descript" id="description">
-                <div class="descript-title">
-                    <i class="fa fa-info-circle" aria-hidden="true"></i>
-                    <p>說明:</p>
-                    <span class="btn m-btn-collapse mobile">
+                <!-- 說明 -->
+                <div class="mb-20 descript js-descript" id="description">
+                    <div class="descript-title">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        <p>說明:</p>
+                        <span class="btn m-btn-collapse mobile">
                         <span class="jsChangeText">展開</span>
                         <i class="fa fa-angle-double-up" aria-hidden="true"></i></span>
+                    </div>
+                    <ul class="list-shape js-list-shape num-style">
+                        <li> 「保戶e點通」之線上變更收費管道限異動為「自行繳費」，若您欲異動為金融機構自動轉帳或信用卡代繳，請您下載「<span style="color: red; "><a href="https://www.pcalife.com.tw/zh/our-services/downloadforms" target="_blank" style="color: red;" class="tabpanelink">轉帳授權申請暨約定書</a></span>」填寫後寄回。
+                        </li>
+                        <li>選擇變更為自行繳費後，那麼您可以「續期繳費通知單」，以劃撥、ATM
+                            轉帳、便利商店(限5萬元以下)、親臨本公司客戶服務中心或掛號郵寄劃線且禁止背書轉讓之個人支票等方式繳費；或使用手機行動繳費功能繳費(需於變更後次二工作日方能使用)。
+                            <span style="color: red; "><a href="https://www.pcalife.com.tw/zh/services-and-claims/payment/self-payment/" target="_blank" style="color: red;" class="tabpanelink">詳細自行繳費說明</a></span>，請您點擊連結閱讀。
+                        </li>
+                        <li>您於當期保費應繳日起30日內，以劃撥、ATM 轉帳及便利商店等方式繳費，經本公司入保費帳後，將自動在您的下期保費給予1%
+                            之優惠(投資型商品、年金商品及集體彙繳件不適用，且若商品另有約定者依該商品之約定辦理)。
+                        </li>
+                        <li>
+                            若您於一般工作日下午5:00以後執行線上變更，則視為次日之變更作業。另外，若您於國定例假日執行，則視為次一工作日之變更作業。
+                        </li>
+                    </ul>
                 </div>
-                <ul class="list-shape js-list-shape num-style">
-                    <li>
-                        信用卡卡號不變且有效期間按相同年期延展時，授權人同意原轉帳授權繼續有效，本公司得自動延展有效期間並進行扣款，無需重新授權
-                        ；信用卡卡號不變，但有效期間非按相同年期延展亦同，惟授權人應儘速通知本公司更新有效期間，俾便扣款手續有效完成，以維護保單效力
-                        。
-                    </li>
-                    <li>
-                        提醒您，申請信用卡效期變更，同一授權帳號之所有有效保單資料將一併更改。
-                    </li>
-                    <li>
-                        若您於一般工作日下午5:00以後執行線上變更，則視為次日之變更作業。另外，若您於國定例假日執行，則視為次一工作日之變更作業。
-                    </li>
-                </ul>
-            </div>
-            <!-- 說明 END-->
+                <!-- 說明 END-->
 
+            </div>
         </div>
+    </div>
+
+  <div>
+
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 footer-safe">
+        <a href="https://trustsealinfo.verisign.com/splash?form_file=fdf/splash.fdf&amp;dn=www.eservice.pcalife.com.tw&amp;lang=zh_TW" target="_blank">
+          <img src="/eservice/images/logo-safe.jpg">
+        </a>
+      </div>
+      <div class="footer-con col-xl-10 col-lg-10 col-md-10 col-sm-12">
+        <ul class="footer-phone">
+          <li>客戶服務專線 0809-0809-68</li>
+          <li>海外諮詢暨申訴專線 +886-2-8786-9955按1</li>
+        </ul>
+        <ul class="footer-link">
+          <li>
+            <a href="https://www.eservice.pcalife.com.tw/pca-esv-web/info/cp" target="_blank">
+              保戶e點通服務暨使用約定條款
+            </a>
+          </li>
+          <li>
+            <a href="https://www.eservice.pcalife.com.tw/sso/htm/AlertMsg.htm" target="_blank">
+              個人資料保護
+            </a>
+          </li>
+          <li>
+            <a href="https://www.pcalife.com.tw/zh/footer/disclaimer/" target="_blank">
+              網站綜合聲明
+            </a>
+          </li>
+          <li>
+            <a href="https://www.pcalife.com.tw/zh/enquiry" target="_blank">
+              聯絡我們
+            </a>
+          </li>
+          <li>
+            <a href="https://www.eservice.pcalife.com.tw/sso/passwordRule.html" target="_blank">
+              使用安全說明
+            </a>
+          </li>
+          <li>
+            <a href="https://www.pcalife.com.tw/zh/our-services/faq" target="_blank">
+              常見問題
+            </a>
+          </li>
+          <li>
+            <a href="https://www.eservice.pcalife.com.tw/pca-esv-web/htmls/manual/pca_eservice_manual.pdf" target="_blank">
+              使用說明
+            </a>
+          </li>
+          <!-- <li>
+              <a href="https://www.pcalife.com.tw/export/sites/prudential-tw/.galleries/pdf/003.-PCA-Privacy-Notice-and-Consent-Guidance-Final-for-release_TCENG_2018.12.06.ok.pdf"
+                 target="_blank">
+                GDPR隱私權告知事項
+              </a>
+            </li> -->
+        </ul>
+        <p class="footer-text">
+          建議使用瀏覽器為 Edge、Chrome、Firefox、Safari
+        </p>
+      </div>
+    </div>
+  </div>
+  <!-- loading -->
+	<!-- 20200527 調整 -->
+	<div class="loading_box" id="loading_1">
+		<div class="loading_con">
+			<div class="loading_item">
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+			</div>
+		</div>
+		<p class="loading_text">
+			資料處理中，請您稍後
+		</p>
+	</div>
+	<!-- /#20200527 調整 -->
+  <!-- loading END -->
+  <!-- 讀取中圖示含文字 start -->
+  <div class="loading_box" id="loading_2">
+    <div class="loading_con">
+      <div class="loading_item">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+    <p class="loading_text">
+      資料處理中，請您稍後
+    </p>
+  </div>
+  <!-- 讀取中圖示含文字 end -->
+</footer>
+<div class="sidebar">
+  
+  <div class="sidenav">
+    <a href="/eservice/csr/pq/ml" class="csrSidenav">
+      <span class="icon-notice"></span>
+      重要通知
+    </a>
+    <a href="/eservice/csr/pq/mi" class="csrSidenav">
+      <span class="icon-my-data"></span>
+      我的基本<br>資料
+    </a>
+    <a href="/eservice/csr/pq/pl" class="csrSidenav">
+      <span class="icon-ins-data"></span>
+      保單基本<br>資料
+    </a>
+    <a href="/eservice/csr/inv/pl" class="csrSidenav">
+      <span class="icon-safeguard"></span>
+      投資<br>
+      帳戶資料
+    </a>
+  </div>
+  <div class="mobile">
+    <a style="position: absolute;top: 20%;right: 20%" href="" class="gotop js-gotop">
+      <i class="fa fa-minus" aria-hidden="true"></i>
+      <i class="fa fa-angle-up" aria-hidden="true"></i>
+    </a>
+  </div>
+  <div class="hidden-mobile">
+    <a href="" class="gotop js-gotop">
+      <i class="fa fa-minus" aria-hidden="true"></i>
+      <i class="fa fa-angle-up" aria-hidden="true"></i>
+    </a>
+  </div>
+</div>
+
+</div>
+  <input type="hidden" id="pcaUrl" value="https://onlineuat.pcalife.com.tw/pca-esv-web/">
+  <input id="logonSys" type="hidden" value="">
+</div>
