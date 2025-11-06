@@ -1,191 +1,112 @@
-<div class="main main--h60">
-        <div class="container">
-            <div class="cc_content">
-                <!--  NAV -->
-                <div class="cc_nav">
-                    <ul>
-                        <li>繳費專區</li>
-                        <li>信用卡卡號/效期變更</li>
-                    </ul>
-                </div>
+package com.autotest.pages.csrpage.csrchangepage;
 
-                <div class="redTag" id="red_tag">信用卡卡號/效期變更 - 確認&nbsp;&nbsp;&nbsp; </div>
-                <div class="subTitle">請您再次確認申請內容是否正確？</div>
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
-                <form id="chgCardDateFrom" action="/eservice/csr/oc/chgcvdresult" method="post"><input type="hidden" name="_csrf" value="eb6d9666-5e80-4940-8e8e-d63bfd449c61">
-                    <input type="hidden" id="chgPolicies" value="com.pca.esvrwd.dto.onlineChange.ChgCardDateDTO@3ae836be" disabled="">
-                    <input type="hidden" name="email" id="email" value="sean.hy.chen@pcalife.com.tw" disabled="">
-                    <input type="hidden" name="mobile" id="mobile" value="0999999999" disabled="">
+import submodule.com.autotest.commonpage.AbstractBasePage;
+import submodule.com.autotest.utils.CommUtil;
 
-                    <input type="hidden" name="sourceType" id="sourceType" value="E">
-                    <input type="hidden" name="contractNum" id="contractNum" value="80424859">
-                    <input type="hidden" name="policyholderName" id="policyholderName" value="神Ｑ雨翅蛾">
-                    <input type="hidden" name="insuredName" id="insuredName" value="神Ｑ雨翅蛾">
-                    <input type="hidden" name="insuranceName" id="insuranceName" value="保誠人壽倍感安心終身醫療健康保險">
-                    <input type="hidden" name="creditCardNumber" id="creditCardNumber" value="524255********2517">
-                    <input type="hidden" name="endYear" id="endYear" value="30">
-                    <input type="hidden" name="endMonth" id="endMonth" value="01">
-                    <input type="hidden" name="note" id="note" value="">
-                    <input type="hidden" name="changeType" id="changeType" value="cardDate">
-                    <input type="hidden" name="newCreditCardNumber" id="newCreditCardNumber" value="">
-                    <input type="hidden" name="_csrf" value="eb6d9666-5e80-4940-8e8e-d63bfd449c61">
-                </form>
+//收費管道(限變更為自行繳費)
+public class CSRPaymentChannel extends AbstractBasePage {
 
-                <!-- for PC begin-->
-                <div class="tb_Table_pc">
-                    <div class="tb_row headeRow">
-                        <div class="tb_column insurecode">保單號碼</div>
-                        <div class="tb_column name">要保人</div>
-                        <div class="tb_column name">被保險人</div>
-                        <div class="tb_column flexInsuranceForSure" style="text-align:left">險種名稱</div>
- 						<!--
-                        <div class="tb_column creditcard_code">信用卡號</div>   
-                        <div class="tb_column expiry_date">異動前效期</div>
-                        <div class="tb_column expiry_date">異動後效期</div>
-                        -->
-                    </div>
+	// e-Service 線上變更的按鈕
+	private By eServiceBtnLocator = By.xpath("//div[@class='modal-body']/button[@id='E']");
 
-                    <!--  PC 有異動權限異動保單確認-->
-                    <div class="tb_row">
-                        <div class="tb_column insurecode"><a href="/eservice/csr/pq/pl?policyNumber=80424859" class="partial-table__link">80424859</a></div>
-                        <div class="tb_column name">神Ｑ雨翅蛾</div>
-                        <div class="tb_column name">神Ｑ雨翅蛾</div>
-                        <div class="tb_column flexInsuranceForSure" style="text-align:left">保誠人壽倍感安心終身醫療健康保險</div>
-                        <!-- 
-                        <div class="tb_column creditcard_code" th:text="${VO.creditCardNumber}"></div>
-                         
-                        <div class="tb_column expiry_date" th:text="${VO.beforeCreditCardAuthorizationEndDateChtText}"></div>
-                        <div class="tb_column expiry_date" style="font-weight: 800"
-                             th:text="'20' + ${VO.endYear} + '年' + ${VO.endMonth} + '月'"></div>
-                        -->     
-                    </div>
-                </div>
-                <!-- for PC end-->
+	// 確定按鈕
+	private By confirmBtnLocator = By
+			.xpath("//div[@class='modal-footer']/div[@class='btn-area']/button[@id='checkSelected']");
 
-                <!--=================================== PC/Mobile 分隔線  ========================================-->
+	// 【收費管道(限變更為自行繳費)】確定按鈕
+	private By paymentChannelConfirmBtnLocator = By.xpath(
+			"(//div[contains(@class, 'modal-content')]//p[@id='messageBoxText' and contains(text(), '提醒您，執行【收費管道變更】作業後，系統需作業時間，若您欲使用【行動繳費】方式，請於次二個工作日再登入使用。')]/following::button[contains(text(), '確定') and contains(@class, 'btn red xs')])[1]");
 
-                <!-- for mobile begin-->
-                <!--  MOBILE 有異動權限保單確認-->
-                <div class="tb_Table_mobile">
-                    <div class="tb_row headeRow">
-                        <div class="tb_column -f sn">
-                        </div>
-                        <div class="tb_column id">保單號碼</div>
-                        <div class="tb_column insurname">險種名稱</div>
-                    </div>
+	// Page title
+	private By paymentMethodPageTitleLocator = By
+			.xpath("//div[@class='redTag' and @id='red_tag' and contains(text(),'收費管道(限變更為自行繳費)')]");
 
-                    <div class="tb_row mobileKey">
-                        <div class="tb_column sn">
-                            <div class="checkBoxSet">
-                                <label class="cc-form-control">
-                                </label>
-                            </div>
-                        </div>
-                        <div class="tb_column id"><a href="/eservice/csr/pq/pl?policyNumber=80424859" class="partial-table__link">80424859</a></div>
-                        <div class="tb_column insurname">保誠人壽倍感安心終身醫療健康保險</div>
-                    </div>
+	// 有異動權限保單 Page Title locator check
+	private By policyWithChangeAuthorityTblTitleLocator = By.xpath("//div[@class='subTitle' and text()='有異動權限保單']");
 
-                    <div class="tb_row ">
-                        <div class="tb_row_mobile">
-                            <div class="tb_column_mobile">要保人</div>
-                            <div class="tb_column_mobile">神Ｑ雨翅蛾</div>
-                        </div>
-                        <div class="tb_row_mobile">
-                            <div class="tb_column_mobile">被保險人</div>
-                            <div class="tb_column_mobile">神Ｑ雨翅蛾</div>
-                        </div>
-                        <!-- 
-                        <div class="tb_row_mobile">
-                            <div class="tb_column_mobile">信用卡號</div>
-                            <div class="tb_column_mobile" th:text="${VO.creditCardNumber}"></div>
-                        </div> 					
-                        <div class="tb_row_mobile">
-                            <div class="tb_column_mobile">異動前效期</div>
-                            <div class="tb_column_mobile" th:text="${VO.beforeCreditCardAuthorizationEndDateChtText}"></div>
-                        </div>
-                        <div class="tb_row_mobile">
-                            <div class="tb_column_mobile">異動後效期</div>
-                            <div class="tb_column_mobile" style="font-weight: 800"
-                                 th:text="'20' + ${VO.endYear} + '年' + ${VO.endMonth} + '月'"></div>
-                        </div>
-                        -->
-                    </div>
+	// 無異動權限保單 Page Title locator check
+	private By policyWithoutChangeAuthorityTblTitleLocator = By.xpath("//div[@class='subTitle' and text()='無異動權限保單']");
 
-                    <div class="mobileNewExpire">
-                    </div>
-                </div>
-                
-                
-                
- <!-- - -->               
+	// 有異動權限保單 table locator
+	private By policyWithChangeAuthorityTblLocator = By.xpath(
+			"//div[@class='tb_Table_pc' and following-sibling::div[@class='cc-flowDiv' and @id='senOTPzone'] and preceding-sibling::div[@class='subTitle' and text()='有異動權限保單']]");
+	
+	// go up button
+	private By goUpButton = By.xpath("//div[@class='sidebar']//div[@class='hidden-mobile']//a[@class='gotop js-gotop']");
 
-		        <!-- 帳戶變更 異動比較 -->
-		        <div class="comparing_table">
-		            <div class="row pc_header">
-		                <div class="column">項目</div>
-		                <div class="column">異動前</div>
-		                <div class="column">異動後</div>
-		            </div>
-		            <div class="row" id="rowCardNo" style="display:none">
-		                <div class="column -strong">信用卡號</div>
-		                <div class="column"><div class="mTitle">異動前</div><div class="dynaContent">524255********2517</div></div>
-		                <div class="column"><div class="mTitle">異動後</div><div class="dynaContent"></div></div>
+	public CSRPaymentChannel() {
 
-		            </div>
-		            <div class="row">
-		                <div class="column -strong">信用卡效期</div>
-		                <div class="column"><div class="mTitle">異動前</div><div class="dynaContent">2023年12月</div></div>
-		                <div class="column"><div class="mTitle">異動後</div><div class="dynaContent">2030年01月</div></div>
-		            </div>
-		        </div>              
-                
- <!-- - -->               
-                              
-        
-                <!-- 備註輸入需要 csr4 -->
-                <div id="noteDiv" class="memo" style="display:none">
-                    	備註<input type="text" class="memo" id="memo" readonly="">
-                </div>                 
-                
-                
-                
-                
-                
-                
-                
-                
+		// 無異動權限保單 table locator
+		super.pageDisplayCorrectlyLocator = By.xpath(
+				"//div[@class='tb_Table_pc' and preceding-sibling::div[@class='cc-flowDiv' and @id='senOTPzone'] and preceding-sibling::div[@class='subTitle' and text()='無異動權限保單']]");
+	}
 
-                <!-- 流程控制 -->
-                <div class="cc-flowDiv" id="senOTPzone">
-<!--                    <button class="flowbutton  buttonDisabled" id="button_cancel">取消申請</button>-->
-                    <button class="flowbutton  buttonDisabled" id="button_back">返回修改</button>
-                    <button class="flowbutton  buttonEnabled" id="button_apply">確認送出</button>
-                </div>
+	@Override
+	public boolean isPageDisplayCorrectly(int waitingTime) {
 
-                <!-- 說明 -->
-                <div class="mb-20 descript js-descript" id="description">
-                    <div class="descript-title">
-                        <i class="fa fa-info-circle" aria-hidden="true"></i>
-                        <p>說明:</p>
-                        <span class="btn m-btn-collapse mobile">
-                        <span class="jsChangeText">展開</span>
-                        <i class="fa fa-angle-double-up" aria-hidden="true"></i></span>
-                    </div>
-                    <ul class="list-shape js-list-shape num-style">
-                        <li>
-                            信用卡卡號不變且有效期間按相同年期延展時，授權人同意原轉帳授權繼續有效，本公司得自動延展有效期間並進行扣款，無需重新授權
-                            ；信用卡卡號不變，但有效期間非按相同年期延展亦同，惟授權人應儘速通知本公司更新有效期間，俾便扣款手續有效完成，以維護保單效力
-                            。
-                        </li>
-                        <li>
-                            提醒您，申請信用卡效期變更，同一授權帳號之所有有效保單資料將一併更改。
-                        </li>
-                        <li>
-                            若您於一般工作日下午5:00以後執行線上變更，則視為次日之變更作業。另外，若您於國定例假日執行，則視為次一工作日之變更作業。
-                        </li>
-                    </ul>
-                </div>
-                <!-- 說明 END-->
-            </div>
-        </div>
-    </div>
+		// eService按鈕存在
+		if (findElement(eServiceBtnLocator, false, 10000) != null) {
+
+			click(eServiceBtnLocator, 10000);
+			click(confirmBtnLocator, 10000);
+
+		}
+
+		CommUtil.sleep(3);
+		
+		// 【收費管道(限變更為自行繳費)重要訊息】確定按鈕
+		if (findElement(paymentChannelConfirmBtnLocator, false, 10000) != null) {
+
+			click(paymentChannelConfirmBtnLocator, 10000);
+
+		}
+
+		// // 無異動權限保單 table check
+		boolean tblWithoutChangeAuthority = super.isPageDisplayCorrectly(waitingTime);
+
+		// Page Title check
+		boolean paymentMethodPageTitle = false;
+		WebElement pageTitleResult = findElement(paymentMethodPageTitleLocator, false, waitingTime);
+		if (pageTitleResult != null) {
+			paymentMethodPageTitle = true;
+		}
+
+		// 有異動權限保單 table check
+		boolean tblWithChangeAuthority = false;
+		WebElement displayResult1 = findElement(policyWithChangeAuthorityTblLocator, false, waitingTime);
+		if (displayResult1 != null) {
+			tblWithChangeAuthority = true;
+		}
+
+		// 有異動權限保單 table title check
+		boolean tbltitleWithChangeAuthority = false;
+		WebElement tbltitleWithChangeAuthorityResult = findElement(policyWithChangeAuthorityTblTitleLocator, false,
+				waitingTime);
+		if (tbltitleWithChangeAuthorityResult != null) {
+			tbltitleWithChangeAuthority = true;
+		}
+
+		// 無異動權限保單 table title check
+		boolean tbltitleWithoutChangeAuthority = false;
+		WebElement tbltitleWithoutChangeAuthorityResult = findElement(policyWithoutChangeAuthorityTblTitleLocator,
+				false, waitingTime);
+		if (tbltitleWithoutChangeAuthorityResult != null) {
+			tbltitleWithoutChangeAuthority = true;
+		}
+
+		if (tblWithChangeAuthority && tblWithoutChangeAuthority && paymentMethodPageTitle && tbltitleWithChangeAuthority
+				&& tbltitleWithoutChangeAuthority) {
+			// click go up button
+			click(goUpButton, 15000); 
+			CommUtil.sleep(10);
+			return true;
+		} else {
+			logger.debug("頁面未正常顯示，等待時間:" + waitingTime);
+			return false;
+		}
+	}
+
+}
