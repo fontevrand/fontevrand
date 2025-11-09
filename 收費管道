@@ -5,60 +5,45 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import submodule.com.autotest.commonpage.AbstractBasePage;
 import submodule.com.autotest.utils.CommUtil;
 
-// 收費管道(限變更為自行繳費) - 第一頁驗證與挑選
+// 收費管道(限變更為自行繳費) - 第一頁驗證與挑選 + 第二頁確認比對（不送出）
 public class CSRPaymentChannel extends AbstractBasePage {
 
 	// ====== 既有/原本 ======
 	private By eServiceBtnLocator = By.xpath("//div[@class='modal-body']/button[@id='E']");
-	private By confirmBtnLocator = By
-			.xpath("//div[@class='modal-footer']/div[@class='btn-area']/button[@id='checkSelected']");
+	private By confirmBtnLocator = By.xpath("//div[@class='modal-footer']/div[@class='btn-area']/button[@id='checkSelected']");
 	private By paymentChannelConfirmBtnLocator = By.xpath(
-			"(//div[contains(@class, 'modal-content')]//p[@id='messageBoxText' and contains(text(), '提醒您，執行【收費管道變更】作業後，系統需作業時間，若您欲使用【行動繳費】方式，請於次二個工作日再登入使用。')]/following::button[contains(text(), '確定') and contains(@class, 'btn red xs')])[1]");
-	private By paymentMethodPageTitleLocator = By
-			.xpath("//div[@class='redTag' and @id='red_tag' and contains(text(),'收費管道(限變更為自行繳費)')]");
+			"(//div[contains(@class, 'modal-content')]//p[@id='messageBoxText' and contains(text(), '提醒您，執行【收費管道變更】作業後，系統需作業時間')]/following::button[contains(text(), '確定') and contains(@class, 'btn red xs')])[1]");
+	private By paymentMethodPageTitleLocator = By.xpath("//div[@class='redTag' and @id='red_tag' and contains(text(),'收費管道(限變更為自行繳費)')]");
 	private By policyWithChangeAuthorityTblTitleLocator = By.xpath("//div[@class='subTitle' and text()='有異動權限保單']");
 	private By policyWithoutChangeAuthorityTblTitleLocator = By.xpath("//div[@class='subTitle' and text()='無異動權限保單']");
 	private By goUpButton = By.xpath("//div[@class='sidebar']//div[@class='hidden-mobile']//a[@class='gotop js-gotop']");
 
 	// ====== 有異動權限保單 (With-Change) 區塊 ======
-	private By withTblPcLocator = By.xpath(
-			"//div[@class='subTitle' and text()='有異動權限保單']/following-sibling::div[contains(@class,'tb_Table_pc')][1]");
-	private By withTblPcHeaderCells = By.xpath(
-			"//div[@class='subTitle' and text()='有異動權限保單']/following-sibling::div[contains(@class,'tb_Table_pc')][1]//div[contains(@class,'headeRow')]//div[contains(@class,'tb_column')]");
-	private By withTblPcRows = By.xpath(
-			"//div[@class='subTitle' and text()='有異動權限保單']/following-sibling::div[contains(@class,'tb_Table_pc')][1]//div[contains(@class,'tb_row') and not(contains(@class,'headeRow'))]");
-	private By withTblPcSelectCbs = By.xpath(
-			"//div[@class='subTitle' and text()='有異動權限保單']/following-sibling::div[contains(@class,'tb_Table_pc')][1]//input[@type='checkbox' and @name='list_pc']");
-	private By withTblPcPolicyLinks = By.xpath(
-			"//div[@class='subTitle' and text()='有異動權限保單']/following-sibling::div[contains(@class,'tb_Table_pc')][1]//div[contains(@class,'insurecode')]//a");
+	private By withTblPcLocator = By.xpath("//div[@class='subTitle' and text()='有異動權限保單']/following-sibling::div[contains(@class,'tb_Table_pc')][1]");
+	private By withTblPcHeaderCells = By.xpath("//div[@class='subTitle' and text()='有異動權限保單']/following-sibling::div[contains(@class,'tb_Table_pc')][1]//div[contains(@class,'headeRow')]//div[contains(@class,'tb_column')]");
+	private By withTblPcRows = By.xpath("//div[@class='subTitle' and text()='有異動權限保單']/following-sibling::div[contains(@class,'tb_Table_pc')][1]//div[contains(@class,'tb_row') and not(contains(@class,'headeRow'))]");
+	private By withTblPcSelectCbs = By.xpath("//div[@class='subTitle' and text()='有異動權限保單']/following-sibling::div[contains(@class,'tb_Table_pc')][1]//input[@type='checkbox' and @name='list_pc']");
+	private By withTblPcPolicyLinks = By.xpath("//div[@class='subTitle' and text()='有異動權限保單']/following-sibling::div[contains(@class,'tb_Table_pc')][1]//div[contains(@class,'insurecode')]//a");
 
-	// Mobile（有異動權限保單：每一個 mobileKey 為一張卡片）
+	// Mobile（有異動權限保單）
 	private By withMobileKeyRows = By.xpath("//div[contains(@class,'tb_Table_mobile')]//div[contains(@class,'mobileKey')]");
-	private By withFirstMobileSelect = By.xpath(
-			"(//div[contains(@class,'tb_Table_mobile')]//div[contains(@class,'mobileKey')]//input[@type='checkbox' and @name='list_mobile'])[1]");
+	private By withFirstMobileSelect = By.xpath("(//div[contains(@class,'tb_Table_mobile')]//div[contains(@class,'mobileKey')]//input[@type='checkbox' and @name='list_mobile'])[1]");
 
 	// ====== 無異動權限保單 (Without-Change) 區塊 ======
-	private By withoutTblPcLocator = By.xpath(
-			"//div[@class='subTitle' and text()='無異動權限保單']/following-sibling::div[contains(@class,'tb_Table_pc')][1]");
-	private By withoutTblPcHeaderCells = By.xpath(
-			"//div[@class='subTitle' and text()='無異動權限保單']/following-sibling::div[contains(@class,'tb_Table_pc')][1]//div[contains(@class,'headeRow')]//div[contains(@class,'tb_column')]");
-	private By withoutTblPcRows = By.xpath(
-			"//div[@class='subTitle' and text()='無異動權限保單']/following-sibling::div[contains(@class,'tb_Table_pc')][1]//div[contains(@class,'tb_row') and not(contains(@class,'headeRow'))]");
-	private By withoutPcNoDataText = By.xpath(
-			"//div[@class='subTitle' and text()='無異動權限保單']/following-sibling::div[contains(@class,'tb_Table_pc')][1]//div[contains(@class,'tb_row') and contains(normalize-space(.),'目前無相關資料')]");
-	private By withoutTblPcSelectCbs = By.xpath(
-			"//div[@class='subTitle' and text()='無異動權限保單']/following-sibling::div[contains(@class,'tb_Table_pc')][1]//input[@type='checkbox' and @name='list_pc']");
+	private By withoutTblPcLocator = By.xpath("//div[@class='subTitle' and text()='無異動權限保單']/following-sibling::div[contains(@class,'tb_Table_pc')][1]");
+	private By withoutTblPcHeaderCells = By.xpath("//div[@class='subTitle' and text()='無異動權限保單']/following-sibling::div[contains(@class,'tb_Table_pc')][1]//div[contains(@class,'headeRow')]//div[contains(@class,'tb_column')]");
+	private By withoutTblPcRows = By.xpath("//div[@class='subTitle' and text()='無異動權限保單']/following-sibling::div[contains(@class,'tb_Table_pc')][1]//div[contains(@class,'tb_row') and not(contains(@class,'headeRow'))]");
+	private By withoutPcNoDataText = By.xpath("//div[@class='subTitle' and text()='無異動權限保單']/following-sibling::div[contains(@class,'tb_Table_pc')][1]//div[contains(@class,'tb_row') and contains(normalize-space(.),'目前無相關資料')]");
+	private By withoutTblPcSelectCbs = By.xpath("//div[@class='subTitle' and text()='無異動權限保單']/following-sibling::div[contains(@class,'tb_Table_pc')][1]//input[@type='checkbox' and @name='list_pc']");
 
-	// 若無異動權限保單有手機版資料（不一定出現，保險起見也支援）
-	private By withoutFirstMobileSelect = By.xpath(
-			"(//div[@class='subTitle' and text()='無異動權限保單']/following::div[contains(@class,'tb_Table_mobile')]//div[contains(@class,'mobileKey')]//input[@type='checkbox' and @name='list_mobile'])[1]");
+	// 若無異動權限保單有手機版資料（保險起見也支援）
+	private By withoutFirstMobileSelect = By.xpath("(//div[@class='subTitle' and text()='無異動權限保單']/following::div[contains(@class,'tb_Table_mobile')]//div[contains(@class,'mobileKey')]//input[@type='checkbox' and @name='list_mobile'])[1]");
 
 	// ====== 其他元件 ======
 	private By applyBtnLocator = By.id("button_apply");
@@ -66,7 +51,7 @@ public class CSRPaymentChannel extends AbstractBasePage {
 	private By selectedDataInputLocator = By.id("selectedData");
 	private By changeablePoliciesHiddenLocator = By.id("changeablePolicies");
 
-	// ====== 給下一頁比對用：記錄被選取列 ======
+	// ====== 給下一頁比對用：記錄被選取列（只存 1 筆） ======
 	private static final List<Map<String, String>> selectedRows = new ArrayList<>();
 	public static List<Map<String, String>> getSelectedRows() { return selectedRows; }
 
@@ -78,7 +63,6 @@ public class CSRPaymentChannel extends AbstractBasePage {
 
 	@Override
 	public boolean isPageDisplayCorrectly(int waitingTime) {
-
 		// --- 關閉可能出現的彈窗 ---
 		if (findElement(eServiceBtnLocator, false, 10000) != null) {
 			click(eServiceBtnLocator, 10000);
@@ -93,7 +77,7 @@ public class CSRPaymentChannel extends AbstractBasePage {
 		boolean pageTitleOk = (findElement(paymentMethodPageTitleLocator, false, waitingTime) != null);
 		boolean withTitleOk = (findElement(policyWithChangeAuthorityTblTitleLocator, false, waitingTime) != null);
 		boolean withoutTitleOk = (findElement(policyWithoutChangeAuthorityTblTitleLocator, false, waitingTime) != null);
-		boolean baseOk = super.isPageDisplayCorrectly(waitingTime); // 仍保留你原本的底層檢查
+		boolean baseOk = super.isPageDisplayCorrectly(waitingTime);
 
 		// --- 驗 headers（有異動權限保單 / PC）---
 		boolean withHeaderOk = checkHeaderEquals(withTblPcHeaderCells,
@@ -103,40 +87,37 @@ public class CSRPaymentChannel extends AbstractBasePage {
 		boolean withoutHeaderOk = checkHeaderEquals(withoutTblPcHeaderCells,
 				Arrays.asList("", "保單號碼", "契約始期", "要保人", "被保險人", "險種名稱", "保單狀況", "收費管道", "銀行名稱", "信用卡號/銀行帳號"));
 
-		// --- 判斷各區塊是否有資料 ---
-		int withPcRows = driver.findElements(withTblPcRows).size();
+		// --- 判斷是否有資料 ---
+		int withPcRowsCount = driver.findElements(withTblPcRows).size();
 		int withMobileCards = driver.findElements(withMobileKeyRows).size();
-		boolean withHasData = (withPcRows > 0) || (withMobileCards > 0);
+		boolean withHasData = (withPcRowsCount > 0) || (withMobileCards > 0);
 
 		boolean withoutPcNoData = (findElement(withoutPcNoDataText, false, 1500) != null);
-		int withoutPcRows = withoutPcNoData ? 0 : driver.findElements(withoutTblPcRows).size();
-
-		// NOTE: 官方 DOM 裡「無異動權限保單 / mobile」若有資料，應該也會產出 mobileKey；因樣本為「無資料」，這裡先採保守策略
-		boolean withoutHasData = (withoutPcRows > 0)
-				|| (findElement(withoutFirstMobileSelect, false, 500) != null);
+		int withoutPcRowsCount = withoutPcNoData ? 0 : driver.findElements(withoutTblPcRows).size();
+		boolean withoutHasData = (withoutPcRowsCount > 0) || (findElement(withoutFirstMobileSelect, false, 500) != null);
 
 		// --- 清空上一次的選取紀錄 ---
 		selectedRows.clear();
 
-		// --- 有資料就勾選至少一筆 + 記錄資料 ---
-		boolean selectedAny = false;
+		// ========== 依你本次需求：第一頁就選「第一個」有異動權限保單 ==========
+		boolean selectedOne = false;
 
-		// 1) 有異動權限保單
+		// (A) 先選 有異動權限保單 PC 的第一個 checkbox
 		if (withHasData) {
-			// 先嘗試 PC table
-			WebElement firstPcCb = findElement(withTblPcSelectCbs, false, 1500);
+			WebElement firstPcCb = findElement(withTblPcSelectCbs, false, 2000);
 			if (firstPcCb != null) {
 				try {
 					WebElement row = getAncestorRow(firstPcCb);
 					Map<String, String> rowData = extractPcRowData(row);
 					firstPcCb.click();
-					selectedRows.add(rowData);
-					selectedAny = true;
+					selectedRows.add(rowData); // 只存第一筆
+					selectedOne = true;
+					logger.info("[第一頁] 已勾選有異動權限(PC)第一筆，policy=" + rowData.get("policyNumber") + ", 付款方式=" + rowData.get("paymentMethod"));
 				} catch (Exception e) {
-					logger.warn("[withHasData-PC 勾選失敗] " + e.getMessage());
+					logger.warn("[withHasData-PC 第一筆勾選失敗] " + e.getMessage());
 				}
 			} else {
-				// 退到 Mobile
+				// (B) 退到 有異動權限 Mobile 的第一筆
 				WebElement mobileCb = findElement(withFirstMobileSelect, false, 1500);
 				if (mobileCb != null) {
 					try {
@@ -144,50 +125,58 @@ public class CSRPaymentChannel extends AbstractBasePage {
 						Map<String, String> rowData = extractMobileRowData(mobileKey);
 						mobileCb.click();
 						selectedRows.add(rowData);
-						selectedAny = true;
+						selectedOne = true;
+						logger.info("[第一頁] 已勾選有異動權限(Mobile)第一筆，policy=" + rowData.get("policyNumber") + ", 付款方式=" + rowData.get("paymentMethod"));
 					} catch (Exception e) {
-						logger.warn("[withHasData-Mobile 勾選失敗] " + e.getMessage());
+						logger.warn("[withHasData-Mobile 第一筆勾選失敗] " + e.getMessage());
 					}
 				}
 			}
 		}
 
-		// 2) 無異動權限保單
-		if (withoutHasData) {
-			// 先 PC
-			WebElement firstPcCb = findElement(withoutTblPcSelectCbs, false, 1500);
-			if (firstPcCb != null) {
+		// (C) 萬一真的沒有有異動權限資料，再試「無異動權限」第一筆（通常不會進第二頁，但保險起見依舊支援）
+		if (!selectedOne && withoutHasData) {
+			WebElement firstPcCb2 = findElement(withoutTblPcSelectCbs, false, 1500);
+			if (firstPcCb2 != null) {
 				try {
-					WebElement row = getAncestorRow(firstPcCb);
+					WebElement row = getAncestorRow(firstPcCb2);
 					Map<String, String> rowData = extractPcRowData(row);
-					firstPcCb.click();
+					firstPcCb2.click();
 					selectedRows.add(rowData);
-					selectedAny = true;
+					selectedOne = true;
+					logger.info("[第一頁] 改勾選無異動權限(PC)第一筆，policy=" + rowData.get("policyNumber"));
 				} catch (Exception e) {
-					logger.warn("[withoutHasData-PC 勾選失敗] " + e.getMessage());
+					logger.warn("[withoutHasData-PC 第一筆勾選失敗] " + e.getMessage());
 				}
 			} else {
-				// 再 Mobile（若有）
-				WebElement mobileCb = findElement(withoutFirstMobileSelect, false, 1500);
-				if (mobileCb != null) {
+				WebElement mobileCb2 = findElement(withoutFirstMobileSelect, false, 1500);
+				if (mobileCb2 != null) {
 					try {
-						WebElement mobileKey = getAncestorByClass(mobileCb, "tb_row mobileKey");
+						WebElement mobileKey = getAncestorByClass(mobileCb2, "tb_row mobileKey");
 						Map<String, String> rowData = extractMobileRowData(mobileKey);
-						mobileCb.click();
+						mobileCb2.click();
 						selectedRows.add(rowData);
-						selectedAny = true;
+						selectedOne = true;
+						logger.info("[第一頁] 改勾選無異動權限(Mobile)第一筆，policy=" + rowData.get("policyNumber"));
 					} catch (Exception e) {
-						logger.warn("[withoutHasData-Mobile 勾選失敗] " + e.getMessage());
+						logger.warn("[withoutHasData-Mobile 第一筆勾選失敗] " + e.getMessage());
 					}
 				}
 			}
 		}
 
-		// --- 只要任一區塊有資料就按「申請」 ---
-		if (selectedAny) {
+		// --- 點「申請」前置（只要有勾到一筆就送）---
+		if (selectedOne) {
 			WebElement applyBtn = findElement(applyBtnLocator, false, waitingTime);
 			if (applyBtn != null) {
 				click(applyBtnLocator, waitingTime);
+				// 進入第二頁：做確認頁面檢查與比對（不按確認送出）
+				boolean confirmOk = new ConfirmPage().isPageDisplayCorrectly(waitingTime);
+				boolean mustOk = pageTitleOk && withTitleOk && withoutTitleOk && baseOk && withHeaderOk && withoutHeaderOk && confirmOk;
+				if (!mustOk) {
+					logger.debug("第一頁或第二頁表頭/比對未通過");
+				}
+				return mustOk;
 			} else {
 				logger.warn("[Apply 按鈕不存在] 無法送出");
 				return false;
@@ -196,14 +185,12 @@ public class CSRPaymentChannel extends AbstractBasePage {
 			// 兩區都沒有資料：不送出，僅回頂
 			click(goUpButton, 15000);
 			CommUtil.sleep(2);
+			boolean mustOk = pageTitleOk && withTitleOk && withoutTitleOk && baseOk && withHeaderOk && withoutHeaderOk;
+			if (!mustOk) {
+				logger.debug("頁面或表頭驗證未通過（且無資料可申請）");
+			}
+			return mustOk;
 		}
-
-		// --- 回傳是否「第一頁任務」成功（頁面基本元素 + header 檢查需通過）---
-		boolean mustOk = pageTitleOk && withTitleOk && withoutTitleOk && baseOk && withHeaderOk && withoutHeaderOk;
-		if (!mustOk) {
-			logger.debug("頁面或表頭驗證未通過");
-		}
-		return mustOk;
 	}
 
 	/* ====================== 私有工具 ====================== */
@@ -296,5 +283,201 @@ public class CSRPaymentChannel extends AbstractBasePage {
 		} catch (Exception e) {
 			return "";
 		}
+	}
+
+	/* ===========================================================
+	 * ===============  第二頁：確認頁面（不按送出）  =================
+	 * =========================================================== */
+	public static class ConfirmPage extends AbstractBasePage {
+
+		private By confirmTitle = By.xpath("//div[@id='red_tag' and contains(normalize-space(.),'收費管道(限變更為自行繳費) - 確認')]");
+		// PC Table
+		private By pcHeaderCells = By.xpath("//div[contains(@class,'tb_Table_pc')]//div[contains(@class,'headeRow')]//div[contains(@class,'tb_column')]");
+		private By pcFirstDataRow = By.xpath("(//div[contains(@class,'tb_Table_pc')]//div[contains(@class,'tb_row') and not(contains(@class,'headeRow'))])[1]");
+
+		// Mobile（保守推論）
+		private By mobileFirstKey = By.xpath("(//div[contains(@class,'tb_Table_mobile')]//div[contains(@class,'mobileKey')])[1]");
+
+		// Hidden fallback
+		private By hiddenSelectedContract0 = By.id("selectedData0.contractNum");
+
+		@Override
+		public boolean isPageDisplayCorrectly(int waitingTime) {
+			// 等到標題出現
+			if (findElement(confirmTitle, false, Math.max(5000, waitingTime)) == null) {
+				logger.warn("[第二頁] 標題不存在：收費管道(限變更為自行繳費) - 確認");
+				return false;
+			}
+
+			// 表頭驗證 (PC)
+			boolean headerOk = checkHeaderEquals(pcHeaderCells, Arrays.asList(
+					"保單號碼", "要保人", "被保險人", "險種名稱", "異動前收費管道", "異動後收費管道"));
+
+			// 取第一筆顯示資料（PC or Mobile）
+			Map<String, String> confirmRow = extractPcFirstRow();
+			if (confirmRow == null) {
+				confirmRow = extractMobileFirstRow();
+			}
+
+			// Hidden 兜底：至少抓到 policyNumber
+			if (confirmRow == null || empty(confirmRow.get("policyNumber"))) {
+				WebElement h0 = findElement(hiddenSelectedContract0, false, 1000);
+				if (h0 != null) {
+					if (confirmRow == null) confirmRow = new HashMap<>();
+					confirmRow.put("policyNumber", h0.getAttribute("value"));
+					logger.info("[第二頁] 以 hidden 兜底取得 policyNumber=" + confirmRow.get("policyNumber"));
+				}
+			}
+
+			if (confirmRow == null) {
+				logger.warn("[第二頁] 無法擷取確認頁資料列");
+				return false;
+			}
+
+			// 取得第一頁所選的那一筆（只存 1 筆）
+			if (CSRPaymentChannel.selectedRows.isEmpty()) {
+				logger.warn("[第二頁] 第一頁 selectedRows 為空，無從比對");
+				return false;
+			}
+			Map<String, String> selected = CSRPaymentChannel.selectedRows.get(0);
+
+			// 基本欄位比對
+			boolean samePolicy = eq(selected.get("policyNumber"), confirmRow.get("policyNumber"));
+			boolean sameOwner  = isBlank(selected.get("ownerName")) || eq(selected.get("ownerName"), confirmRow.get("ownerName")); // 有些 layout 可能不顯示
+			boolean sameInsured= isBlank(selected.get("insuredName")) || eq(selected.get("insuredName"), confirmRow.get("insuredName"));
+			boolean sameProduct= isBlank(selected.get("productName")) || eq(selected.get("productName"), confirmRow.get("productName"));
+
+			if (!samePolicy)  logger.warn("[比對] 保單號碼不同 first='" + nz(selected.get("policyNumber")) + "' confirm='" + nz(confirmRow.get("policyNumber")) + "'");
+			if (!sameOwner)   logger.warn("[比對] 要保人不同 first='" + nz(selected.get("ownerName")) + "' confirm='" + nz(confirmRow.get("ownerName")) + "'");
+			if (!sameInsured) logger.warn("[比對] 被保險人不同 first='" + nz(selected.get("insuredName")) + "' confirm='" + nz(confirmRow.get("insuredName")) + "'");
+			if (!sameProduct) logger.warn("[比對] 險種名稱不同 first='" + nz(selected.get("productName")) + "' confirm='" + nz(confirmRow.get("productName")) + "'");
+
+			// 付款方式比對：異動前=第一頁 paymentMethod；異動後=自行繳費
+			String expectedBefore = nz(selected.get("paymentMethod"));
+			String expectedAfter  = "自行繳費";
+			String actualBefore   = nz(confirmRow.get("beforeMethod"));
+			String actualAfter    = nz(confirmRow.get("afterMethod"));
+
+			boolean beforeOk = eq(expectedBefore, actualBefore);
+			boolean afterOk  = eq(expectedAfter, actualAfter);
+
+			if (!beforeOk) logger.warn("[比對] 異動前收費管道 不符，expected='" + expectedBefore + "', actual='" + actualBefore + "'");
+			if (!afterOk)  logger.warn("[比對] 異動後收費管道 不符，expected='自行繳費', actual='" + actualAfter + "'");
+
+			// 這頁不按「確認送出」，僅驗證
+			boolean allOk = headerOk && samePolicy && beforeOk && afterOk && sameOwner && sameInsured && sameProduct;
+			if (!allOk) {
+				logger.debug("[第二頁] 確認頁比對未通過");
+			} else {
+				logger.info("[第二頁] 確認頁比對通過（不送出）");
+			}
+			return allOk;
+		}
+
+		/* ------------------ 第二頁：擷取工具 ------------------ */
+
+		private Map<String, String> extractPcFirstRow() {
+			try {
+				WebElement row = findElement(pcFirstDataRow, false, 4000);
+				if (row == null) return null;
+
+				Map<String, String> m = new HashMap<>();
+				m.put("policyNumber", safeText(row, ".//div[contains(@class,'insurecode')]"));
+				// 注意：確認頁的兩個 name 欄位 class 都是 name；以下以順序判斷
+				List<WebElement> names = row.findElements(By.xpath(".//div[contains(@class,'name')]"));
+				if (names.size() >= 1) m.put("ownerName", trim(names.get(0).getText()));
+				if (names.size() >= 2) m.put("insuredName", trim(names.get(1).getText()));
+				m.put("productName", safeText(row, ".//div[contains(@class,'flexInsuranceForSure')]"));
+				// 兩個 expiry_date：第一個=異動前、第二個=異動後
+				List<WebElement> dates = row.findElements(By.xpath(".//div[contains(@class,'expiry_date')]"));
+				if (dates.size() >= 1) m.put("beforeMethod", trim(dates.get(0).getText()));
+				if (dates.size() >= 2) m.put("afterMethod",  trim(dates.get(1).getText()));
+				m.put("section", "PC");
+				return m;
+			} catch (Exception e) {
+				logger.warn("[第二頁-PC 擷取失敗] " + e.getMessage());
+				return null;
+			}
+		}
+
+		private Map<String, String> extractMobileFirstRow() {
+			try {
+				WebElement key = findElement(mobileFirstKey, false, 1500);
+				if (key == null) return null;
+
+				Map<String, String> m = new HashMap<>();
+				m.put("policyNumber", safeText(key, ".//div[contains(@class,'id')]"));
+				m.put("productName", safeText(key, ".//div[contains(@class,'insurname')]"));
+
+				WebElement ext = null;
+				try {
+					ext = key.findElement(By.xpath("following-sibling::div[contains(@class,'ext')][1]"));
+				} catch (Exception ignore) {}
+
+				m.put("ownerName",    extVal(ext, "要保人"));
+				m.put("insuredName",  extVal(ext, "被保險人"));
+				m.put("beforeMethod", extVal(ext, "異動前收費管道"));
+				m.put("afterMethod",  extVal(ext, "異動後收費管道"));
+				m.put("section", "Mobile");
+				return m;
+			} catch (Exception e) {
+				logger.warn("[第二頁-Mobile 擷取失敗] " + e.getMessage());
+				return null;
+			}
+		}
+
+		/* ------------------ 共用小工具（複製一份，避免相依） ------------------ */
+
+		private boolean checkHeaderEquals(By headerCellsLocator, List<String> expected) {
+			try {
+				List<WebElement> cells = driver.findElements(headerCellsLocator);
+				List<String> actual = new ArrayList<>();
+				for (WebElement c : cells) {
+					String t = (c.getText() == null) ? "" : c.getText().replace("\u00A0", " ").trim();
+					actual.add(t);
+				}
+				if (actual.size() != expected.size()) {
+					logger.warn("[第二頁 Header 欄數不符] 預期=" + expected.size() + "，實際=" + actual.size() + "；實際=" + actual);
+					return false;
+				}
+				for (int i = 0; i < expected.size(); i++) {
+					if (!expected.get(i).equals(actual.get(i))) {
+						logger.warn("[第二頁 Header 文案不符] index=" + i + ", expected='" + expected.get(i) + "', actual='" + actual.get(i) + "'");
+						return false;
+					}
+				}
+				return true;
+			} catch (Exception ex) {
+				logger.warn("[第二頁 Header 驗證例外] " + ex.getMessage());
+				return false;
+			}
+		}
+
+		private String safeText(WebElement scope, String relXpath) {
+			try {
+				WebElement el = scope.findElement(By.xpath(relXpath));
+				String t = el.getText();
+				return t == null ? "" : t.trim();
+			} catch (Exception e) {
+				return "";
+			}
+		}
+
+		private String extVal(WebElement ext, String label) {
+			if (ext == null) return "";
+			try {
+				WebElement row = ext.findElement(By.xpath(".//div[contains(@class,'tb_row_mobile')][div[contains(@class,'tb_column_mobile')][1][normalize-space(text())='"
+						+ label + "']]"));
+				return row.findElement(By.xpath("./div[contains(@class,'tb_column_mobile')][2]")).getText().trim();
+			} catch (Exception e) {
+				return "";
+			}
+		}
+
+		private String trim(String s) { return s == null ? "" : s.replace("\u00A0", " ").trim(); }
+		private boolean eq(String a, String b) { return trim(a).equals(trim(b)); }
+		private String nz(String s) { return s == null ? "" : s; }
+		private boolean empty(String s) { return s == null || s.trim().isEmpty(); }
+		private boolean isBlank(String s) { return s == null || trim(s).isEmpty(); }
 	}
 }
