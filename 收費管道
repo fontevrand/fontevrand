@@ -5,8 +5,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.ElementClickInterceptedException;
 
 import submodule.com.autotest.commonpage.AbstractBasePage;
 import submodule.com.autotest.utils.CommUtil;
@@ -30,6 +34,7 @@ public class CSRPaymentChannel extends AbstractBasePage {
 	private By withTblPcRows = By.xpath("//div[@class='subTitle' and text()='有異動權限保單']/following-sibling::div[contains(@class,'tb_Table_pc')][1]//div[contains(@class,'tb_row') and not(contains(@class,'headeRow'))]");
 	private By withTblPcSelectCbs = By.xpath("//div[@class='subTitle' and text()='有異動權限保單']/following-sibling::div[contains(@class,'tb_Table_pc')][1]//input[@type='checkbox' and @name='list_pc']");
 	private By withTblPcPolicyLinks = By.xpath("//div[@class='subTitle' and text()='有異動權限保單']/following-sibling::div[contains(@class,'tb_Table_pc')][1]//div[contains(@class,'insurecode')]//a");
+	private By withPcNoDataText = By.xpath("//div[@class='subTitle' and text()='有異動權限保單']/following-sibling::div[contains(@class,'tb_Table_pc')][1]//div[contains(@class,'tb_row') and contains(normalize-space(.),'目前無相關資料')]");
 
 	// Mobile（有異動權限保單）
 	private By withMobileKeyRows = By.xpath("//div[contains(@class,'tb_Table_mobile')]//div[contains(@class,'mobileKey')]");
@@ -79,117 +84,78 @@ public class CSRPaymentChannel extends AbstractBasePage {
 		boolean withoutTitleOk = (findElement(policyWithoutChangeAuthorityTblTitleLocator, false, waitingTime) != null);
 		boolean baseOk = super.isPageDisplayCorrectly(waitingTime);
 
-		// --- 驗 headers（有異動權限保單 / PC）---
-		boolean withHeaderOk = checkHeaderEquals(withTblPcHeaderCells,
-				Arrays.asList("", "保單號碼", "契約始期", "要保人", "被保險人", "險種名稱", "保單狀況", "收費管道", "銀行名稱", "信用卡號/銀行帳號", "自行繳費"));
+		// --- 判斷是否出現「目前無相關資料」→ 該區整段 skip（含 headers） ---
+		boolean withNoData = (findElement(withPcNoDataText, false, 1500) != null);
+		boolean withoutNoData = (findElement(withoutPcNoDataText, false, 1500) != null);
 
-		// --- 驗 headers（無異動權限保單 / PC）---
-		boolean withoutHeaderOk = checkHeaderEquals(withoutTblPcHeaderCells,
-				Arrays.asList("", "保單號碼", "契約始期", "要保人", "被保險人", "險種名稱", "保單狀況", "收費管道", "銀行名稱", "信用卡號/銀行帳號"));
-
-		// --- 判斷是否有資料 ---
-		int withPcRowsCount = driver.findElements(withTblPcRows).size();
-		int withMobileCards = driver.findElements(withMobileKeyRows).size();
-		boolean withHasData = (withPcRowsCount > 0) || (withMobileCards > 0);
-
-		boolean withoutPcNoData = (findElement(withoutPcNoDataText, false, 1500) != null);
-		int withoutPcRowsCount = withoutPcNoData ? 0 : driver.findElements(withoutTblPcRows).size();
-		boolean withoutHasData = (withoutPcRowsCount > 0) || (findElement(withoutFirstMobileSelect, false, 500) != null);
+		// --- 非 no-data 才做 header 檢查 ---
+		boolean withHeaderOk = true;
+		boolean withoutHeaderOk = true;
+		if (!withNoData) {
+			withHeaderOk = checkHeaderEquals(withTblPcHeaderCells,
+					Arrays.asList("", "保單號碼", "契約始期", "要保人", "被保險人", "險種名稱", "保單狀況", "收費管道", "銀行名稱", "信用卡號/銀行帳號", "自行繳費"));
+		}
+		if (!withoutNoData) {
+			withoutHeaderOk = checkHeaderEquals(withoutTblPcHeaderCells,
+					Arrays.asList("", "保單號碼", "契約始期", "要保人", "被保險人", "險種名稱", "保單狀況", "收費管道", "銀行名稱", "信用卡號/銀行帳號"));
+		}
 
 		// --- 清空上一次的選取紀錄 ---
 		selectedRows.clear();
 
-		// ========== 依你本次需求：第一頁就選「第一個」有異動權限保單 ==========
+		// ========== 第一頁選取邏輯（符合你最新規格） ==========
 		boolean selectedOne = false;
 
-		// (A) 先選 有異動權限保單 PC 的第一個 checkbox
-		if (withHasData) {
-			WebElement firstPcCb = findElement(withTblPcSelectCbs, false, 2000);
-			if (firstPcCb != null) {
-				try {
-					WebElement row = getAncestorRow(firstPcCb);
-					Map<String, String> rowData = extractPcRowData(row);
-					firstPcCb.click();
-					selectedRows.add(rowData); // 只存第一筆
-					selectedOne = true;
-					logger.info("[第一頁] 已勾選有異動權限(PC)第一筆，policy=" + rowData.get("policyNumber") + ", 付款方式=" + rowData.get("paymentMethod"));
-				} catch (Exception e) {
-					logger.warn("[withHasData-PC 第一筆勾選失敗] " + e.getMessage());
-				}
-			} else {
-				// (B) 退到 有異動權限 Mobile 的第一筆
-				WebElement mobileCb = findElement(withFirstMobileSelect, false, 1500);
-				if (mobileCb != null) {
-					try {
-						WebElement mobileKey = getAncestorByClass(mobileCb, "tb_row mobileKey");
-						Map<String, String> rowData = extractMobileRowData(mobileKey);
-						mobileCb.click();
-						selectedRows.add(rowData);
-						selectedOne = true;
-						logger.info("[第一頁] 已勾選有異動權限(Mobile)第一筆，policy=" + rowData.get("policyNumber") + ", 付款方式=" + rowData.get("paymentMethod"));
-					} catch (Exception e) {
-						logger.warn("[withHasData-Mobile 第一筆勾選失敗] " + e.getMessage());
-					}
-				}
-			}
+		// (A) 先處理【有異動權限保單】，非 no-data 才嘗試
+		if (!withNoData) {
+			selectedOne = tryPickFirstInSection(
+					"有異動權限保單",
+					withTblPcSelectCbs,
+					withFirstMobileSelect,
+					true /* 試 PC 優先 */
+			);
 		}
 
-		// (C) 萬一真的沒有有異動權限資料，再試「無異動權限」第一筆（通常不會進第二頁，但保險起見依舊支援）
-		if (!selectedOne && withoutHasData) {
-			WebElement firstPcCb2 = findElement(withoutTblPcSelectCbs, false, 1500);
-			if (firstPcCb2 != null) {
-				try {
-					WebElement row = getAncestorRow(firstPcCb2);
-					Map<String, String> rowData = extractPcRowData(row);
-					firstPcCb2.click();
-					selectedRows.add(rowData);
-					selectedOne = true;
-					logger.info("[第一頁] 改勾選無異動權限(PC)第一筆，policy=" + rowData.get("policyNumber"));
-				} catch (Exception e) {
-					logger.warn("[withoutHasData-PC 第一筆勾選失敗] " + e.getMessage());
-				}
-			} else {
-				WebElement mobileCb2 = findElement(withoutFirstMobileSelect, false, 1500);
-				if (mobileCb2 != null) {
-					try {
-						WebElement mobileKey = getAncestorByClass(mobileCb2, "tb_row mobileKey");
-						Map<String, String> rowData = extractMobileRowData(mobileKey);
-						mobileCb2.click();
-						selectedRows.add(rowData);
-						selectedOne = true;
-						logger.info("[第一頁] 改勾選無異動權限(Mobile)第一筆，policy=" + rowData.get("policyNumber"));
-					} catch (Exception e) {
-						logger.warn("[withoutHasData-Mobile 第一筆勾選失敗] " + e.getMessage());
-					}
-				}
-			}
+		// (B) 若 A 沒選到、且【無異動權限保單】非 no-data，再嘗試
+		if (!selectedOne && !withoutNoData) {
+			selectedOne = tryPickFirstInSection(
+					"無異動權限保單",
+					withoutTblPcSelectCbs,
+					withoutFirstMobileSelect,
+					true
+			);
 		}
 
-		// --- 點「申請」前置（只要有勾到一筆就送）---
-		if (selectedOne) {
-			WebElement applyBtn = findElement(applyBtnLocator, false, waitingTime);
-			if (applyBtn != null) {
-				click(applyBtnLocator, waitingTime);
-				// 進入第二頁：做確認頁面檢查與比對（不按確認送出）
-				boolean confirmOk = new ConfirmPage().isPageDisplayCorrectly(waitingTime);
-				boolean mustOk = pageTitleOk && withTitleOk && withoutTitleOk && baseOk && withHeaderOk && withoutHeaderOk && confirmOk;
-				if (!mustOk) {
-					logger.debug("第一頁或第二頁表頭/比對未通過");
-				}
-				return mustOk;
-			} else {
-				logger.warn("[Apply 按鈕不存在] 無法送出");
-				return false;
+		// === 決策：是否按「申請」 ===
+		// 兩區都 no-data → 不送，僅驗證基本顯示即可
+		if (withNoData && withoutNoData) {
+			logger.info("兩區塊皆為『目前無相關資料』 → 不執行申請，結束第一頁驗證");
+			// 回頂（保持你原本的小互動）
+			if (findElement(goUpButton, true, 2000) != null) {
+				click(goUpButton, 2000);
+				CommUtil.sleep(1);
 			}
-		} else {
-			// 兩區都沒有資料：不送出，僅回頂
-			click(goUpButton, 15000);
-			CommUtil.sleep(2);
-			boolean mustOk = pageTitleOk && withTitleOk && withoutTitleOk && baseOk && withHeaderOk && withoutHeaderOk;
-			if (!mustOk) {
-				logger.debug("頁面或表頭驗證未通過（且無資料可申請）");
-			}
+			boolean mustOk = pageTitleOk && withTitleOk && withoutTitleOk && baseOk; // headers 該情況下整段 skip
+			if (!mustOk) logger.debug("頁面或流程顯示驗證未完全通過（兩區皆無資料）");
 			return mustOk;
+		}
+
+		// 至少一區有資料，但還是沒成功勾到 → 直接 fail，避免「看起來沒動作卻 Pass」
+		if (!selectedOne) {
+			throw new AssertionError("頁面至少一區有資料，但未能成功勾選任何一筆（阻止無動作 Pass）。請查看是否有遮擋或版位漂移。");
+		}
+
+		// 有成功勾到 → 進第二頁做比對（不按送出）
+		WebElement applyBtn = findElement(applyBtnLocator, false, waitingTime);
+		if (applyBtn != null) {
+			click(applyBtnLocator, waitingTime);
+			boolean confirmOk = new ConfirmPage().isPageDisplayCorrectly(waitingTime);
+			boolean mustOk = pageTitleOk && withTitleOk && withoutTitleOk && baseOk && withHeaderOk && withoutHeaderOk && confirmOk;
+			if (!mustOk) logger.debug("第一頁或第二頁的表頭/比對未通過");
+			return mustOk;
+		} else {
+			logger.warn("[Apply 按鈕不存在] 無法進入確認頁");
+			return false;
 		}
 	}
 
@@ -218,6 +184,69 @@ public class CSRPaymentChannel extends AbstractBasePage {
 			logger.warn("[Header 驗證例外] " + ex.getMessage());
 			return false;
 		}
+	}
+
+	/** 嘗試在指定區塊勾選第一筆（先 PC、再 Mobile），成功則記錄 row 資料 */
+	private boolean tryPickFirstInSection(String sectionTitle, By pcCheckboxes, By mobileFirstCheckbox, boolean pcFirst){
+		// 先 PC
+		if (pcFirst) {
+			List<WebElement> pcs = driver.findElements(pcCheckboxes);
+			if (!pcs.isEmpty()) {
+				WebElement cb = pcs.get(0);
+				if (safeCenterClickAndSelect(cb, "[第一頁] " + sectionTitle + "(PC)第一筆")) {
+					WebElement row = getAncestorRow(cb);
+					selectedRows.add(extractPcRowData(row));
+					return true;
+				} else {
+					logger.warn("[{}] PC 第一筆勾選仍未成功（isSelected=false）", sectionTitle);
+				}
+			}
+		}
+		// 再 Mobile
+		WebElement mcb = findElement(mobileFirstCheckbox, false, 1200);
+		if (mcb != null) {
+			if (safeCenterClickAndSelect(mcb, "[第一頁] " + sectionTitle + "(Mobile)第一筆")) {
+				WebElement mobileKey = getAncestorByClass(mcb, "tb_row mobileKey");
+				selectedRows.add(extractMobileRowData(mobileKey));
+				return true;
+			} else {
+				logger.warn("[{}] Mobile 第一筆勾選仍未成功（isSelected=false）", sectionTitle);
+			}
+		}
+		return false;
+	}
+
+	/** 置中滾動＋正常點擊；攔截則微調捲動＋JS click；最後確認 isSelected() */
+	private boolean safeCenterClickAndSelect(WebElement checkbox, String logPrefix){
+		try {
+			safeCenterClick(checkbox);
+			// 正常 click 一次（若被擋，in catch 補救）
+			try {
+				checkbox.click();
+			} catch (ElementClickInterceptedException e) {
+				logger.warn("{}：正常 click 被攔截，改用 JS click；原因：{}", logPrefix, e.getMessage());
+				((JavascriptExecutor)driver).executeScript("window.scrollBy(0, 120);");
+				((JavascriptExecutor)driver).executeScript("arguments[0].click();", checkbox);
+			}
+			// 最後再驗一次選取狀態，若仍未勾中，補一個 JS click
+			if (!checkbox.isSelected()) {
+				((JavascriptExecutor)driver).executeScript("arguments[0].click();", checkbox);
+			}
+			boolean ok = checkbox.isSelected();
+			if (ok) logger.info("{} 已勾選", logPrefix);
+			return ok;
+		} catch (Exception ex) {
+			logger.warn("{} 勾選例外: {}", logPrefix, ex.getMessage());
+			return false;
+		}
+	}
+
+	/** 將元素置中到視窗中，降低被固定 header/浮動元件遮擋風險 */
+	private void safeCenterClick(WebElement el){
+		try {
+			((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView({block:'center'});", el);
+			CommUtil.sleep(1);
+		} catch (Exception ignore) {}
 	}
 
 	private WebElement getAncestorRow(WebElement anyChildInRow) {
@@ -343,7 +372,7 @@ public class CSRPaymentChannel extends AbstractBasePage {
 
 			// 基本欄位比對
 			boolean samePolicy = eq(selected.get("policyNumber"), confirmRow.get("policyNumber"));
-			boolean sameOwner  = isBlank(selected.get("ownerName")) || eq(selected.get("ownerName"), confirmRow.get("ownerName")); // 有些 layout 可能不顯示
+			boolean sameOwner  = isBlank(selected.get("ownerName")) || eq(selected.get("ownerName"), confirmRow.get("ownerName"));
 			boolean sameInsured= isBlank(selected.get("insuredName")) || eq(selected.get("insuredName"), confirmRow.get("insuredName"));
 			boolean sameProduct= isBlank(selected.get("productName")) || eq(selected.get("productName"), confirmRow.get("productName"));
 
